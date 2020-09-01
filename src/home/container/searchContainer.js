@@ -1,6 +1,7 @@
-import Search from "../component/search";
+import React from "react";
+import Search from "../component/Search";
 import axios from "axios";
 
-export default function searchContainer() {
+export default function SearchContainer() {
   return <Search />;
 }

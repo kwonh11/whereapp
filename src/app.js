@@ -1,8 +1,8 @@
 import { Router, Route, Link, Switch } from "react-router-dom";
 import Chat from "../src/chat/container";
 import Detail from "../src/detail/container";
-import Home from "../src/home/component";
 import News from "../src/news/container";
+import HomePage from "../src/home/page/HomePage";
 import { createBrowserHistory } from "history";
 
 const customHistory = createBrowserHistory();
@@ -24,7 +24,7 @@ export default function App() {
           <Route path="/detail" component={Detail} />
           <Route path="/chat" component={Chat} />
           <Route path="/news/:company" component={News} />
-          <Route path="/" exact component={Home} />
+          <Route path="/" exact component={HomePage} />
         </Switch>
       </Router>
     </React.Fragment>

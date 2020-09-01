@@ -9,7 +9,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function login() {
+export default function Login() {
   const classes = useStyles();
   return (
     <Button variant="outlined" color="primary">

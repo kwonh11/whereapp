@@ -9,7 +9,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function category() {
+export default function Category() {
   const classes = useStyles();
 
   const [value, setValue] = useState(0);
