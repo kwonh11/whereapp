@@ -23,7 +23,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function search() {
+export default function Search() {
   const classes = useStyles();
   return (
     <Paper component="form" className={classes.root} elevation={3}>
