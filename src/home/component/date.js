@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function date() {
+export default function Date() {
   const classes = useStyles();
   return (
     <form className={classes.container} noValidate>
