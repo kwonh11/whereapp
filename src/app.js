@@ -1,5 +1,5 @@
 import { Router, Route, Link, Switch } from "react-router-dom";
-import Chat from "../src/chat/container";
+import ChatPage from "../src/chat/page/ChatPage";
 import Detail from "../src/detail/container";
 import News from "../src/news/container";
 import HomePage from "../src/home/page/HomePage";
@@ -22,7 +22,7 @@ export default function App() {
         <br />
         <Switch>
           <Route path="/detail" component={Detail} />
-          <Route path="/chat" component={Chat} />
+          <Route path="/chat" component={ChatPage} />
           <Route path="/news/:company" component={News} />
           <Route path="/" exact component={HomePage} />
         </Switch>
