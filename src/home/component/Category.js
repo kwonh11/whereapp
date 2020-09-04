@@ -27,6 +27,7 @@ export default function Category() {
         indicatorColor="primary"
         textColor="primary"
         onChange={handleChange}
+        variant="fullWidth"
       >
         {categoryList.map((item, idx) => (
           <Tab key={idx} label={item} />
