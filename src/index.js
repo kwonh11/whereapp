@@ -3,8 +3,6 @@ import App from './app';
 
 // store ContextAPI로 감싸기
 ReactDOM.render(
-    <App>
-        AAAAAA
-    </App>
+    <App />
     , document.getElementById('root')
 );

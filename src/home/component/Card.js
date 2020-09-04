@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
       width: 330,
       minWidth: 330,
       height: 500,
-      margin: "0 0.7rem",
+      margin: "0 15px",
     },
     media: {
       height: 0,
@@ -33,7 +33,7 @@ export default function NewsCard( { image, category, title, description, origina
           <CardHeader
             avatar={
               <Avatar aria-label="news" className={classes.avatar}>
-                {company? company[0]+company[1] : ''}
+                {company? company.slice(0,4) : ''}
               </Avatar>
             }
             action={

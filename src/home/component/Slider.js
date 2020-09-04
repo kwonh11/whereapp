@@ -1,56 +1,93 @@
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 import NewsCard from './Card';
-import Arrow from '../images/arrow.png';
+import {ArrowBackIosOutlined, ArrowForwardIosOutlined} from '@material-ui/icons';
+
+
 
 const SliderContainer = styled.div`
-    width: ${props => props.width};
+    width: ${props=> props.device === "web"? 'calc(990px + 75px)':''};
     height: ${props => props.height};
+    overflow: hidden;
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
-    margin: 0;
+    margin: 10vh 0;
     padding: 0;
 `
 const CardContainer = styled.div`
     width: 100%;
-    height: 100%;
-    padding: 1.5rem;
+    height: 110%;
+    position: relative;
+    left : ${props => props.active * -360}px;
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
+    transition: all 0.3s ease-out;
 `
 const ArrowContainer = styled.div`
     position:absolute;
-    width: 80%;
+    width: ${props=> props.device === "web"? 'calc(990px + 60px)':''};
+    margin-left: 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 `
-const ArrowLeft = styled.span`
-    
-`;
-const ArrowRight = styled.span`
-    background-image: url(${Arrow});
+const ArrowHoverAction = css`
+    &:hover {
+        cursor: pointer;
+        background: black;
+        font-size:85;
+        color:white;
+        opacity: 0.55;
+        box-shadow: 16px 18px 28px -3px rgba(143,143,143,0.75);
+    }
 `
-export default function Slider(props) {
-    // 렌더 속성값 패턴으로 chlidren 속성에 Array타입의 Card들이 입력됨
-    // 항상 0부터 시작, 넘김 간격 5초
-    const [active, setActive] = React.useState(0);
-    const { children } = props;
-    const totalCount = children.length;
+const PrevArrow = styled.span`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f1f1f1;
+    color:#c1c1c1;
+    opacity: ${props => props.visible === "none"? 0 : 0.75};
+    width: 100px;
+    height: 500px;
+    z-index:  ${props => props.visible === "none"? -10 : 10};
+    transition: all 0.3s ease-out;
+    ${props => props.visible === "none"? "": ArrowHoverAction};
+`;
+const NextArrow = styled(PrevArrow)`
+    ${props => props.visible === "none"? "": ArrowHoverAction};
+`;
 
-    console.log(children);
+export default function Slider(props) {
+    const { cardWidth, testNews } = props;
+    const max = React.useCallback(()=> testNews.length-2 ,[testNews]);
+    const [active, setActive] = React.useState(0);
+    const cardContainerRef = React.useRef();
+    
+    const onClickPrev = () => {
+        setActive(active -1 > -1? active -1 : -1);
+    }
+    const onClickNext = (max) => {
+        setActive(active +1 < max +1 ? active + 1 : max + 1);
+    }
     return (
-        <SliderContainer width="70vw" height="50vh">
-            <CardContainer>
-            <ArrowContainer>
-                <span>A</span>
-                <ArrowRight></ArrowRight>
+        <SliderContainer device={"web"} height="65vh">
+            <ArrowContainer device={"web"}>
+                <PrevArrow visible={active <= -1? "none":""} onClick={onClickPrev}>
+                    <ArrowBackIosOutlined style={{fontSize:75}} />
+                </PrevArrow>
+                <NextArrow visible={active >= max()? "none":""} onClick={()=>onClickNext(max())}>
+                    <ArrowForwardIosOutlined style={{fontSize:75}} />
+                </NextArrow>
             </ArrowContainer>
-                {children.map((item,index)=>{
-                return(
-                    <NewsCard key={index} {...item} active={index===active} pendingLeft={index===active-1 || totalCount-1} pendingRight={index===active+1 || 0}/>
-                )})}
+            <CardContainer ref={cardContainerRef} active={active}>
+            {/* testNews는 이 후 saga->api->store 를 통해 전달된 response에 따라 변경*/}
+            {testNews.map((item,index)=>{
+                return (
+                    <NewsCard key={index} {...item}/>
+                )
+            })}
             </CardContainer>  
         </SliderContainer>
     )
