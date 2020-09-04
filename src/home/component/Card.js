@@ -1,9 +1,19 @@
 
+import styled from 'styled-components';
 import { makeStyles } from "@material-ui/core/styles";
 import {Card, CardHeader, CardMedia, CardContent,
     Avatar, IconButton, Typography, CardActions} from "@material-ui/core";
-import { Favorite as FavoriteIcon, Share as ShareIcon, MoreVert as MoreVertIcon} from '@material-ui/icons'
+import { Favorite as FavoriteIcon, Share as ShareIcon, MoreVert as MoreVertIcon} from '@material-ui/icons';
 import { red } from "@material-ui/core/colors";
+
+
+const StyledCard = styled(Card)`
+  &:hover{
+    box-shadow: 0px 1px 4px rgba(0,0,0,.1), 0px 2px 3px rgba(0,0,0,.12), 0px 1px 3px rgba(0,0,0,.14);
+    transform: translateY(-1px);
+    cursor: pointer;
+  }
+`;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -29,7 +39,7 @@ export default function NewsCard( { image, category, title, description, origina
         return (isString && desc.length >= count? desc.substring(0,count) + "..." : desc);
     }
     return (
-        <Card className={classes.root}>
+        <StyledCard className={classes.root}>
           <CardHeader
             avatar={
               <Avatar aria-label="news" className={classes.avatar}>
@@ -62,6 +72,6 @@ export default function NewsCard( { image, category, title, description, origina
               <ShareIcon />
             </IconButton>
           </CardActions>
-        </Card>
+        </StyledCard>
       );
 }
