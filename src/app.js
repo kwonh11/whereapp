@@ -3,6 +3,7 @@ import ChatPage from "../src/chat/page/ChatPage";
 import Detail from "../src/detail/container";
 import NewsPage from './news/page/NewsPage';
 import HomePage from "./home/page/HomePage";
+import UserPage from "./user/page/UserPage";
 import { createBrowserHistory } from "history";
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';

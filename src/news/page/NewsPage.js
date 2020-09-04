@@ -1,5 +1,6 @@
 import CorpCategoryContainer from '../container/CorpCategoryContainer';
 import styled from 'styled-components';
+import NewsContainer from "../container/NewsContainer";
 
 // 임시 테스트용 컨테이너
 const Container = styled.div`
@@ -13,6 +14,7 @@ export default function NewsPage() {
     return (
         <Container>
             <CorpCategoryContainer />
+            <NewsContainer />
         </Container>
     )
-}
+};
