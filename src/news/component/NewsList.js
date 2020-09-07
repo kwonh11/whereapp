@@ -99,7 +99,7 @@ export default function NewsList() {
   const handleView = (event, newView) => {
     setView(newView);
   };
-
+  //
   return (
     <div>
       <ToggleButtonGroup value={view} exclusive onChange={handleView}>
