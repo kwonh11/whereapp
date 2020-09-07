@@ -3,9 +3,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Paper, Tabs, Tab } from "@material-ui/core";
 
 const useStyles = makeStyles({
-  root: {
-    backgroundColor: "#3f63bf",
-    borderColor: "#3f63bf",
+  paper: {
+    height: "100%",
   },
 });
 
@@ -21,13 +20,14 @@ export default function Category() {
   };
 
   return (
-    <Paper square>
+    <Paper square className={classes.paper}>
       <Tabs
         value={value}
         indicatorColor="primary"
         textColor="primary"
         onChange={handleChange}
-        variant="fullWidth"
+        orientation="vertical"
+        variant="scrollable"
       >
         {categoryList.map((item, idx) => (
           <Tab key={idx} label={item} />
