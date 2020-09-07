@@ -1,11 +1,9 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { makeStyles } from "@material-ui/core/styles";
-import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
-import ViewListIcon from "@material-ui/icons/ViewList";
-import ViewModuleIcon from "@material-ui/icons/ViewModule";
 import CardView from "../../common/component/CardView";
 import ListView from "../../common/component/ListView";
+import ViewButton from "../../common/component/ViewButton";
 
 const data = [
   {
@@ -102,14 +100,7 @@ export default function NewsList() {
   //
   return (
     <div>
-      <ToggleButtonGroup value={view} exclusive onChange={handleView}>
-        <ToggleButton value="card">
-          <ViewModuleIcon />
-        </ToggleButton>
-        <ToggleButton value="list">
-          <ViewListIcon />
-        </ToggleButton>
-      </ToggleButtonGroup>
+      <ViewButton view={view} handleView={handleView} />
       <ContentsContainer view={view}>
         {view === "card" ? <CardView data={data} /> : <ListView data={data} />}
       </ContentsContainer>
