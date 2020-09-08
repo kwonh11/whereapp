@@ -3,7 +3,6 @@ import DateContainer from "../container/DateContainer";
 import SearchContainer from "../container/SearchContainer";
 import SliderContainer from "../container/SliderContainer";
 import styled from "styled-components";
-import getRssUrl from "../../common/getRssUrl";
 
 const Container = styled.section`
   display: flex;
@@ -22,7 +21,6 @@ const ContentsWrap = styled.div`
 `;
 
 export default function HomePage() {
-  getRssUrl();
   return (
     <Container>
       <FilterWrap>
