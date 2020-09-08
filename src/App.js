@@ -8,6 +8,7 @@ import { createBrowserHistory } from "history";
 import styled, { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
 import GNBPage from "./gnb/page/GNBPage";
+import Modal from './common/component/Modal';
 
 const customHistory = createBrowserHistory();
 const GlobalStyle = createGlobalStyle`
@@ -27,7 +28,18 @@ const AppContainer = styled.div`
 `;
 // router
 export default function App() {
+  // test
+  const [on, setOn] = React.useState(false);
+  React.useLayoutEffect(()=>{
+    setTimeout(()=> {
+      setOn(true);
+    }, 1000);
+  },[]);
+  const onClickClose = () => {
+    setOn(!on);
+  }
   return (
+    <React.Fragment>
     <AppContainer>
       <GlobalStyle />
       <Router history={customHistory}>
@@ -41,5 +53,9 @@ export default function App() {
         <ChatPage />
       </Router>
     </AppContainer>
+      <Modal on={on} onClickClose={onClickClose}>
+        {/* 모달로 띄워질 창 여기에 작성 */}
+      </Modal>
+  </React.Fragment>
   );
 }

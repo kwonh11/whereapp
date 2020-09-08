@@ -8,7 +8,7 @@ import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 
 const useStyles = makeStyles({
   paper: {
-    zIndex: 9999,
+    zIndex: 9998,
     width: 360,
     height: 500,
     display: "flex",
