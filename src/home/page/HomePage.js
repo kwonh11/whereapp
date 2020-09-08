@@ -5,7 +5,6 @@ import SliderContainer from "../container/SliderContainer";
 import styled from "styled-components";
 
 const Container = styled.section`
-  padding-top: 80px;
   display: flex;
   flex-direction: column;
 `;

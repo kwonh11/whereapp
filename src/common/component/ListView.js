@@ -1,5 +1,6 @@
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography, List, ListItem, ListItemText } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles({
   list: {
@@ -11,9 +12,10 @@ const useStyles = makeStyles({
   img: {
     width: 250,
     height: 160,
-    marginRight: 38,
+    marginRight: 20,
   },
   listItem: {
+    padding: "8px 0",
     borderBottom: "1px solid #ccc",
     "&:last-child": {
       borderBottom: "none",

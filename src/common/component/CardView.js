@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Card,
@@ -12,6 +13,10 @@ import {
 const useStyles = makeStyles({
   root: {
     maxWidth: 345,
+
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
   },
   media: {
     height: 140,
@@ -40,7 +45,7 @@ export default function CardView({ data }) {
       </CardActionArea>
       <CardActions>
         <Button size="small" color="primary">
-          자세히
+          <Link to={`/new/${news.id}`}> 자세히</Link>
         </Button>
         <Button size="small" color="primary">
           스크랩
