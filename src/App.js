@@ -1,23 +1,26 @@
-import { Router, Route, Link, Switch } from "react-router-dom";
+import { Router, Route, Switch } from "react-router-dom";
 import ChatPage from "./chat/page/ChatPage";
 import Detail from "./detail/container";
 import NewsPage from "./news/page/NewsPage";
 import HomePage from "./home/page/HomePage";
-import UserPage from "./user/page/UserPage";
 import { createBrowserHistory } from "history";
 import styled, { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
 import GNBPage from "./gnb/page/GNBPage";
+import DetailPage from "./detail/page/DetailPage";
 
 const customHistory = createBrowserHistory();
 const GlobalStyle = createGlobalStyle`
   ${reset};
   * {
-        box-sizing : border-box;
-        text-decoration: none;
+    box-sizing : border-box;
+    text-decoration: none;
   }
   body {
-      background-color: rgb(249, 249, 249);
+    background-color: rgb(249, 249, 249);
+  }
+  section {
+    padding-top: 80px;
   }
 `;
 const AppContainer = styled.div`
@@ -35,8 +38,9 @@ export default function App() {
         <Switch>
           <Route path="/detail" component={Detail} />
           <Route path="/chat" component={ChatPage} />
+          <Route path="/news:id" component={DetailPage} />
           <Route path="/news" component={NewsPage} />
-          <Route path="/" exact component={HomePage} />
+          <Route path="/" exact component={NewsPage} />
         </Switch>
         <ChatPage />
       </Router>

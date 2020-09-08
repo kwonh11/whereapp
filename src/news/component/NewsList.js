@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { makeStyles } from "@material-ui/core/styles";
 import CardView from "../../common/component/CardView";
 import ListView from "../../common/component/ListView";
@@ -7,6 +7,7 @@ import ViewButton from "../../common/component/ViewButton";
 
 const data = [
   {
+    id: 1,
     image:
       "https://cphoto.asiae.co.kr/listimglink/1/2020063008261333186_1593473174.jpg",
     category: "MASK",
@@ -18,6 +19,7 @@ const data = [
     company: "조선일보",
   },
   {
+    id: 2,
     image: "https://www.boannews.com/media/upFiles2/2020/08/571615334_9555.jpg",
     category: "IT",
     title: "인스타그램 고객 지원센터 위장한 공격자들 주의보",
@@ -28,6 +30,7 @@ const data = [
     company: "보안뉴스",
   },
   {
+    id: 3,
     image: "https://www.boannews.com/media/upFiles2/2020/08/571553550_8076.jpg",
     category: "IT",
     title: "다시 한 번 북한 찍은 미국, 이번엔 암호화폐 계정 노린다",
@@ -38,6 +41,7 @@ const data = [
     company: "보안뉴스",
   },
   {
+    id: 4,
     image: "https://www.boannews.com/media/upFiles2/2020/08/571553550_8076.jpg",
     category: "IT",
     title: "다시 한 번 북한 찍은 미국, 이번엔 암호화폐 계정 노린다",
@@ -48,6 +52,7 @@ const data = [
     company: "보안뉴스",
   },
   {
+    id: 5,
     image: "https://www.boannews.com/media/upFiles2/2020/08/571553550_8076.jpg",
     category: "IT",
     title: "다시 한 번 북한 찍은 미국, 이번엔 암호화폐 계정 노린다",
@@ -86,7 +91,19 @@ const useStyles = makeStyles({
 });
 
 const ContentsContainer = styled.div`
-  display: ${(props) => (props.view === "card" ? "flex" : "block")};
+  margin-top: 10px;
+  ${(props) =>
+    props.view === "card" &&
+    css`
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    `}
+  ${(props) =>
+    props.view === "list" &&
+    css`
+      display: block;
+    `};
 `;
 
 export default function NewsList() {

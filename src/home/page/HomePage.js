@@ -6,7 +6,6 @@ import styled from "styled-components";
 import getRssUrl from "../../common/getRssUrl";
 
 const Container = styled.section`
-  padding-top: 80px;
   display: flex;
   flex-direction: column;
 `;
