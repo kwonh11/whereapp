@@ -50,9 +50,9 @@ export default function App() {
         <Switch>
           <Route path="/detail" component={Detail} />
           <Route path="/chat" component={ChatPage} />
-          <Route path="/news:id" component={DetailPage} />
+          <Route path="/news/:id" component={DetailPage} />
           <Route path="/news" component={NewsPage} />
-          <Route path="/" exact component={NewsPage} />
+          <Route path="/" exact component={DetailPage} />
         </Switch>
         <ChatPage />
       </Router>
