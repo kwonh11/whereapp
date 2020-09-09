@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Login from "./Login";
+import {Button} from '@material-ui/core';
+import LogoImage from '../../images/logo.png';
 
 const Container = styled.nav`
   height: 70px;
@@ -15,7 +17,6 @@ const Container = styled.nav`
   justify-content: center;
   align-items: center;
 `;
-
 const Inner = styled.div`
   width: 1300px;
   height: 100%;
@@ -24,11 +25,12 @@ const Inner = styled.div`
   justify-content: space-between;
   padding: 0 10px;
 `;
-
 const RightItem = styled.ul`
   display: flex;
   & li {
     margin-right: 10px;
+    display: flex;
+    align-items: center;
     /* & + & {
       margin-right: 10px;
     } */
@@ -37,6 +39,15 @@ const RightItem = styled.ul`
     }
   }
 `;
+const Logo = styled(Button)`
+  width: 100px;
+  height: 50px;
+  margin-right: 15px;
+  background-image: url(${(props) => props.image});
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+`;
 
 export default function GNB() {
   return (
@@ -44,7 +55,9 @@ export default function GNB() {
       <Inner>
         <RightItem>
           <li>
-            <Link to="/">로고</Link>
+            <Link to="/">
+              <Logo image={LogoImage} />
+            </Link>
           </li>
           <li>
             <Link to="/news">언론사별 보기</Link>
