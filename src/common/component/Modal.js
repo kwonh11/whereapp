@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const ModalContainer = styled.div`
-    position: absolute;
+    position: fixed;
     left: 0;
     top: 0;
     display: flex;

@@ -9,6 +9,7 @@ import GNBPage from "./gnb/page/GNBPage";
 import DetailPage from "./detail/page/DetailPage";
 import UserPage from "./user/page/UserPage";
 import Modal from './common/component/Modal';
+import Footer from './common/component/Footer';
 
 // login test
 import SignIn from './gnb/component/Signin';
@@ -57,6 +58,7 @@ export default function App() {
         <ChatPage />
       </Router>
     </AppContainer>
+      <Footer />
       <Modal on={modalOn} onClickClose={onClickClose}>
         {/* 모달로 띄워질 창 여기에 작성 */}
         <SignIn/>
