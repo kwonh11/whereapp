@@ -4,11 +4,11 @@ import Button from '@material-ui/core/Button';
 
 
 const CommentsWrap = styled.div`
+    position: static !important;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 500px;
     height: 300px;
     width: 100%;
 `;
@@ -32,7 +32,7 @@ const InputDatas = styled.div`
 `;
 const Characters = styled.div`
     font-size: 0.7rem;
-    color: ${props => props.color === "blue"? "#848484":"red"};
+    color: ${props => props.color === "gray"? "#848484":"red"};
     display: flex;
     align-self: flex-end;
 `;
@@ -42,10 +42,8 @@ export default function Comments(props) {
     const [sendable, setSendable] = React.useState(true);
 
     React.useEffect(()=>{
-        if (value.length > 300) {
-            console.log("300글자 초과");
-            setSendable(false);
-        }
+        if (value.length > 300) setSendable(false);
+        if (value.length <= 300) setSendable(true);
     },[value]);
 
     const handleChange = (event) => {
@@ -65,7 +63,7 @@ export default function Comments(props) {
             value={value}
             />
             <InputDatas>
-                <Characters color={sendable? "blue":"red"}> 
+                <Characters color={sendable? "gray":"red"}> 
                     {value.length} / 300
                 </Characters>
                 <StyledButton variant="contained" color="primary">입 력</StyledButton>

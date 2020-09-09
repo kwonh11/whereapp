@@ -18,6 +18,10 @@ function getURL(iconName) {
 }
 
 const IconBox = styled.div`
+  border: 1px solid;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: ${(props) => props.size};
   height: ${(props) => props.size};
   margin: ${(props) => props.margin};

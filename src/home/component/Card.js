@@ -8,7 +8,7 @@ import { red } from "@material-ui/core/colors";
 
 
 const StyledCard = styled(Card)`
-  transition: all 0.3s ease-out;
+  transition: all 0.7s ease-out;
   &:hover{
     box-shadow: 0px 1px 4px rgba(0,0,0,.1), 0px 2px 3px rgba(0,0,0,.12), 0px 1px 3px rgba(0,0,0,.14);
     transform: translateY(-5px);
