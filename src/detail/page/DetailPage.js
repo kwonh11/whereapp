@@ -1,5 +1,14 @@
-import DetailContainer from "../container/DetailContainer";
+import ArticleContainer from "../container/ArticleContainer";
+import styled from "styled-components";
 
-export default function DetailPage() {
-  return <DetailContainer />;
+const DetailPageContainer = styled.section``;
+
+export default function DetailPage({ match }) {
+  console.log("DetailPage");
+  const { id } = match.params;
+  return (
+    <DetailPageContainer>
+      <ArticleContainer id={id} />
+    </DetailPageContainer>
+  );
 }

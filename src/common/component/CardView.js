@@ -45,7 +45,7 @@ export default function CardView({ data }) {
       </CardActionArea>
       <CardActions>
         <Button size="small" color="primary">
-          <Link to={`/new/${news.id}`}> 자세히</Link>
+          <Link to={`/news/${news.id}`}> 자세히</Link>
         </Button>
         <Button size="small" color="primary">
           스크랩

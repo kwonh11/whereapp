@@ -8,7 +8,11 @@ import styled, { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
 import GNBPage from "./gnb/page/GNBPage";
 import DetailPage from "./detail/page/DetailPage";
+<<<<<<< HEAD
+import UserPage from "./user/page/UserPage";
+=======
 import Modal from './common/component/Modal';
+>>>>>>> 11383eb7db03ffb5e21874ba941d6294b500c5bc
 
 const customHistory = createBrowserHistory();
 const GlobalStyle = createGlobalStyle`
@@ -48,11 +52,12 @@ export default function App() {
       <Router history={customHistory}>
         <GNBPage />
         <Switch>
+          <Route path="/user" component={UserPage} />
           <Route path="/detail" component={Detail} />
           <Route path="/chat" component={ChatPage} />
           <Route path="/news/:id" component={DetailPage} />
           <Route path="/news" component={NewsPage} />
-          <Route path="/" exact component={DetailPage} />
+          <Route path="/" exact component={HomePage} />
         </Switch>
         <ChatPage />
       </Router>
