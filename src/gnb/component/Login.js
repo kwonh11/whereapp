@@ -1,16 +1,8 @@
 import { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import { Button, Avatar } from "@material-ui/core";
 import PersonIcon from "@material-ui/icons/Person";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-
-const useStyles = makeStyles({
-  root: {
-    backgroundColor: "#3f63bf",
-    borderColor: "#3f63bf",
-  },
-});
 
 const LogoutContainer = styled.div`
   display: flex;
@@ -28,7 +20,6 @@ export default function Login() {
     setLogin(!login);
   };
 
-  const classes = useStyles();
   return login ? (
     <LogoutContainer>
       <Avatar>

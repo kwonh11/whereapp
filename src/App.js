@@ -10,6 +10,9 @@ import DetailPage from "./detail/page/DetailPage";
 import UserPage from "./user/page/UserPage";
 import Modal from './common/component/Modal';
 
+// login test
+import SignIn from './gnb/component/Signin';
+
 const customHistory = createBrowserHistory();
 const GlobalStyle = createGlobalStyle`
   ${reset};
@@ -32,9 +35,9 @@ const AppContainer = styled.div`
 // router
 export default function App() {
   // test
-  const [on, setOn] = React.useState(false);
+  const [modalOn, setModalOn] = React.useState(true);
   const onClickClose = () => {
-    setOn(!on);
+    setModalOn(!modalOn);
   };
 
   return (
@@ -54,8 +57,9 @@ export default function App() {
         <ChatPage />
       </Router>
     </AppContainer>
-      <Modal on={on} onClickClose={onClickClose}>
+      <Modal on={modalOn} onClickClose={onClickClose}>
         {/* 모달로 띄워질 창 여기에 작성 */}
+        <SignIn/>
       </Modal>
   </React.Fragment>
   );
