@@ -8,11 +8,8 @@ import styled, { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
 import GNBPage from "./gnb/page/GNBPage";
 import DetailPage from "./detail/page/DetailPage";
-<<<<<<< HEAD
 import UserPage from "./user/page/UserPage";
-=======
-import Modal from './common/component/Modal';
->>>>>>> 11383eb7db03ffb5e21874ba941d6294b500c5bc
+import Modal from "./common/component/Modal";
 
 const customHistory = createBrowserHistory();
 const GlobalStyle = createGlobalStyle`
@@ -27,7 +24,9 @@ const GlobalStyle = createGlobalStyle`
   section {
     padding-top: 80px;
   }
+
 `;
+
 const AppContainer = styled.div`
   max-width: 1300px;
   margin: 0 auto;
@@ -37,34 +36,34 @@ const AppContainer = styled.div`
 export default function App() {
   // test
   const [on, setOn] = React.useState(false);
-  React.useLayoutEffect(()=>{
-    setTimeout(()=> {
+  React.useLayoutEffect(() => {
+    setTimeout(() => {
       setOn(true);
     }, 1000);
-  },[]);
+  }, []);
   const onClickClose = () => {
     setOn(!on);
-  }
+  };
   return (
     <React.Fragment>
-    <AppContainer>
-      <GlobalStyle />
-      <Router history={customHistory}>
-        <GNBPage />
-        <Switch>
-          <Route path="/user" component={UserPage} />
-          <Route path="/detail" component={Detail} />
-          <Route path="/chat" component={ChatPage} />
-          <Route path="/news/:id" component={DetailPage} />
-          <Route path="/news" component={NewsPage} />
-          <Route path="/" exact component={HomePage} />
-        </Switch>
-        <ChatPage />
-      </Router>
-    </AppContainer>
-      <Modal on={on} onClickClose={onClickClose}>
-        {/* 모달로 띄워질 창 여기에 작성 */}
-      </Modal>
-  </React.Fragment>
+      <AppContainer>
+        <GlobalStyle />
+        <Router history={customHistory}>
+          <GNBPage />
+          <Switch>
+            <Route path="/user" component={UserPage} />
+            <Route path="/detail" component={Detail} />
+            <Route path="/chat" component={ChatPage} />
+            <Route path="/news/:id" component={DetailPage} />
+            <Route path="/news" component={NewsPage} />
+            <Route path="/" exact component={HomePage} />
+          </Switch>
+          <ChatPage />
+        </Router>
+      </AppContainer>
+      {/* <Modal on={on} onClickClose={onClickClose}> */}
+      {/* 모달로 띄워질 창 여기에 작성 */}
+      {/* </Modal> */}
+    </React.Fragment>
   );
 }

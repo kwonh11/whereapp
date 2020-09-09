@@ -4,6 +4,7 @@ import { Button, Avatar } from "@material-ui/core";
 import PersonIcon from "@material-ui/icons/Person";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import Modal from "../../common/component/Modal";
 
 const useStyles = makeStyles({
   root: {
