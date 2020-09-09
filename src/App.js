@@ -1,6 +1,5 @@
 import { Router, Route, Switch } from "react-router-dom";
 import ChatPage from "./chat/page/ChatPage";
-import Detail from "./detail/container";
 import NewsPage from "./news/page/NewsPage";
 import HomePage from "./home/page/HomePage";
 import { createBrowserHistory } from "history";
@@ -8,11 +7,11 @@ import styled, { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
 import GNBPage from "./gnb/page/GNBPage";
 import DetailPage from "./detail/page/DetailPage";
-<<<<<<< HEAD
 import UserPage from "./user/page/UserPage";
-=======
 import Modal from './common/component/Modal';
->>>>>>> 11383eb7db03ffb5e21874ba941d6294b500c5bc
+
+// login test
+import SignIn from './gnb/component/Signin';
 
 const customHistory = createBrowserHistory();
 const GlobalStyle = createGlobalStyle`
@@ -36,15 +35,11 @@ const AppContainer = styled.div`
 // router
 export default function App() {
   // test
-  const [on, setOn] = React.useState(false);
-  React.useLayoutEffect(()=>{
-    setTimeout(()=> {
-      setOn(true);
-    }, 1000);
-  },[]);
+  const [modalOn, setModalOn] = React.useState(true);
   const onClickClose = () => {
-    setOn(!on);
-  }
+    setModalOn(!modalOn);
+  };
+
   return (
     <React.Fragment>
     <AppContainer>
@@ -53,7 +48,7 @@ export default function App() {
         <GNBPage />
         <Switch>
           <Route path="/user" component={UserPage} />
-          <Route path="/detail" component={Detail} />
+          <Route path="/detail" component={DetailPage} />
           <Route path="/chat" component={ChatPage} />
           <Route path="/news/:id" component={DetailPage} />
           <Route path="/news" component={NewsPage} />
@@ -62,8 +57,9 @@ export default function App() {
         <ChatPage />
       </Router>
     </AppContainer>
-      <Modal on={on} onClickClose={onClickClose}>
+      <Modal on={modalOn} onClickClose={onClickClose}>
         {/* 모달로 띄워질 창 여기에 작성 */}
+        <SignIn/>
       </Modal>
   </React.Fragment>
   );

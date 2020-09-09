@@ -24,6 +24,7 @@ const ModalBox = styled.div`
     width: 500px;
     height: 400px;
     margin-top: ${props => props.on === "on"? "0px": "30px"};
+    border-radius: 10px;
     transition: all 0.3s ease-out;
 `
 const ExitWrap = styled.div`
@@ -42,7 +43,6 @@ const ExitWrap = styled.div`
 `
 export default function Modal(props) {
     const { on, onClickClose, children } = props;
-
     return (
         <ModalContainer on={on? "on":"off"}>
             <ModalBox on={on? "on":"off"}>
