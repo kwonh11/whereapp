@@ -79,7 +79,7 @@ export default function Slider(props) {
   };
   return (
     // <SliderContainer device={"web"} height="65vh">
-    <SliderContainer device={"web"} height="100%">
+    <SliderContainer device={"web"} height="110%">
       <ArrowContainer device={"web"}>
         <PrevArrow visible={active <= -1 ? "none" : ""} onClick={onClickPrev}>
           <ArrowBackIosOutlined style={{ fontSize: 75 }} />
