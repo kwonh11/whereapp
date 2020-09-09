@@ -1,4 +1,4 @@
-import Deatil from "../component/Detail";
+import Detail from "../component/Detail";
 
 export default function DetailContainer() {
   return <Detail />;
