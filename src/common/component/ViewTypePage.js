@@ -131,7 +131,6 @@ const ContentsContainer = styled.div`
 `;
 
 function ViewTypePage({ location, data }) {
-  console.log(location);
   let query = qs.parse(location.search, {
     ignoreQueryPrefix: true,
   });

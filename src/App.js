@@ -51,7 +51,7 @@ export default function App() {
         <Router history={customHistory}>
           <GNBPage />
           <Switch>
-            <Route path="/user" component={UserPage} />
+            <Route path="/user/:tab" component={UserPage} />
             <Route path="/detail" component={Detail} />
             <Route path="/chat" component={ChatPage} />
             <Route path="/news/:id" component={DetailPage} />

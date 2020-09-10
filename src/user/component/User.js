@@ -14,6 +14,7 @@ import {
 import ViewTypePage from "../../common/component/ViewTypePage";
 import ViewTypeBtn from "../../common/component/ViewTypeBtn";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const data = [
   {
@@ -101,13 +102,12 @@ function TabPanel(props) {
   );
 }
 
-export default function User() {
+export default function User({ tab }) {
   const classes = useStyles();
-
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(tab === "scrap" ? 0 : 1);
   const [order, setOrder] = useState(0);
 
-  const categoryList = ["스크랩", "내 댓글"];
+  const categoryList = ["scrap", "comment"];
   const orderList = ["push", "latest", "comments"];
   //담은 순, 최신 순, 댓글 많은 순
 
@@ -129,12 +129,6 @@ export default function User() {
     setValue(newValue);
   };
 
-  const [view, setView] = useState("card");
-
-  const handleView = (event, newView) => {
-    setView(newView);
-  };
-
   return (
     <div className={classes.root}>
       <AppBar position="static" color="default">
@@ -146,7 +140,11 @@ export default function User() {
           variant="fullWidth"
         >
           {categoryList.map((item, idx) => (
-            <Tab key={idx} value={idx} label={item} />
+            <Tab key={idx} label={item}>
+              <Link to={`/user/${item}`}>
+                <Tab label={item} />
+              </Link>
+            </Tab>
           ))}
         </Tabs>
       </AppBar>
