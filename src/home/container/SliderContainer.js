@@ -51,6 +51,6 @@ const testNews = [...news, ...news, ...news.slice(0,2)];
 
 export default function SliderContainer(props) {
     return (
-        <Slider testNews={testNews}/>
+        <Slider news={testNews}/>
     )
 }

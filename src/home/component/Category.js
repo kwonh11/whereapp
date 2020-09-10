@@ -5,6 +5,7 @@ import { Paper, Tabs, Tab } from "@material-ui/core";
 const useStyles = makeStyles({
   paper: {
     height: "100%",
+    marginRight: "20px"
   },
 });
 
@@ -30,7 +31,7 @@ export default function Category() {
         variant="scrollable"
       >
         {categoryList.map((item, idx) => (
-          <Tab key={idx} label={item} />
+          <Tab key={idx} label={item} style={{fontSize:"1.1rem", fontWeight: "bold"}}/>
         ))}
       </Tabs>
     </Paper>

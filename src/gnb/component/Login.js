@@ -13,14 +13,7 @@ import Modal from "../../common/component/Modal";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
 import UserPage from "../../user/page/UserPage";
 
-const useStyles = makeStyles({
-  root: {
-    backgroundColor: "#3f63bf",
-    borderColor: "#3f63bf",
-  },
-});
-
-const UserContainer = styled.div`
+const LogoutContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
