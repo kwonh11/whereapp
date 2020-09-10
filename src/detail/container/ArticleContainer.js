@@ -61,7 +61,9 @@ const data = [
 
 export default function ArticleContainer({ id }) {
   const news = data.find((item) => item.id === parseInt(id));
-  console.log(news);
 
+  const onSubmitComments = (sendable) => {
+    
+  }
   return <Article news={news} />;
 }
