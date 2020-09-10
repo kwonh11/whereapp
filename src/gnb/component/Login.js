@@ -13,7 +13,7 @@ import Modal from "../../common/component/Modal";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
 import UserPage from "../../user/page/UserPage";
 
-const LogoutContainer = styled.div`
+const UserContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -80,7 +80,6 @@ export default function Login() {
     setOn(!on);
   };
 
-  const classes = useStyles();
   return (
     <>
       {login ? (
