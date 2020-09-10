@@ -1,9 +1,6 @@
 import { useState } from "react";
-import styled, { css } from "styled-components";
-import { makeStyles } from "@material-ui/core/styles";
-import CardView from "../../common/component/CardView";
-import ListView from "../../common/component/ListView";
-import ViewButton from "../../common/component/ViewButton";
+import ViewTypeBtn from "../../common/component/ViewTypeBtn";
+import ViewTypePage from "../../common/component/ViewTypePage";
 
 const data = [
   {
@@ -64,63 +61,11 @@ const data = [
   },
 ];
 
-const useStyles = makeStyles({
-  root: {
-    maxWidth: 345,
-  },
-  media: {
-    height: 140,
-  },
-  list: {
-    width: "100%",
-  },
-  inline: {
-    display: "inline",
-  },
-  img: {
-    width: 250,
-    height: 160,
-    marginRight: 38,
-  },
-  listItem: {
-    borderBottom: "1px solid #ccc",
-    "&:last-child": {
-      borderBottom: "none",
-    },
-  },
-});
-
-const ContentsContainer = styled.div`
-  margin-top: 10px;
-  ${(props) =>
-    props.view === "card" &&
-    css`
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 20px;
-    `}
-  ${(props) =>
-    props.view === "list" &&
-    css`
-      display: block;
-    `};
-`;
-
 export default function NewsList() {
-  const classes = useStyles();
-
-  const [view, setView] = useState("card");
-
-  const handleView = (event, newView) => {
-    setView(newView);
-  };
-  //
   return (
     <div>
-      <ViewButton view={view} handleView={handleView} />
-      <ContentsContainer view={view}>
-        {view === "card" ? <CardView data={data} /> : <ListView data={data} />}
-      </ContentsContainer>
+      <ViewTypeBtn />
+      <ViewTypePage data={data} />
     </div>
   );
 }

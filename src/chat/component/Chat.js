@@ -5,6 +5,7 @@ import SendIcon from "@material-ui/icons/Send";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
 import CloseIcon from "@material-ui/icons/Close";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
+import styled, { css } from "styled-components";
 
 const useStyles = makeStyles({
   paper: {
@@ -38,55 +39,57 @@ const useStyles = makeStyles({
   inputBase: {
     flex: 1,
   },
-  iconButton: {
-    zIndex: 9999,
-    backgroundColor: "#3f63bf",
-    color: "#fff",
-    width: 62,
-    height: 62,
-    position: "fixed",
-    bottom: 30,
-    right: 30,
-    "&:hover": {
-      backgroundColor: "#3f63bf",
-    },
-  },
   icon: {
     width: "80%",
     height: "80%",
   },
 });
 
+const ChatBtn = styled(IconButton)`
+  &.MuiButtonBase-root {
+    z-index: 9999;
+    color: #fff;
+    right: 30px;
+    width: 62px;
+    bottom: 30px;
+    height: 62px;
+    position: fixed;
+    background-color: #3f63bf;
+    &.MuiButtonBase-root:hover {
+      background-color: #3f63bf;
+    }
+  }
+`;
+
 export default function Chat({ visual, handleClick }) {
   const classes = useStyles();
-  return (
-    <>
-      <IconButton onClick={handleClick} className={classes.iconButton}>
-        <ChatBubbleOutlineIcon className={classes.icon} />
-      </IconButton>
-      <Zoom in={visual}>
-        <Paper elevation={3} className={classes.paper}>
-          <div className={classes.header}>
-            <span>참여인원</span>
-            <IconButton onClick={handleClick}>
-              <CloseIcon />
-            </IconButton>
-          </div>
-          <div className={classes.contents}></div>
-          <form className={classes.form}>
-            <IconButton>
-              <AttachFileIcon />
-            </IconButton>
-            <InputBase
-              className={classes.inputBase}
-              placeholder="메세지를 입력해주세요."
-            />
-            <IconButton>
-              <SendIcon />
-            </IconButton>
-          </form>
-        </Paper>
-      </Zoom>
-    </>
+  return visual ? (
+    <Zoom in={visual}>
+      <Paper elevation={3} className={classes.paper}>
+        <div className={classes.header}>
+          <span>참여인원</span>
+          <IconButton onClick={handleClick}>
+            <CloseIcon />
+          </IconButton>
+        </div>
+        <div className={classes.contents}></div>
+        <form className={classes.form}>
+          <IconButton>
+            <AttachFileIcon />
+          </IconButton>
+          <InputBase
+            className={classes.inputBase}
+            placeholder="메세지를 입력해주세요."
+          />
+          <IconButton>
+            <SendIcon />
+          </IconButton>
+        </form>
+      </Paper>
+    </Zoom>
+  ) : (
+    <ChatBtn onClick={handleClick} className={classes.iconButton}>
+      <ChatBubbleOutlineIcon className={classes.icon} />
+    </ChatBtn>
   );
 }

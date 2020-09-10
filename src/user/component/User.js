@@ -11,12 +11,10 @@ import {
   FormControl,
   Select,
 } from "@material-ui/core";
-import CardView from "../../common/component/CardView";
-import ListView from "../../common/component/ListView";
+import ViewTypePage from "../../common/component/ViewTypePage";
+import ViewTypeBtn from "../../common/component/ViewTypeBtn";
 import styled from "styled-components";
-import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
-import ViewListIcon from "@material-ui/icons/ViewList";
-import ViewModuleIcon from "@material-ui/icons/ViewModule";
+import { Link } from "react-router-dom";
 
 const data = [
   {
@@ -83,8 +81,10 @@ const useStyles = makeStyles({
   },
 });
 
-const ContentsContainer = styled.div`
-  display: ${(props) => (props.view === "card" ? "flex" : "block")};
+const FilterWrap = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 function TabPanel(props) {
@@ -95,20 +95,19 @@ function TabPanel(props) {
       role="tabpanel"
       hidden={value !== index}
       {...other}
-      style={{ background: "#ccc" }}
+      style={{ background: "#eae6e6", padding: 15 }}
     >
       {value === index && <div>{children}</div>}
     </div>
   );
 }
 
-export default function User() {
+export default function User({ tab }) {
   const classes = useStyles();
-
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(tab === "scrap" ? 0 : 1);
   const [order, setOrder] = useState(0);
 
-  const categoryList = ["내 정보", "스크랩", "내 댓글"];
+  const categoryList = ["scrap", "comment"];
   const orderList = ["push", "latest", "comments"];
   //담은 순, 최신 순, 댓글 많은 순
 
@@ -130,12 +129,6 @@ export default function User() {
     setValue(newValue);
   };
 
-  const [view, setView] = useState("card");
-
-  const handleView = (event, newView) => {
-    setView(newView);
-  };
-
   return (
     <div className={classes.root}>
       <AppBar position="static" color="default">
@@ -147,49 +140,33 @@ export default function User() {
           variant="fullWidth"
         >
           {categoryList.map((item, idx) => (
-            <Tab key={idx} value={idx} label={item} />
+            <Tab key={idx} label={item}>
+              <Link to={`/user/${item}`}>
+                <Tab label={item} />
+              </Link>
+            </Tab>
           ))}
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <div style={{ display: "flex" }}>
-          <Typography variant="h6" gutterBottom>
-            닉네임
-          </Typography>
-          <TextField variant="outlined" placeholder="닉네임" />
-        </div>
-        <div>
-          <Button variant="contained" color="secondary">
-            탈퇴
-          </Button>
-          <Button variant="contained" color="secondary">
-            저장
-          </Button>
-        </div>
+        <FilterWrap>
+          <ViewTypeBtn />
+          <div>
+            {makeSelect(["조선", "중앙"], order)}
+            {makeSelect(orderList, order)}
+          </div>
+        </FilterWrap>
+        <ViewTypePage data={data} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <div>
-          <ToggleButtonGroup value={view} exclusive onChange={handleView}>
-            <ToggleButton value="card">
-              <ViewModuleIcon />
-            </ToggleButton>
-            <ToggleButton value="list">
-              <ViewListIcon />
-            </ToggleButton>
-          </ToggleButtonGroup>
-          {makeSelect(["조선", "중앙"], order)}
-          {makeSelect(orderList, order)}
-        </div>
-        <ContentsContainer view={view}>
-          {view === "card" ? (
-            <CardView data={data} />
-          ) : (
-            <ListView data={data} />
-          )}
-        </ContentsContainer>
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        Item Three
+        <FilterWrap>
+          <ViewTypeBtn />
+          <div>
+            {makeSelect(["조선", "중앙"], order)}
+            {makeSelect(orderList, order)}
+          </div>
+        </FilterWrap>
+        <ViewTypePage data={data} />
       </TabPanel>
     </div>
   );
