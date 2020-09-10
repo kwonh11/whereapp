@@ -6,10 +6,11 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 // footer컨테이너 100vw 로 width설정하면 스크롤발생
 const FooterContainer = styled.footer`
     position: absolute;
-    bottom: -30vh;
+    margin-top : 200px;
+    top: auto;
     left: 0;
-    width: 99vw;
-    height: 18vh;
+    width: 100%;
+    height: 180px;
     display: flex;  
     justify-content: center;
     align-items: center;
