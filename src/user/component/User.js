@@ -1,19 +1,9 @@
 import { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  Paper,
-  Tabs,
-  Tab,
-  AppBar,
-  Typography,
-  Button,
-  TextField,
-  FormControl,
-  Select,
-} from "@material-ui/core";
+import { Paper, FormControl, Select } from "@material-ui/core";
 import ViewTypePage from "../../common/component/ViewTypePage";
 import ViewTypeBtn from "../../common/component/ViewTypeBtn";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
 
 const data = [
@@ -81,26 +71,37 @@ const useStyles = makeStyles({
   },
 });
 
+const MenuContainer = styled.div`
+  display: flex;
+  height: 60px;
+`;
+
+const MenuBtn = styled.button`
+  width: 50%;
+  border: 0;
+
+  & a {
+    color: black;
+    font-size: 20px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  ${(props) =>
+    props.value &&
+    css`
+      border-bottom: 3px solid #3f63bf;
+    `}
+`;
+
 const FilterWrap = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
 `;
-
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      {...other}
-      style={{ background: "#eae6e6", padding: 15 }}
-    >
-      {value === index && <div>{children}</div>}
-    </div>
-  );
-}
 
 export default function User({ tab }) {
   const classes = useStyles();
@@ -130,25 +131,20 @@ export default function User({ tab }) {
   };
 
   return (
-    <div className={classes.root}>
-      <AppBar position="static" color="default">
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          indicatorColor="primary"
-          textColor="primary"
-          variant="fullWidth"
-        >
-          {categoryList.map((item, idx) => (
-            <Tab key={idx} label={item}>
-              <Link to={`/user/${item}`}>
-                <Tab label={item} />
-              </Link>
-            </Tab>
-          ))}
-        </Tabs>
-      </AppBar>
-      <TabPanel value={value} index={0}>
+    <Paper elevation={3}>
+      <MenuContainer>
+        {categoryList.map((item, idx) => {
+          console.log(item);
+          console.log(tab);
+          console.log(item === tab);
+          return (
+            <MenuBtn key={idx} value={item === tab ? 1 : 0}>
+              <Link to={`/user/${item}`}>{item}</Link>
+            </MenuBtn>
+          );
+        })}
+      </MenuContainer>
+      <div>
         <FilterWrap>
           <ViewTypeBtn />
           <div>
@@ -157,17 +153,7 @@ export default function User({ tab }) {
           </div>
         </FilterWrap>
         <ViewTypePage data={data} />
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <FilterWrap>
-          <ViewTypeBtn />
-          <div>
-            {makeSelect(["조선", "중앙"], order)}
-            {makeSelect(orderList, order)}
-          </div>
-        </FilterWrap>
-        <ViewTypePage data={data} />
-      </TabPanel>
-    </div>
+      </div>
+    </Paper>
   );
 }
