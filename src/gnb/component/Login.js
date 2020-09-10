@@ -1,26 +1,13 @@
 import { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import {
-  Button,
-  Avatar,
-  Typography,
-  Divider,
-  IconButton,
-} from "@material-ui/core";
+import { Button, Avatar } from "@material-ui/core";
+import PersonIcon from "@material-ui/icons/Person";
 import styled from "styled-components";
 import { Link, Route } from "react-router-dom";
 import Modal from "../../common/component/Modal";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
 import UserPage from "../../user/page/UserPage";
 
-const useStyles = makeStyles({
-  root: {
-    backgroundColor: "#3f63bf",
-    borderColor: "#3f63bf",
-  },
-});
-
-const UserContainer = styled.div`
+const LogoutContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;

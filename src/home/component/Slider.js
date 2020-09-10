@@ -14,7 +14,7 @@ const SliderContainer = styled.div`
   display: flex;
   justify-content: start;
   align-items: center;
-  margin: 10vh 0;
+  margin: 0;
   padding: 0;
   position: relative;
 `;
@@ -33,7 +33,7 @@ const ArrowContainer = styled.div`
   width: 100%;
   /* width: ${(props) =>
     props.device === "web" ? "calc(990px + 60px)" : ""}; */
-  /* margin-left: 15px; */
+  margin-left: 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -66,8 +66,8 @@ const NextArrow = styled(PrevArrow)`
 `;
 
 export default function Slider(props) {
-  const { cardWidth, testNews } = props;
-  const max = React.useCallback(() => testNews.length - 2, [testNews]);
+  const { cardWidth, news } = props;
+  const max = React.useCallback(() => news.length - 2, [news]);
   const [active, setActive] = React.useState(0);
   const cardContainerRef = React.useRef();
 
@@ -93,7 +93,7 @@ export default function Slider(props) {
       </ArrowContainer>
       <CardContainer ref={cardContainerRef} active={active}>
         {/* testNews는 이 후 saga->api->store 를 통해 전달된 response에 따라 변경*/}
-        {testNews.map((item, index) => {
+        {news.map((item, index) => {
           return <NewsCard key={index} {...item} />;
         })}
       </CardContainer>

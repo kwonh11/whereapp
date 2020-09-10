@@ -10,6 +10,7 @@ const Container = styled.section`
 `;
 const FilterWrap = styled.div`
   display: flex;
+  margin-top: 50px;
   align-items: center;
   justify-content: space-between;
   height: 100px;
