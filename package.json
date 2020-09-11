@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "npx webpack-dev-server",
-    "server": "nodemon ./src/server/app"
+    "server": "npx nodemon ./server/app"
   },
   "repository": {
     "type": "git",
@@ -34,6 +34,7 @@
     "express": "^4.17.1",
     "file-loader": "^6.1.0",
     "html-webpack-plugin": "^4.3.0",
+    "mongodb": "^3.6.2",
     "mongoose": "^5.10.4",
     "morgan": "^1.10.0",
     "qs": "^6.9.4",
