@@ -38,7 +38,7 @@ const Characters = styled.div`
 `;
 
 export default function Comments(props) {
-    const [value, setValue] = React.useState('');
+    const [inputValue, setInputValue] = React.useState('');
     const [sendable, setSendable] = React.useState(true);
 
     React.useEffect(()=>{
@@ -47,7 +47,7 @@ export default function Comments(props) {
     },[value]);
 
     const handleChange = (event) => {
-      setValue(event.target.value);
+        setInputValue(event.target.value);
     };
 
     return (
@@ -60,13 +60,17 @@ export default function Comments(props) {
             placeholder="바르고 고운 말을 사용해주세요."
             multiline
             variant="outlined"
-            value={value}
+            value={inputValue}
             />
             <InputDatas>
                 <Characters color={sendable? "gray":"red"}> 
-                    {value.length} / 300
+                    {inputValue.length} / 300
                 </Characters>
-                <StyledButton variant="contained" color="primary">입 력</StyledButton>
+                <StyledButton 
+                variant="contained" 
+                color="primary">
+                    입 력
+                </StyledButton>
             </InputDatas>
         </CommentsWrap>
     )

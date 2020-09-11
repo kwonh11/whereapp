@@ -16,7 +16,7 @@ const FooterContainer = styled.footer`
     align-items: center;
     flex-direction: column;
     background-color: #f1f1f1;
-`
+`;
 const IconContainer = styled.div`
     display: flex;
     justify-content: center;
@@ -25,7 +25,7 @@ const IconContainer = styled.div`
     & > div {
         margin: 0 8px;
     }
-`
+`;
 const InfoWrap = styled.div`
     height: 30px;
     width: 100%;
@@ -39,6 +39,7 @@ const InfoWrap = styled.div`
         margin-bottom: 5px;
     }
 `;
+
 
 export default function Footer() {
     return (
