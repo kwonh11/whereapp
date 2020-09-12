@@ -37,12 +37,6 @@ const AppContainer = styled.div`
 `;
 // router
 export default function App() {
-  // test
-  const [modalOn, setModalOn] = React.useState(true);
-  const onClickClose = () => {
-    setModalOn(!modalOn);
-  };
-
   return (
     <React.Fragment>
       <AppContainer>
@@ -61,10 +55,6 @@ export default function App() {
         </Router>
       </AppContainer>
       <Footer />
-      <Modal on={modalOn} onClickClose={onClickClose}>
-        {/* 모달로 띄워질 창 여기에 작성 */}
-        <SignIn />
-      </Modal>
     </React.Fragment>
   );
 }

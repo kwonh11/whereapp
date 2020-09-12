@@ -8,10 +8,10 @@ import {
   IconButton,
 } from "@material-ui/core";
 import styled from "styled-components";
-import { Link, Route } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Modal from "../../common/component/Modal";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
-import UserPage from "../../user/page/UserPage";
+import SignIn from "./Signin";
 
 const UserContainer = styled.div`
   display: flex;
@@ -69,31 +69,46 @@ const BtnWrap = styled.div`
 `;
 
 export default function Login() {
-  const [login, setLogin] = useState(true);
-  const [on, setOn] = useState(false);
+  const [login, setLogin] = useState(false);
+  const [loginModal, setLoginModal] = useState(false);
+  const [infoModal, setInfoModal] = useState(false);
 
-  const handleClick = () => {
-    setLogin(!login);
+  const handleClickLoginModal = () => {
+    setLoginModal(!loginModal);
   };
 
-  const onClickClose = () => {
-    setOn(!on);
+  const handleClickInfoModal = () => {
+    setInfoModal(!infoModal);
   };
 
   return (
     <>
       {login ? (
-        <IconButton color="primary" component="span" onClick={onClickClose}>
+        <IconButton
+          color="primary"
+          component="span"
+          onClick={handleClickInfoModal}
+        >
           <Avatar></Avatar>
         </IconButton>
       ) : (
-        <Button variant="outlined" color="primary" onClick={handleClick}>
+        <Button
+          variant="outlined"
+          color="primary"
+          onClick={handleClickLoginModal}
+        >
           로그인 / 가입
         </Button>
       )}
 
-      {on && (
-        <Modal on={on} onClickClose={onClickClose}>
+      {loginModal && (
+        <Modal on={loginModal} onClickClose={handleClickLoginModal}>
+          <SignIn />
+        </Modal>
+      )}
+
+      {infoModal && (
+        <Modal on={infoModal} onClickClose={handleClickInfoModal}>
           <UserContainer>
             <UserInner>
               <Avatar></Avatar>
@@ -104,16 +119,16 @@ export default function Login() {
             <Typography variant="subtitle1">email</Typography>
           </UserContainer>
           <Divider />
-          <Menu color="primary" onClick={onClickClose}>
+          <Menu color="primary">
             <Link to="/user/scrap">스크랩</Link>
           </Menu>
           <Divider />
-          <Menu color="primary" onClick={onClickClose}>
+          <Menu color="primary">
             <Link to="/user/comment">내 댓글</Link>
           </Menu>
           <Divider />
           <BtnWrap>
-            <Button variant="outlined" color="primary" onClick={handleClick}>
+            <Button variant="outlined" color="primary">
               로그아웃
             </Button>
           </BtnWrap>

@@ -12,7 +12,9 @@ module.exports = () => {
       MONGO_URL,
       {
         dbName: "newsmart",
+        useCreateIndex: true,
         useNewUrlParser: true,
+        useUnifiedTopology: true,
       },
       (error) => {
         if (error) {
@@ -33,4 +35,5 @@ module.exports = () => {
     console.error("몽고디비 연결이 끊김, 재시도");
     connect();
   });
+  require("./user");
 };
