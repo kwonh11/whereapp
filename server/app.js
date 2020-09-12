@@ -29,8 +29,11 @@ app.set("port", process.env.PORT || 8000);
 //     console.log("webpack-dev-server is listening on port", devPort);
 //   });
 // }
+const corsOptions = {
+  origin: ["http://localhost:8000", "http://localhost:9000"],
+};
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(morgan("dev"));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(
