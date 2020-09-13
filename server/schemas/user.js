@@ -16,14 +16,6 @@ const userSchema = new Schema({
     type: String,
     require: true,
   },
-  articles: {
-    type: ObjectId,
-    ref: "Article",
-  },
-  comments: {
-    type: ObjectId,
-    ref: "Comment",
-  },
 });
 
 module.exports = mongoose.model("User", userSchema);
