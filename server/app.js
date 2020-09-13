@@ -17,7 +17,7 @@ app.listen(app.get("port"), () => {
 });
 
 app.use(morgan("dev"));
-app.use(express.static(path.resolve(__dirname, 'dist')));
+app.use(express.static(path.resolve(__dirname, 'view')));
 
 
 
