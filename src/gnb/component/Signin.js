@@ -42,7 +42,7 @@ export default function SignIn() {
     console.log("kakao");
     // axios.get("/api").then((res) => console.log(res));
     axios
-      .get("http://localhost:8000/auth/kakao")
+      .get("http://localhost:8000/auth/kakao", { credentials: true })
       .then((res) => console.log(res));
   };
 
@@ -50,6 +50,7 @@ export default function SignIn() {
     <SignInContainer>
       <TitleContainer>[작은로고] 다음 계정으로 로그인</TitleContainer>
       <StyledButton image={googleLoginImage} />
+
       <StyledButton image={kakaoLoginImage} onClick={handleKakao} />
     </SignInContainer>
   );

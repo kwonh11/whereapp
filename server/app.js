@@ -29,11 +29,25 @@ app.set("port", process.env.PORT || 8000);
 //     console.log("webpack-dev-server is listening on port", devPort);
 //   });
 // }
-const corsOptions = {
-  origin: ["http://localhost:8000", "http://localhost:9000"],
-};
 
-app.use(cors(corsOptions));
+// app.use(
+//   cors({
+//     origin: true,
+//     credentials: true,
+//   })
+// );
+var corsOption = {
+  origin: true,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+  exposedHeaders: ["x-auth-token"],
+};
+app.use(cors(corsOption));
+// const corsOptions = {
+//   origin: ["http://localhost:8000", "http://localhost:9000"],
+// };
+
+// app.use(cors(corsOptions));
 app.use(morgan("dev"));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(
