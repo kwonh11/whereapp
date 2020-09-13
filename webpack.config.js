@@ -9,7 +9,7 @@ module.exports = {
     },
     output : {
         filename : process.env.production? '[name].[chunkhash].js' : '[name].[hash].js',
-        path : path.resolve(__dirname, 'dist'),
+        path : path.resolve(__dirname, 'server/dist'),
     },
     optimization : {
         splitChunks : {
