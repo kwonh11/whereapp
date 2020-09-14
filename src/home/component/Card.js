@@ -6,6 +6,8 @@ import {Card, CardHeader, CardMedia, CardContent,
 import { Favorite as FavoriteIcon, Share as ShareIcon, MoreVert as MoreVertIcon} from '@material-ui/icons';
 import { red } from "@material-ui/core/colors";
 
+//test 중
+import {callApiScrap} from '../../common/api';
 
 const StyledCard = styled(Card)`
   transition: all 0.7s ease-out;
@@ -39,6 +41,13 @@ export default function NewsCard( { image, category, title, description, origina
         const isString = typeof desc === "string";
         return (isString && desc.length >= count? desc.substring(0,count) + "..." : desc);
     }
+
+    // test
+    // redux 구현 후 article 매개변수를 redux store를 통해 정확한 데이터로 넘겨줘야함
+    const testHandleOnClickScrap = (article) => {
+      callApiScrap(article).catch(err =>console.log(err));
+    }
+
     return (
         <StyledCard className={classes.root}>
           <CardHeader
@@ -66,7 +75,7 @@ export default function NewsCard( { image, category, title, description, origina
             </Typography>
           </CardContent>
           <CardActions disableSpacing>
-            <IconButton aria-label="add to favorites">
+            <IconButton aria-label="add to favorites" onClick={testHandleOnClickScrap}>
               <FavoriteIcon />
             </IconButton>
             <IconButton aria-label="share">
