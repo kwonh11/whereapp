@@ -36,9 +36,6 @@ module.exports = {
     port: 9000,
     proxy: {
       "**": "http://localhost:8000",
-    output : {
-        filename : process.env.production? '[name].[chunkhash].js' : '[name].[hash].js',
-        path : path.resolve(__dirname, 'server/dist'),
     },
   },
   module: {
