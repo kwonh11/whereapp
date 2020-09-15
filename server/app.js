@@ -19,12 +19,12 @@ app.listen(app.get("port"), () => {
   console.log(app.get("port"), "번 대기중!!!");
 });
 app.use(middlewares.logger);
+app.use(morgan("dev"));
 app.use(express.json({extended:true}));
 app.use(express.urlencoded());
 app.use("/user",userRouter);
 app.use("/news",newsRouter);
 
-app.use(morgan("dev"));
 app.use(express.static(path.resolve(__dirname, 'view')));
 
 

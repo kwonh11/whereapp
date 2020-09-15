@@ -7,45 +7,39 @@ const parseString = require('xml2js').parseString;
 const express = require("express");
 const router = express.Router();
 
-// 검색기능
-// google rss를 이용한 검색 결과를 보여준다.
-// 최대 10개
-// JSON으로 파싱 후 
-// Article 모델의 구조에 맞춰 array를 리턴함
+
+
+// Naver News API를 이용한 검색으로 변경하기
+// 1. naver에서 애플리케이션등록
+// 2. 요청 헤더에 클라이언트 id, 클라이언트 시크릿을 포함시킴
+// 3. naver api의 뒤에 쿼리를 "query"키로 발송
+// 4. json형태로 받아 확인
+// 5. query escape해야함 주의
+
+// google검색은 image제외하고 사용할 시에는 유용할 듯
+// image를 넣어야하는 경우, 다양한 플랫폼들의 각기 다른 DOM구조를 파싱해야함 -> 현실적으로 어려움
+// 상의 후 결정
 
 const getGoogleNewsByKeyword = async (keyword) => {
     console.log(keyword);
     const url = `https://news.google.com/rss/search?q=${keyword}&hl=ko&gl=KR&ceid=KR:ko`;
     const encodedURI = encodeURI(url);
-    let googleNewsList = [];
-    // {
-    //     title: [ '6개 제약⋅ 바이오사 코로나19 치료제 해외임상… “환자 모집 용이" - 조선비즈' ],
-    //     link: [
-    //       'https://biz.chosun.com/site/data/html_dir/2020/09/09/2020090903610.html'
-    //     ],
-    //     guid: [
-    //       {
-    //         _: 'CBMiR2h0dHBzOi8vYml6LmNob3N1bi5jb20vc2l0ZS9kYXRhL2h0bWxfZGlyLzIwMjAvMDkvMDkvMjAyMDA5MDkwMzYxMC5odG1s0gFDaHR0cHM6Ly9tLmJpei5jaG9zdW4uY29tL25ld3MvYXJ0aWNsZS5hbXAuaHRtbD9jb250aWQ9MjAyMDA5MDkwMzYxMA',
-    //         '$': [Object]
-    //       }
-    //     ],
-    //     pubDate: [ 'Wed, 09 Sep 2020 21:00:00 GMT' ],
-    //     description: [
-    //       '<a href="https://biz.chosun.com/site/data/html_dir/2020/09/09/2020090903610.html" target="_blank">6개 제약⋅ 바이오사 코로나19 치료제 해외임상… “환자 모집 용
-    //   이"</a>&nbsp;&nbsp;<font color="#6f6f6f">조선비즈</font>'
-    //     ],
-    //     source: [ { _: '조선비즈', '$': [Object] } ]
-    //   }
+
     await axios.get(encodedURI).then((response)=> {
         parseString(response.data, (err,result)=>{
             const newsList = result.rss.channel[0].item;
-            googleNewsList = newsList.map(news => ({
-                title: news.title,
-                link: news.link[0],
-                // 여기에 response 배열 요소 작성
-            }));
+            googleNewsList = newsList.map(news => {
+                // content, image, category 파싱 필요
+                console.log({
+                    title: news.title[0],
+                    link: news.link[0],
+                    corp: news.source[0]._,
+                    published: news.pubDate[0],
+                    origin: news.link[0],
+                })
+            });
         })
-    })
+    }).catch(err => console.log(err));
 }
 
 router.get("/search/:keyword", async (req,res) => {
