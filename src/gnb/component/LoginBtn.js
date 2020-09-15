@@ -148,9 +148,11 @@ export default function Login() {
           </Menu>
           <Divider />
           <BtnWrap>
-            <Button variant="outlined" color="primary">
-              로그아웃
-            </Button>
+            <a href="/auth/logout">
+              <Button variant="outlined" color="primary">
+                로그아웃
+              </Button>
+            </a>
           </BtnWrap>
         </Modal>
       )}
