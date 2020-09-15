@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import Login from "./Login";
-import {Button} from '@material-ui/core';
-import LogoImage from '../../images/logo.png';
+import LoginBtn from "./LoginBtn";
+import { Button } from "@material-ui/core";
+import LogoImage from "../../images/logo.png";
 
 const Container = styled.nav`
   height: 70px;
@@ -67,7 +67,7 @@ export default function GNB() {
           </li>
         </RightItem>
         <div>
-          <Login />
+          <LoginBtn />
         </div>
       </Inner>
     </Container>
