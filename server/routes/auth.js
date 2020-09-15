@@ -1,19 +1,33 @@
 const express = require("express");
 const passport = require("passport");
-const cors = require("cors");
-const User = require("../schemas/user");
 
 const router = express.Router();
+
+router.get("/checkUser", (req, res, next) => {
+  res.status(200).json({
+    user: req.user,
+  });
+});
+
+router.get("/google", passport.authenticate("google", { scope: ["profile"] }));
+
+router.get(
+  "/google/callback",
+  passport.authenticate("google", { failureRedirect: "/login" }),
+  (req, res) => {
+    res.redirect("/");
+  }
+);
 
 router.get("/kakao", passport.authenticate("kakao"));
 
 router.get(
   "/kakao/callback",
   passport.authenticate("kakao", {
-    failureRedirect: "http://localhost:9000/",
+    failureRedirect: "/",
   }),
   (req, res) => {
-    res.redirect("http://localhost:9000/");
+    res.redirect("/");
   }
 );
 

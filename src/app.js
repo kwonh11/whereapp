@@ -37,6 +37,7 @@ const AppContainer = styled.div`
 `;
 // router
 export default function App() {
+  console.log("app!!!!!!!!!");
   return (
     <React.Fragment>
       <AppContainer>

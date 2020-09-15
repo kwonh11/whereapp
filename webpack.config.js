@@ -11,7 +11,7 @@ module.exports = {
     filename: process.env.production
       ? "[name].[chunkhash].js"
       : "[name].[hash].js",
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, "server/view"),
   },
   optimization: {
     splitChunks: {

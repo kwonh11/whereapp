@@ -1,4 +1,5 @@
 const kakao = require("./kakaoStrategy");
+const google = require("./googleStrategy");
 const User = require("../schemas/user");
 
 module.exports = (passport) => {
@@ -12,4 +13,5 @@ module.exports = (passport) => {
       .catch((err) => done(err));
   });
   kakao(passport);
+  google(passport);
 };
