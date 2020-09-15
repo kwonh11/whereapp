@@ -15,13 +15,21 @@ const articleSchema = new Schema({
     type: String,
     require: true,
   },
-  crop: {
+  corp: {
     type: String,
     require: true,
   },
   subscriber: {
     type: ObjectId,
     ref: "User",
+  },
+  published: {
+    type: String,
+    required: true,
+  },
+  createAt: {
+    type: Date,
+    default: Date.now,
   },
 });
 
