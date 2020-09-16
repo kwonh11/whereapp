@@ -23,6 +23,8 @@ export function callApiScrap(article) {
   return axios.post("/user/scrap", data, axiosConfig);
 };
 
+// 검색 후 응답되는 배열은
+// list 형태로 출력
 export function callApiSearchByKeyword(keyword) {
   if(!keyword) return;
   return axios.get(`/news/search/${keyword}`);

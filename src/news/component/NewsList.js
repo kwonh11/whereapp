@@ -60,8 +60,11 @@ const data = [
     company: "보안뉴스",
   },
 ];
+// https://www.npmjs.com/package/@react-google-maps/api
+// 요기요 따라하자
 
 export default function NewsList() {
+
   return (
     <div>
       <ViewTypeBtn />

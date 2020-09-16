@@ -1,13 +1,10 @@
 const express = require("express");
 const morgan = require("morgan");
 const path = require('path');
-const cors = require('cors');
 const userRouter = require('./routes/user');
 const newsRouter = require('./routes/news');
-const middlewares = require('./routes/middlewares')
+const middlewares = require('./routes/middlewares');
 require("dotenv").config();
-
-const indexRouter = require("./routes");
 const connect = require("./schemas");
 
 const app = express();
@@ -20,7 +17,7 @@ app.listen(app.get("port"), () => {
 });
 app.use(middlewares.logger);
 app.use(morgan("dev"));
-app.use(express.json({extended:true}));
+app.use(express.json({extended: true}));
 app.use(express.urlencoded());
 app.use("/user",userRouter);
 app.use("/news",newsRouter);
