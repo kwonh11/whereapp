@@ -14,13 +14,15 @@ const app = express();
 connect();
 passportConfig(passport);
 
-
 app.set("port", process.env.PORT || 8000);
 app.listen(app.get("port"), () => {
   console.log(app.get("port"), "번 대기중!!!");
 });
 
 app.use(morgan("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use("/img", express.static(path.join(__dirname, "uploads")));
 app.use(cookieParser("secret"));
 app.use(
   session({
@@ -39,4 +41,3 @@ app.use(passport.session());
 
 app.use("/", express.static(path.join(__dirname, "view")));
 app.use("/auth", authRouter);
-
