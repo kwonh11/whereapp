@@ -102,6 +102,23 @@ export default function Login() {
     setInfoModal(!infoModal);
   };
 
+  const handleAddFile = (e) => {
+    const formData = new FormData();
+    formData.append("img", e.target.files[0]);
+
+    axios
+      .patch(`/auth/img/${userInfo.snsId}`, formData)
+      .then((res) => {
+        setUserInfo({
+          ...userInfo,
+          image: res.data.url,
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
   return (
     <>
       {login ? (
@@ -130,9 +147,23 @@ export default function Login() {
           <UserContainer>
             <UserInner>
               <img src={userInfo && userInfo.image} />
-              <IconButton color="primary" component="span">
-                <PhotoCamera />
-              </IconButton>
+              <input
+                accept="image/*"
+                style={{ display: "none" }}
+                type="file"
+                id="img"
+                name="img"
+                onChange={handleAddFile}
+              />
+              <label htmlFor="img">
+                <IconButton
+                  color="primary"
+                  aria-label="upload picture"
+                  component="span"
+                >
+                  <PhotoCamera />
+                </IconButton>
+              </label>
             </UserInner>
             <Typography variant="subtitle1">
               {userInfo && userInfo.nick}
