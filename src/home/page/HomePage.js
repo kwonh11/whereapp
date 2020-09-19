@@ -1,12 +1,13 @@
 import CategoryContainer from "../container/CategoryContainer";
 import DateContainer from "../container/DateContainer";
-import SearchContainer from "../container/SearchContainer";
+import LocationContainer from "../container/LocationContainer";
 import SliderContainer from "../container/SliderContainer";
 import styled from "styled-components";
 
 const Container = styled.section`
   display: flex;
   flex-direction: column;
+  padding-top: 75px;
 `;
 const FilterWrap = styled.div`
   display: flex;
@@ -15,23 +16,21 @@ const FilterWrap = styled.div`
   justify-content: space-between;
   height: 100px;
 `;
-const ContentsWrap = styled.div`
-  display: flex;
-  height: 500px;
-  align-items: center;
-`;
+// const ContentsWrap = styled.div`
+//   display: flex;
+//   height: 440px;
+//   align-items: center;
+// `;
 
 export default function HomePage() {
   return (
     <Container>
-      <FilterWrap>
-        <DateContainer />
-        <SearchContainer />
-      </FilterWrap>
-      <ContentsWrap>
-        <CategoryContainer />
+      {/* <ContentsWrap>
         <SliderContainer />
-      </ContentsWrap>
+      </ContentsWrap> */}
+      <FilterWrap>
+        <LocationContainer />
+      </FilterWrap>
     </Container>
   );
 }

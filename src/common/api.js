@@ -1,23 +1,9 @@
 import axios from 'axios';
+import qs from 'qs';
 
-
-// test용 데이터
-const dumyArticle = {
-  title: "뉴스1",
-  images: "image",
-  content: "content",
-  category: "category",
-  corp: "google",
-  published: "2020-01-01",
-  // date타입 server로 이동 후 타입 변환 주의
-  createAt: new Date(),
-}
 const axiosConfig = {
   baseURL: 'http://localhost:8000',
 };
-const data = {
-    article : dumyArticle
-}
 
 export function callApiScrap(article) {
   return axios.post("/user/scrap", data, axiosConfig);
@@ -28,4 +14,34 @@ export function callApiScrap(article) {
 export function callApiSearchByKeyword(keyword) {
   if(!keyword) return;
   return axios.get(`/news/search/${keyword}`);
+}
+
+export function callApiAreaBasedList(latitude, longitude) {
+  return axios.get(``)
+}
+
+
+// 유저 위치 재확인후 저장
+// redux에 유저 위치 저장하는 로직 필요
+export function getUsersLocation() {
+  console.log('getUsersLocation');
+  let result = {
+    latitude: '',
+    longitude: '',
+    error: false
+  };
+  const onSuccess = (position) => {
+    result.latitude  = position.coords.latitude;
+    result.longitude = position.coords.longitude;
+    console.log(`latitude : ${result.latitude}, longitude: ${result.longitude}`);
+  }
+  const onFailure = () => {
+    result.error = true;
+  }
+  if(!navigator.geolocation) {
+
+  } else {
+    navigator.geolocation.getCurrentPosition(onSuccess, onFailure);
+  }
+  return result;
 }

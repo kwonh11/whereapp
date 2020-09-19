@@ -1,28 +1,26 @@
 import styled, { css } from "styled-components";
-import NewsCard from "./Card";
+import ItemCard from "./Card";
 import {
   ArrowBackIosOutlined,
   ArrowForwardIosOutlined,
 } from "@material-ui/icons";
 
 const SliderContainer = styled.div`
-  /* width: ${(props) =>
-    props.device === "web" ? "calc(990px + 75px)" : ""}; */
   width: 100%;
-  height: ${(props) => props.height};
+  height: 105%;
   overflow: hidden;
   display: flex;
   justify-content: start;
   align-items: center;
-  margin: 0;
-  padding: 0;
+  padding-top: 80px;
   position: relative;
 `;
 const CardContainer = styled.div`
   width: 100%;
-  height: 110%;
+  height: 105%;
   position: relative;
-  left: ${(props) => props.active * -360}px;
+  left: ${(props) => props.active * -344}px;
+  padding-bottom:5px;
   display: flex;
   justify-content: start;
   align-items: center;
@@ -31,9 +29,6 @@ const CardContainer = styled.div`
 const ArrowContainer = styled.div`
   position: absolute;
   width: 100%;
-  /* width: ${(props) =>
-    props.device === "web" ? "calc(990px + 60px)" : ""}; */
-  margin-left: 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -56,7 +51,7 @@ const PrevArrow = styled.span`
   color: #c1c1c1;
   opacity: ${(props) => (props.visible === "none" ? 0 : 0.75)};
   width: 100px;
-  height: 500px;
+  height: 440px;
   z-index: ${(props) => (props.visible === "none" ? -10 : 10)};
   transition: all 0.3s ease-out;
   ${(props) => (props.visible === "none" ? "" : ArrowHoverAction)};
@@ -66,22 +61,24 @@ const NextArrow = styled(PrevArrow)`
 `;
 
 export default function Slider(props) {
-  const { cardWidth, news } = props;
-  const max = React.useCallback(() => news.length - 2, [news]);
+  const { items } = props;
   const [active, setActive] = React.useState(0);
-  const cardContainerRef = React.useRef();
-
+  const [cardsPerPage, setCardsPerPage] = React.useState(1);
+  const max = React.useCallback(() => items.length - 1, [items]);
+  React.useEffect(()=>{
+    setCardsPerPage(Math.floor(document.documentElement.clientWidth / 337));
+  },[document.documentElement.clientWidth]);
+  console.log(items.length);
   const onClickPrev = () => {
-    setActive(active - 1 > -1 ? active - 1 : -1);
+    setActive(active - cardsPerPage > 0 ? active - cardsPerPage : 0);
   };
   const onClickNext = (max) => {
-    setActive(active + 1 < max + 1 ? active + 1 : max + 1);
+    setActive(active + cardsPerPage < max ? active + cardsPerPage : max);
   };
   return (
-    // <SliderContainer device={"web"} height="65vh">
-    <SliderContainer device={"web"} height="110%">
+    <SliderContainer device={"web"}>
       <ArrowContainer device={"web"}>
-        <PrevArrow visible={active <= -1 ? "none" : ""} onClick={onClickPrev}>
+        <PrevArrow visible={active <= 0 ? "none" : ""} onClick={onClickPrev}>
           <ArrowBackIosOutlined style={{ fontSize: 75 }} />
         </PrevArrow>
         <NextArrow
@@ -91,10 +88,10 @@ export default function Slider(props) {
           <ArrowForwardIosOutlined style={{ fontSize: 75 }} />
         </NextArrow>
       </ArrowContainer>
-      <CardContainer ref={cardContainerRef} active={active}>
+      <CardContainer active={active} page={cardsPerPage}>
         {/* testNews는 이 후 saga->api->store 를 통해 전달된 response에 따라 변경*/}
-        {news.map((item, index) => {
-          return <NewsCard key={index} {...item} />;
+        {items.map((item, index) => {
+          return <ItemCard key={index} {...item} />;
         })}
       </CardContainer>
     </SliderContainer>

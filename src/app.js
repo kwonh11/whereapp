@@ -8,11 +8,8 @@ import reset from "styled-reset";
 import GNBPage from "./gnb/page/GNBPage";
 import DetailPage from "./detail/page/DetailPage";
 import UserPage from "./user/page/UserPage";
-import Modal from "./common/component/Modal";
 import Footer from "./common/component/Footer";
-
-// login test
-import SignIn from "./gnb/component/Signin";
+import SliderContainer from './home/container/SliderContainer';
 
 const customHistory = createBrowserHistory();
 const GlobalStyle = createGlobalStyle`
@@ -39,10 +36,13 @@ const AppContainer = styled.div`
 export default function App() {
   return (
     <React.Fragment>
+      <Router history={customHistory}>
+      <GNBPage />
+        <Switch>
+          <Route path="/" exact component={SliderContainer} />
+        </Switch>
       <AppContainer>
         <GlobalStyle />
-        <Router history={customHistory}>
-          <GNBPage />
           <Switch>
             <Route path="/user/:tab" component={UserPage} />
             <Route path="/detail" component={DetailPage} />
@@ -52,8 +52,8 @@ export default function App() {
             <Route path="/" exact component={HomePage} />
           </Switch>
           <ChatPage />
-        </Router>
       </AppContainer>
+      </Router>
       <Footer />
     </React.Fragment>
   );
