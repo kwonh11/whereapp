@@ -67,7 +67,7 @@ export default function Slider(props) {
   const max = React.useCallback(() => items.length - 1, [items]);
   React.useEffect(()=>{
     setCardsPerPage(Math.floor(document.documentElement.clientWidth / 337));
-  },[document.documentElement.clientWidth]);
+  },[document.documentElement.clientWidth]);  
   console.log(items.length);
   const onClickPrev = () => {
     setActive(active - cardsPerPage > 0 ? active - cardsPerPage : 0);
