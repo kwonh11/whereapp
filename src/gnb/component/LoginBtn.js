@@ -1,17 +1,11 @@
-import { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import {
-  Button,
-  Avatar, 
-  Typography,
-  Divider,
-  IconButton, 
-} from "@material-ui/core";
-import styled from "styled-components";
+import { useState, useEffect } from "react";
+import { Button, Typography, Divider, IconButton } from "@material-ui/core";
+import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
 import Modal from "../../common/component/Modal";
-import PhotoCamera from "@material-ui/icons/PhotoCamera";
+import PhotoCamera from "@material-ui/icons/PhotoCamera"; 
 import SignIn from "./Signin";
+import axios from "axios";
 
 const UserContainer = styled.div`
   display: flex;
@@ -28,10 +22,11 @@ const UserInner = styled.div`
   position: relative;
   height: 84px;
   width: 84px;
-  margin-bottom: 10px;
-  & div {
+  margin-bottom: 8px;
+  & img {
     width: 100%;
     height: 100%;
+    border-radius: 50%;
   }
   & .MuiButtonBase-root {
     position: absolute;
@@ -40,8 +35,8 @@ const UserInner = styled.div`
       0 1px 3px 1px rgba(65, 69, 73, 0.15);
     width: 34px;
     height: 34px;
-    right: -10px;
-    bottom: -10px;
+    right: -8px;
+    bottom: -8px;
   }
 `;
 
@@ -68,10 +63,36 @@ const BtnWrap = styled.div`
   padding-top: 17px;
 `;
 
+const Avatar = styled(IconButton)`
+  ${(props) =>
+    props.image &&
+    css`
+      background-image: url(${props.image});
+      background-size: 60px 60px;
+      background-repeat: no-repeat;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+    `}
+`;
+
 export default function Login() {
   const [login, setLogin] = useState(false);
   const [loginModal, setLoginModal] = useState(false);
   const [infoModal, setInfoModal] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get("/auth/checkUser")
+      .then((res) => {
+        setLogin(typeof res.data.user !== "undefined");
+        setUserInfo(res.data.user);
+      })
+      .catch((error) => {
+        setLoggedIn(false);
+      });
+  }, []);
 
   const handleClickLoginModal = () => {
     setLoginModal(!loginModal);
@@ -81,16 +102,30 @@ export default function Login() {
     setInfoModal(!infoModal);
   };
 
+  const handleAddFile = (e) => {
+    const formData = new FormData();
+    formData.append("img", e.target.files[0]);
+
+    axios
+      .patch(`/auth/img/${userInfo.snsId}`, formData)
+      .then((res) => {
+        setUserInfo({
+          ...userInfo,
+          image: res.data.url,
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
   return (
     <>
       {login ? (
-        <IconButton
-          color="primary"
-          component="span"
+        <Avatar
           onClick={handleClickInfoModal}
-        >
-          <Avatar></Avatar>
-        </IconButton>
+          image={userInfo && userInfo.image}
+        />
       ) : (
         <Button
           variant="outlined"
@@ -111,12 +146,28 @@ export default function Login() {
         <Modal on={infoModal} onClickClose={handleClickInfoModal}>
           <UserContainer>
             <UserInner>
-              <Avatar></Avatar>
-              <IconButton color="primary" component="span">
-                <PhotoCamera />
-              </IconButton>
+              <img src={userInfo && userInfo.image} />
+              <input
+                accept="image/*"
+                style={{ display: "none" }}
+                type="file"
+                id="img"
+                name="img"
+                onChange={handleAddFile}
+              />
+              <label htmlFor="img">
+                <IconButton
+                  color="primary"
+                  aria-label="upload picture"
+                  component="span"
+                >
+                  <PhotoCamera />
+                </IconButton>
+              </label>
             </UserInner>
-            <Typography variant="subtitle1">email</Typography>
+            <Typography variant="subtitle1">
+              {userInfo && userInfo.nick}
+            </Typography>
           </UserContainer>
           <Divider />
           <Menu color="primary">
@@ -128,9 +179,11 @@ export default function Login() {
           </Menu>
           <Divider />
           <BtnWrap>
-            <Button variant="outlined" color="primary">
-              로그아웃
-            </Button>
+            <a href="/auth/logout">
+              <Button variant="outlined" color="primary">
+                로그아웃
+              </Button>
+            </a>
           </BtnWrap>
         </Modal>
       )}
