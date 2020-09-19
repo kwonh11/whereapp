@@ -3,3 +3,4 @@ export function callApiLike() {
     setTimeout(resolve, 1000);
   });
 }
+ 

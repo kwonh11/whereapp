@@ -3,7 +3,7 @@ import { Button, Typography, Divider, IconButton } from "@material-ui/core";
 import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
 import Modal from "../../common/component/Modal";
-import PhotoCamera from "@material-ui/icons/PhotoCamera";
+import PhotoCamera from "@material-ui/icons/PhotoCamera"; 
 import SignIn from "./Signin";
 import axios from "axios";
 

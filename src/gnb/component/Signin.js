@@ -44,7 +44,7 @@ export default function SignIn() {
         <StyledButton image={googleLoginImage} />
       </a>
       <a href="/auth/kakao">
-        <StyledButton image={kakaoLoginImage} />
+        <StyledButton image={kakaoLoginImage} /> 
       </a>
     </SignInContainer>
   );
