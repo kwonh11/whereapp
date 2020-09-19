@@ -6,23 +6,23 @@ module.exports = (passport) => {
     new KakaoStrategy(
       {
         clientID: process.env.KAKAO_ID,
-        callbackURL: "http://localhost:9000/auth/kakao/callback",
+        callbackURL: "/auth/kakao/callback",
       },
       async (accessToken, refreshToken, profile, done) => {
-        console.log(profile);
         try {
           const exUser = await User.findOne({
-            email: profile.id,
+            snsId: profile.id,
             provider: "kakao",
           });
           if (exUser) {
             done(null, exUser);
           } else {
             const newUser = new User({
-              email: profile.id,
+              snsId: profile.id,
+              nick: profile.displayName,
               provider: "kakao",
+              image: profile._json.properties.profile_image,
             });
-
             newUser.save();
             done(null, newUser);
           }

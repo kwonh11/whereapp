@@ -6,15 +6,23 @@ const {
 } = Schema;
 
 const userSchema = new Schema({
-  email: {
+  snsId: {
     type: String,
-    required: true,
+    require: true,
     unique: true,
+  },
+  nick: {
+    type: String,
+    require: true,
   },
   image: String,
   provider: {
     type: String,
     require: true,
+  },
+  createAt: {
+    type: Date,
+    default: Date.now,
   },
 });
 

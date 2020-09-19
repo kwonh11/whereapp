@@ -2,7 +2,6 @@ import { Button } from "@material-ui/core";
 import styled from "styled-components";
 import googleLoginImage from "../../images/google_login_button.png";
 import kakaoLoginImage from "../../images/kakao_login_button.png";
-import axios from "axios";
 
 const SignInContainer = styled.div`
   width: 100%;
@@ -38,20 +37,15 @@ const TitleContainer = styled.div`
 `;
 
 export default function SignIn() {
-  const handleKakao = () => {
-    console.log("kakao");
-    // axios.get("/api").then((res) => console.log(res));
-    axios
-      .get("http://localhost:8000/auth/kakao", { credentials: true })
-      .then((res) => console.log(res));
-  };
-
   return (
     <SignInContainer>
       <TitleContainer>[작은로고] 다음 계정으로 로그인</TitleContainer>
-      <StyledButton image={googleLoginImage} />
-
-      <StyledButton image={kakaoLoginImage} onClick={handleKakao} />
+      <a href="/auth/google">
+        <StyledButton image={googleLoginImage} />
+      </a>
+      <a href="/auth/kakao">
+        <StyledButton image={kakaoLoginImage} />
+      </a>
     </SignInContainer>
   );
 }

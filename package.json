@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "cross-env NODE_ENV=development nodemon ./server/app",
     "client": "npx webpack-dev-server",
-    "server": "npx nodemon ./server/app"
+    "server": "npx nodemon ./server/app",
+    "build": "npx webpack"
   },
   "proxy": "http://localhost:8000",
   "repository": {
@@ -43,7 +44,9 @@
     "mongodb": "^3.6.2",
     "mongoose": "^5.10.4",
     "morgan": "^1.10.0",
+    "multer": "^1.4.2",
     "passport": "^0.4.1",
+    "passport-google-oauth20": "^2.0.0",
     "passport-kakao": "^1.0.0",
     "qs": "^6.9.4",
     "react": "^16.13.1",
