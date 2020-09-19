@@ -6,16 +6,17 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 // footer컨테이너 100vw 로 width설정하면 스크롤발생
 const FooterContainer = styled.footer`
     position: absolute;
-    bottom: -30vh;
+    margin-top : 200px;
+    top: auto;
     left: 0;
-    width: 99vw;
-    height: 18vh;
+    width: 100%;
+    height: 180px;
     display: flex;  
     justify-content: center;
     align-items: center;
     flex-direction: column;
     background-color: #f1f1f1;
-`
+`;
 const IconContainer = styled.div`
     display: flex;
     justify-content: center;
@@ -24,7 +25,7 @@ const IconContainer = styled.div`
     & > div {
         margin: 0 8px;
     }
-`
+`;
 const InfoWrap = styled.div`
     height: 30px;
     width: 100%;
@@ -38,6 +39,7 @@ const InfoWrap = styled.div`
         margin-bottom: 5px;
     }
 `;
+
 
 export default function Footer() {
     return (

@@ -37,12 +37,7 @@ const AppContainer = styled.div`
 `;
 // router
 export default function App() {
-  // test
-  const [modalOn, setModalOn] = React.useState(true);
-  const onClickClose = () => {
-    setModalOn(!modalOn);
-  };
-
+  console.log("app!!!!!!!!!");
   return (
     <React.Fragment>
       <AppContainer>
@@ -50,7 +45,7 @@ export default function App() {
         <Router history={customHistory}>
           <GNBPage />
           <Switch>
-            <Route path="/user" component={UserPage} />
+            <Route path="/user/:tab" component={UserPage} />
             <Route path="/detail" component={DetailPage} />
             <Route path="/chat" component={ChatPage} />
             <Route path="/news/:id" component={DetailPage} />
@@ -61,10 +56,6 @@ export default function App() {
         </Router>
       </AppContainer>
       <Footer />
-      <Modal on={modalOn} onClickClose={onClickClose}>
-        {/* 모달로 띄워질 창 여기에 작성 */}
-        <SignIn />
-      </Modal>
     </React.Fragment>
   );
 }
