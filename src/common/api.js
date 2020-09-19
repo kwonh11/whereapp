@@ -35,7 +35,7 @@ export function getUsersLocation() {
     result.longitude = position.coords.longitude;
     console.log(`latitude : ${result.latitude}, longitude: ${result.longitude}`);
   }
-  const onFailure = () => {
+  const onFailure = () => { 
     result.error = true;
   }
   if(!navigator.geolocation) {
