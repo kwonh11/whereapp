@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "cross-env NODE_ENV=development nodemon ./server/app",
     "client": "npx webpack-dev-server",
-    "server": "nodemon ./server/app",
+    "server": "npx nodemon ./server/app",
     "build": "npx webpack"
   },
   "proxy": "http://localhost:8000",
@@ -54,6 +54,7 @@
     "react-redux": "^7.2.1",
     "react-router-dom": "^5.2.0",
     "redux": "^4.0.5",
+    "rss-parser": "^3.9.0",
     "style-loader": "^1.2.1",
     "styled-components": "^5.1.1",
     "styled-reset": "^4.2.2",

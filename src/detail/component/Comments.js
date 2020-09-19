@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import { Avatar } from '@material-ui/core';
 
 
 const CommentsWrap = styled.div`
@@ -36,15 +37,33 @@ const Characters = styled.div`
     display: flex;
     align-self: flex-end;
 `;
+const ActionsWrap = styled.div`
+    width: 100%;
+    padding: 10px;
+    margin-left: calc(2.5% - 3px);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+`;
+const ScrapButton = styled(StyledButton)`
+    height: auto;
+    width: auto;
+    margin-left: calc(2.5% - 3px);
+    padding: 8px 3px;
+`;
 
 export default function Comments(props) {
     const [inputValue, setInputValue] = React.useState('');
     const [sendable, setSendable] = React.useState(true);
 
+
+    //test
+    const {onScrap} = props;
+
     React.useEffect(()=>{
-        if (value.length > 300) setSendable(false);
-        if (value.length <= 300) setSendable(true);
-    },[value]);
+        if (inputValue.length > 300) setSendable(false);
+        if (inputValue.length <= 300) setSendable(true);
+    },[inputValue]);
 
     const handleChange = (event) => {
         setInputValue(event.target.value);
@@ -52,6 +71,11 @@ export default function Comments(props) {
 
     return (
         <CommentsWrap>
+            <ActionsWrap>
+                <ScrapButton onClick={onScrap}>
+                   스크랩
+                </ScrapButton>
+            </ActionsWrap>
             <StyledTextField
             id="outlined-textarea"
             onChange={handleChange}
@@ -68,7 +92,8 @@ export default function Comments(props) {
                 </Characters>
                 <StyledButton 
                 variant="contained" 
-                color="primary">
+                color="primary"
+                >
                     입 력
                 </StyledButton>
             </InputDatas>

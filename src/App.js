@@ -27,7 +27,6 @@ const GlobalStyle = createGlobalStyle`
   section {
     padding-top: 80px;
   }
-
 `;
 
 const AppContainer = styled.div`

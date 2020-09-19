@@ -6,6 +6,8 @@ import {Card, CardHeader, CardMedia, CardContent,
 import { Favorite as FavoriteIcon, Share as ShareIcon, MoreVert as MoreVertIcon} from '@material-ui/icons';
 import { red } from "@material-ui/core/colors";
 
+//test 중
+import {callApiScrap} from '../../common/api';
 
 const StyledCard = styled(Card)`
   transition: all 0.7s ease-out;
@@ -15,36 +17,50 @@ const StyledCard = styled(Card)`
     cursor: pointer;
   }
 `;
-
+const BottomIconsWrap = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`
 const useStyles = makeStyles((theme) => ({
     root: {
       width: 330,
       minWidth: 330,
-      height: 500,
-      margin: "0 15px",
+      height: 440,
+      margin: "0 7px",
     },
     media: {
       height: 0,
-      paddingTop: "56.25%" // 16:9
+      paddingTop: "66%" // 16:9
     },
-    avatarRed: {
-      backgroundColor: red[500]
-    },
+    distance: {
+      marginRight: "20px",
+      fontSize: "small",
+      fontWeight: "bold"
+    }
   }));
 // image, title, description, category 를 입력받아 Card를 리턴하는 컴포넌트 함수
-export default function NewsCard( { image, category, title, description, originalLink, date, company} ) {
+export default function NewsCard( props ) {
     const classes = useStyles();
+    const {image, category, title, date, address, tel, dist} = props;
     // desciprion 100글자 제한 + 말줄임표
-    const subString = (desc,count) => {
-        const isString = typeof desc === "string";
-        return (isString && desc.length >= count? desc.substring(0,count) + "..." : desc);
+    // const subString = (desc,count) => {
+    //     const isString = typeof desc === "string";
+    //     return (isString && desc.length >= count? desc.substring(0,count) + "..." : desc);
+    // }
+
+    // test
+    // redux 구현 후 article 매개변수를 redux store를 통해 정확한 데이터로 넘겨줘야함
+    const testHandleOnClickScrap = (article) => {
+      callApiScrap(article).catch(err =>console.log(err));
     }
+
     return (
         <StyledCard className={classes.root}>
           <CardHeader
             avatar={
-              <Avatar aria-label="news" className={classes.avatar}>
-                {company? company.slice(0,4) : ''}
+              <Avatar aria-label="news">
+                {category? category.slice(0,2) : ''}
               </Avatar>
             }
             action={
@@ -52,7 +68,9 @@ export default function NewsCard( { image, category, title, description, origina
                 <MoreVertIcon />
               </IconButton>
             }
-            title={subString(title, 20)}
+            title={<Typography variant="h6">
+              {title}
+            </Typography>}
             subheader={date}
           />
           <CardMedia
@@ -62,17 +80,25 @@ export default function NewsCard( { image, category, title, description, origina
           />
           <CardContent>
             <Typography variant="body2" color="textSecondary" component="p">
-                {subString(description, 80)}
+                {address}<br/>
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="p">
+                {`TEL .${tel}`}<br/>
             </Typography>
           </CardContent>
-          <CardActions disableSpacing>
-            <IconButton aria-label="add to favorites">
-              <FavoriteIcon />
-            </IconButton>
-            <IconButton aria-label="share">
-              <ShareIcon />
-            </IconButton>
-          </CardActions>
+          <BottomIconsWrap>
+            <CardActions disableSpacing>
+              <IconButton aria-label="add to favorites" onClick={testHandleOnClickScrap}>
+                <FavoriteIcon />
+              </IconButton>
+              <IconButton aria-label="share">
+                <ShareIcon />
+              </IconButton>
+            </CardActions>
+            <Avatar aria-label="distance" className={classes.distance}>
+                {`${dist/1000}km`}
+            </Avatar>
+          </BottomIconsWrap>
         </StyledCard>
       );
 }

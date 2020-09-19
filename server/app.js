@@ -4,6 +4,7 @@ const path = require("path");
 const passport = require("passport");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
+const middlewares = require("./routes/middlewares");
 require("dotenv").config();
 
 const passportConfig = require("./passport");
@@ -18,9 +19,9 @@ app.set("port", process.env.PORT || 8000);
 app.listen(app.get("port"), () => {
   console.log(app.get("port"), "번 대기중!!!");
 });
-
+app.use(middlewares.logger);
 app.use(morgan("dev"));
-app.use(express.json());
+app.use(express.json({extended: true}));
 app.use(express.urlencoded({ extended: false }));
 app.use("/img", express.static(path.join(__dirname, "uploads")));
 app.use(cookieParser("secret"));
