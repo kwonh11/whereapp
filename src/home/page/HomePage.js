@@ -1,13 +1,10 @@
-import CategoryContainer from "../container/CategoryContainer";
-import DateContainer from "../container/DateContainer";
-import LocationContainer from "../container/LocationContainer";
-import SliderContainer from "../container/SliderContainer";
+import CategoryContainer from '../container/CategoryContainer';
 import styled from "styled-components";
 
 const Container = styled.section`
   display: flex;
   flex-direction: column;
-  padding-top: 75px;
+  padding-top: 150px;
 `;
 const FilterWrap = styled.div`
   display: flex;
@@ -16,21 +13,10 @@ const FilterWrap = styled.div`
   justify-content: space-between;
   height: 100px;
 `;
-// const ContentsWrap = styled.div`
-//   display: flex;
-//   height: 440px;
-//   align-items: center;
-// `;
-
 export default function HomePage() {
   return (
     <Container>
-      {/* <ContentsWrap>
-        <SliderContainer />
-      </ContentsWrap> */}
-      <FilterWrap>
-        <LocationContainer />
-      </FilterWrap>
+      <CategoryContainer />
     </Container>
   );
 }

@@ -62,19 +62,26 @@ const NextArrow = styled(PrevArrow)`
 
 export default function Slider(props) {
   const { items } = props;
-  const [active, setActive] = React.useState(0);
+  const [active, setActive] = React.useState(9);
   const [cardsPerPage, setCardsPerPage] = React.useState(1);
+
   const max = React.useCallback(() => items.length - 1, [items]);
   React.useEffect(()=>{
+    setTimeout(()=> setActive(0), 300);
+  },[])
+  React.useEffect(()=>{
     setCardsPerPage(Math.floor(document.documentElement.clientWidth / 337));
-  },[document.documentElement.clientWidth]);  
-  console.log(items.length);
+  },[document.documentElement.clientWidth]);
+
   const onClickPrev = () => {
-    setActive(active - cardsPerPage > 0 ? active - cardsPerPage : 0);
+    const index = active - cardsPerPage > 0 ? active - cardsPerPage : 0;
+    setActive(index);
   };
   const onClickNext = (max) => {
-    setActive(active + cardsPerPage < max ? active + cardsPerPage : max);
+    const index = active + cardsPerPage < max ? active + cardsPerPage : max;
+    setActive(index);
   };
+  
   return (
     <SliderContainer device={"web"}>
       <ArrowContainer device={"web"}>
@@ -82,7 +89,7 @@ export default function Slider(props) {
           <ArrowBackIosOutlined style={{ fontSize: 75 }} />
         </PrevArrow>
         <NextArrow
-          visible={active >= max() ? "none" : ""}
+          visible={active+cardsPerPage >= max() ? "none" : ""}
           onClick={() => onClickNext(max())}
         >
           <ArrowForwardIosOutlined style={{ fontSize: 75 }} />

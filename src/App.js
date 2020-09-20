@@ -10,6 +10,7 @@ import DetailPage from "./detail/page/DetailPage";
 import UserPage from "./user/page/UserPage";
 import Modal from "./common/component/Modal";
 import Footer from "./common/component/Footer";
+import SliderContainer from "./home/container/SliderContainer";
 
 // login test
 import SignIn from "./gnb/component/Signin";
@@ -34,15 +35,19 @@ const AppContainer = styled.div`
   margin: 0 auto;
   position: relative;
 `;
+
 // router
 export default function App() {
   console.log("app!!!!!!!!!");
   return (
-    <React.Fragment>
+  <React.Fragment>
+    <Router history={customHistory}>
+      <GNBPage />
+      <Switch>
+        <Route path="/" exact component={SliderContainer} />
+      </Switch>
       <AppContainer>
         <GlobalStyle />
-        <Router history={customHistory}>
-          <GNBPage />
           <Switch>
             <Route path="/user/:tab" component={UserPage} />
             <Route path="/detail" component={DetailPage} />
@@ -52,9 +57,9 @@ export default function App() {
             <Route path="/" exact component={HomePage} />
           </Switch>
           <ChatPage />
-        </Router>
       </AppContainer>
-      <Footer />
-    </React.Fragment>
+    </Router>
+    <Footer />
+  </React.Fragment>
   );
 }
