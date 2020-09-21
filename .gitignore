@@ -2,3 +2,4 @@
 # .env 무시
 .env
 /server/uploads
+/server/view
