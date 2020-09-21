@@ -8,6 +8,7 @@
     "dev": "cross-env NODE_ENV=development nodemon ./server/app",
     "client": "npx webpack-dev-server",
     "server": "npx nodemon ./server/app",
+    "cs": "npx webpack && npm run server",
     "build": "npx webpack"
   },
   "proxy": "http://localhost:8000",

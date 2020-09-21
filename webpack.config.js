@@ -31,7 +31,7 @@ module.exports = {
       },
     },
   },
-  devtool: "inline-source-map",
+  devtool: "cheap-eval-source-map",
   devServer: {
     port: 9000,
     proxy: {

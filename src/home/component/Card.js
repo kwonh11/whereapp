@@ -4,8 +4,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import {Card, CardHeader, CardMedia, CardContent,
     Avatar, IconButton, Typography, CardActions} from "@material-ui/core";
 import { Favorite as FavoriteIcon, Share as ShareIcon, MoreVert as MoreVertIcon} from '@material-ui/icons';
-import { red } from "@material-ui/core/colors";
-
+import { blue, green, red } from "@material-ui/core/colors";
+import CATEGORY_CODE from '../../common/categoryCode';
 //test 중
 import {callApiScrap} from '../../common/api';
 
@@ -31,36 +31,50 @@ const useStyles = makeStyles((theme) => ({
     },
     media: {
       height: 0,
-      paddingTop: "66%" // 16:9
+      paddingTop: "66%" // 330 * 500
     },
-    distance: {
-      marginRight: "20px",
+    typeAvatar: {
       fontSize: "small",
-      fontWeight: "bold"
-    }
+      fontWeight: "bold",
+      backgroundColor: "#484848"
+    },
+    green: {
+      marginRight: "20px",
+      fontSize: "x-small",
+      fontWeight: "bold",
+      color: "white",
+      backgroundColor: blue[800],
+    },
+    red: {
+      marginRight: "20px",
+      fontSize: "x-small",
+      fontWeight: "bold",
+      color: "white",
+      backgroundColor: red[900],
+    },
   }));
+
 // image, title, description, category 를 입력받아 Card를 리턴하는 컴포넌트 함수
 export default function NewsCard( props ) {
     const classes = useStyles();
-    const {image, category, title, date, address, tel, dist} = props;
+    const {image, type, title, date, address, tel, dist} = props;
     // desciprion 100글자 제한 + 말줄임표
     // const subString = (desc,count) => {
     //     const isString = typeof desc === "string";
     //     return (isString && desc.length >= count? desc.substring(0,count) + "..." : desc);
     // }
-
     // test
     // redux 구현 후 article 매개변수를 redux store를 통해 정확한 데이터로 넘겨줘야함
     const testHandleOnClickScrap = (article) => {
       callApiScrap(article).catch(err =>console.log(err));
-    }
+    };
 
     return (
         <StyledCard className={classes.root}>
           <CardHeader
             avatar={
-              <Avatar aria-label="news">
-                {category? category.slice(0,2) : ''}
+              <Avatar aria-label="news" className={classes.typeAvatar}>
+                {CATEGORY_CODE.find(item=> item.code == type).name}
               </Avatar>
             }
             action={
@@ -95,7 +109,7 @@ export default function NewsCard( props ) {
                 <ShareIcon />
               </IconButton>
             </CardActions>
-            <Avatar aria-label="distance" className={classes.distance}>
+            <Avatar aria-label="distance" className={dist >= 1000? classes.red : classes.green} >
                 {`${dist/1000}km`}
             </Avatar>
           </BottomIconsWrap>
