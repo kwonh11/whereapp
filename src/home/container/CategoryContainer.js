@@ -8,6 +8,7 @@ const Container = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 30px;
+  margin-left: 30px;
 `;
 const Rise = styled.div`
   opacity: ${props => props.rise === "1"? 1 : 0};
