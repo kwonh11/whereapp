@@ -7,12 +7,12 @@ const Container = styled.div`
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  gap: 25px;
+  gap: 30px;
 `;
 const Rise = styled.div`
   opacity: ${props => props.rise === "1"? 1 : 0};
   margin-top: ${props => props.rise === "1"? "0px" : "30px"};
-  transition: all 0.4s ease-out ${props => props.index * 0.15}s;
+  transition: all 0.5s ease-out ${props => props.index * 0.15}s;
 `;
 
 export default function CategoryContainer() {
