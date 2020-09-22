@@ -25,11 +25,11 @@ const IconBox = styled.div`
   background-size: contain;
   background-repeat: no-repeat;
   &:hover {
+
   }
 `;
 
 export default function IconComponent(props) {
   const { name, hoverAction, size = "100px", margin = "10px", ...rest } = props;
-
   return <IconBox name={name} size={size} margin={margin} {...rest} />;
 }

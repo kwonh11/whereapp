@@ -100,7 +100,7 @@ export default function Slider(props) {
       <CardContainer active={active} page={cardsPerPage}>
         {/* testNews는 이 후 saga->api->store 를 통해 전달된 response에 따라 변경*/}
         {items.map((item, index) => {
-          return <ItemCard key={index} {...item} />;
+          return <ItemCard key={index} item={item} />;
         })}
       </CardContainer>
     </SliderContainer>

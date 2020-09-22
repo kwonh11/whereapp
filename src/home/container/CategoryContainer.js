@@ -29,17 +29,17 @@ export default function CategoryContainer() {
           }
         })
       },{
-        rootMargin:'50px'
+        rootMargin:'-100px'
       });
       observer.observe(target);
     }
     return ()=> observer && observer.disconnect();
   },[target]);
   return (
-    <Container>
+    <Container ref={setTarget}>
       {
         CATEGORY_CODE.map((item, i) => (
-          <Rise key={item.name} ref={setTarget} rise={rise} index={i+1}>
+          <Rise key={item.name} rise={rise} index={i+1}>
             <Category image={item.image} name={item.name} />
           </Rise>
         ))

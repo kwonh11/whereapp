@@ -1,6 +1,6 @@
 import { Router, Route, Switch } from "react-router-dom";
 import ChatPage from "./chat/page/ChatPage";
-import NewsPage from "./news/page/NewsPage";
+import NewsPage from "./place/page/PlacePage";
 import HomePage from "./home/page/HomePage";
 import { createBrowserHistory } from "history";
 import styled, { createGlobalStyle } from "styled-components";
@@ -50,10 +50,9 @@ export default function App() {
         <GlobalStyle />
           <Switch>
             <Route path="/user/:tab" component={UserPage} />
-            <Route path="/detail" component={DetailPage} />
             <Route path="/chat" component={ChatPage} />
-            <Route path="/news/:id" component={DetailPage} />
-            <Route path="/news" component={NewsPage} />
+            <Route path="/place/:id" component={DetailPage} />
+            <Route path="/place" component={NewsPage} />
             <Route path="/" exact component={HomePage} />
           </Switch>
           <ChatPage />
