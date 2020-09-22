@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import { Avatar } from '@material-ui/core';
-
+import { Avatar, IconButton } from '@material-ui/core';
+import { Favorite as FavoriteIcon, Share as ShareIcon } from '@material-ui/icons';
 
 const CommentsWrap = styled.div`
     position: static !important;
@@ -45,20 +45,13 @@ const ActionsWrap = styled.div`
     justify-content: flex-start;
     align-items: center;
 `;
-const ScrapButton = styled(StyledButton)`
-    height: auto;
-    width: auto;
-    margin-left: calc(2.5% - 3px);
-    padding: 8px 3px;
-`;
 
 export default function Comments(props) {
     const [inputValue, setInputValue] = React.useState('');
     const [sendable, setSendable] = React.useState(true);
 
-
     //test
-    const {onScrap} = props;
+    const {handleScrap, handleShare} = props;
 
     React.useEffect(()=>{
         if (inputValue.length > 300) setSendable(false);
@@ -72,9 +65,12 @@ export default function Comments(props) {
     return (
         <CommentsWrap>
             <ActionsWrap>
-                <ScrapButton onClick={onScrap}>
-                   스크랩
-                </ScrapButton>
+                <IconButton aria-label="add to favorites" onClick={handleScrap}>
+                    <FavoriteIcon />
+                </IconButton>
+                <IconButton aria-label="share" onClick={handleShare}>
+                    <ShareIcon />
+                </IconButton>
             </ActionsWrap>
             <StyledTextField
             id="outlined-textarea"

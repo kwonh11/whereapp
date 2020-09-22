@@ -1,14 +1,13 @@
-import ArticleContainer from "../container/ArticleContainer";
+import DetailContainer from "../container/DetailContainer";
 import styled from "styled-components";
 
 const DetailPageContainer = styled.section``;
 
 export default function DetailPage({ match }) {
-  console.log("DetailPage");
-  const { id } = match.params;
+  console.log(`id : ${match.params.contentId}`);
   return (
     <DetailPageContainer>
-      <ArticleContainer id={id} />
+      <DetailContainer />
     </DetailPageContainer>
   );
 }
