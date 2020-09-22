@@ -3,11 +3,9 @@ import styled from 'styled-components';
 import { makeStyles } from "@material-ui/core/styles";
 import {Card, CardHeader, CardMedia, CardContent,
     Avatar, IconButton, Typography, CardActions} from "@material-ui/core";
-import { Favorite as FavoriteIcon, Share as ShareIcon, MoreVert as MoreVertIcon} from '@material-ui/icons';
-import { blue, green, red } from "@material-ui/core/colors";
+import { Favorite as FavoriteIcon, Share as ShareIcon } from '@material-ui/icons';
+import { blue, red } from "@material-ui/core/colors";
 import CATEGORY_CODE from '../../common/categoryCode';
-//test 중
-import {callApiScrap} from '../../common/api';
 
 const StyledCard = styled(Card)`
   transition: all 0.7s ease-out;
@@ -22,11 +20,20 @@ const BottomIconsWrap = styled.div`
   justify-content: space-between;
   align-items: center;
 `
+const MarksWrap = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+  & div {
+    margin: 0 4px;
+  }
+`;
 const useStyles = makeStyles((theme) => ({
     root: {
-      width: 330,
-      minWidth: 330,
-      height: 440,
+      width: 480,
+      minWidth: 480,
+      height: 500,
       margin: "0 7px",
     },
     media: {
@@ -52,12 +59,23 @@ const useStyles = makeStyles((theme) => ({
       color: "white",
       backgroundColor: red[900],
     },
+    content: {
+      padding: "0 16px"
+    }
   }));
-
+  const Badge = styled.span`
+    font-size: 0.8rem;
+    font-weight: bold;
+    border-radius: 15px;
+    border: 2px solid ${props => props.color === "red"? "red" : "green"};
+    padding: 4px;
+    margin: 0 3px;
+    color: ${props => props.color === "red"? "red" : "green"};
+  `;
 // image, title, description, category 를 입력받아 Card를 리턴하는 컴포넌트 함수
 export default function NewsCard( props ) {
     const classes = useStyles();
-    const {image, type, title, date, address, tel, dist} = props;
+    const {image, type, title, date, address, readCount, tel, dist} = props;
     // desciprion 100글자 제한 + 말줄임표
     // const subString = (desc,count) => {
     //     const isString = typeof desc === "string";
@@ -68,36 +86,30 @@ export default function NewsCard( props ) {
     const testHandleOnClickScrap = (article) => {
       callApiScrap(article).catch(err =>console.log(err));
     };
-
+    const Title = (props) => {
+      const { title, readCount, dist } = props;
+      return (
+        <React.Fragment>
+          {title} 
+          {readCount >=2000 && <Badge color="red"> 추천 </Badge> }
+          {dist < 1000 && <Badge color="green"> 가까움 </Badge> }
+        </React.Fragment>
+      )
+    }
     return (
         <StyledCard className={classes.root}>
-          <CardHeader
-            avatar={
-              <Avatar aria-label="news" className={classes.typeAvatar}>
-                {CATEGORY_CODE.find(item=> item.code == type).name}
-              </Avatar>
-            }
-            action={
-              <IconButton aria-label="settings">
-                <MoreVertIcon />
-              </IconButton>
-            }
-            title={<Typography variant="h6">
-              {title}
-            </Typography>}
-            subheader={date}
-          />
           <CardMedia
             className={classes.media}
             image={image}
             title={title}
           />
-          <CardContent>
+          <CardHeader
+            title={<Title title={title} readCount={readCount} dist={dist}/>}
+            subheader={date}
+          />
+          <CardContent className={classes.content}>
             <Typography variant="body2" color="textSecondary" component="p">
                 {address}<br/>
-            </Typography>
-            <Typography variant="body2" color="textSecondary" component="p">
-                {`TEL .${tel}`}<br/>
             </Typography>
           </CardContent>
           <BottomIconsWrap>
@@ -109,9 +121,14 @@ export default function NewsCard( props ) {
                 <ShareIcon />
               </IconButton>
             </CardActions>
-            <Avatar aria-label="distance" className={dist >= 1000? classes.red : classes.green} >
-                {`${dist/1000}km`}
-            </Avatar>
+            <MarksWrap>
+              <Avatar aria-label="news" className={classes.typeAvatar}>
+                  {CATEGORY_CODE.find(item=> item.code == type).name}
+              </Avatar>
+              <Avatar aria-label="distance" className={dist >= 1000? classes.red : classes.green} >
+                  {`${dist/1000}km`}
+              </Avatar>
+            </MarksWrap>
           </BottomIconsWrap>
         </StyledCard>
       );
