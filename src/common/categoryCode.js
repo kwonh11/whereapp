@@ -7,7 +7,7 @@ import leportsImage from '../images/leports.png';
 import shoppingImage from '../images/department.png';
 import FoodImage from '../images/food.png';
 
-export default [
+const categoryCode = [
     {
         code: 12,
         name: "관광지",
@@ -48,4 +48,8 @@ export default [
         name: "음식점",
         image: FoodImage
     }
-]
+];
+export default categoryCode;
+export const getCategory = (code) => {
+    return categoryCode.find(category => category.code == code).name;
+}
