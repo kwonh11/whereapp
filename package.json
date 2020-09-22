@@ -8,6 +8,7 @@
     "dev": "npx webpack && npx nodemon ./server/app",
     "client": "npx webpack-dev-server",
     "server": "npx nodemon ./server/app",
+    "cs": "npx webpack && npm run server",
     "build": "npx webpack"
   },
   "proxy": "http://localhost:8000",
@@ -52,6 +53,7 @@
     "passport-kakao": "^1.0.0",
     "qs": "^6.9.4",
     "react": "^16.13.1",
+    "react-copy-to-clipboard": "^5.0.2",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.1",
     "react-router-dom": "^5.2.0",

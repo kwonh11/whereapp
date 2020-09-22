@@ -14,13 +14,14 @@ const SliderContainer = styled.div`
   align-items: center;
   padding-top: 80px;
   position: relative;
+  padding-bottom: 150px;
+  background-color: #f1f1f1;
 `;
 const CardContainer = styled.div`
   width: 100%;
   height: 105%;
   position: relative;
-  left: ${(props) => props.active * -344}px;
-  padding-bottom:5px;
+  left: ${(props) => props.active * - 495}px;
   display: flex;
   justify-content: start;
   align-items: center;
@@ -28,6 +29,7 @@ const CardContainer = styled.div`
 `;
 const ArrowContainer = styled.div`
   position: absolute;
+  top: 75px;
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -51,7 +53,7 @@ const PrevArrow = styled.span`
   color: #c1c1c1;
   opacity: ${(props) => (props.visible === "none" ? 0 : 0.75)};
   width: 100px;
-  height: 440px;
+  height: 505px;
   z-index: ${(props) => (props.visible === "none" ? -10 : 10)};
   transition: all 0.3s ease-out;
   ${(props) => (props.visible === "none" ? "" : ArrowHoverAction)};
@@ -62,19 +64,26 @@ const NextArrow = styled(PrevArrow)`
 
 export default function Slider(props) {
   const { items } = props;
-  const [active, setActive] = React.useState(0);
+  const [active, setActive] = React.useState(9);
   const [cardsPerPage, setCardsPerPage] = React.useState(1);
+
   const max = React.useCallback(() => items.length - 1, [items]);
   React.useEffect(()=>{
-    setCardsPerPage(Math.floor(document.documentElement.clientWidth / 337));
-  },[document.documentElement.clientWidth]);  
-  console.log(items.length);
+    setTimeout(()=> setActive(0), 300);
+  },[])
+  React.useEffect(()=>{
+    setCardsPerPage(Math.floor(document.documentElement.clientWidth / 495));
+  },[document.documentElement.clientWidth]);
+
   const onClickPrev = () => {
-    setActive(active - cardsPerPage > 0 ? active - cardsPerPage : 0);
+    const index = active - cardsPerPage > 0 ? active - cardsPerPage : 0;
+    setActive(index);
   };
   const onClickNext = (max) => {
-    setActive(active + cardsPerPage < max ? active + cardsPerPage : max);
+    const index = active + cardsPerPage < max ? active + cardsPerPage : max;
+    setActive(index);
   };
+
   return (
     <SliderContainer device={"web"}>
       <ArrowContainer device={"web"}>
@@ -82,7 +91,7 @@ export default function Slider(props) {
           <ArrowBackIosOutlined style={{ fontSize: 75 }} />
         </PrevArrow>
         <NextArrow
-          visible={active >= max() ? "none" : ""}
+          visible={active+cardsPerPage >= max() ? "none" : ""}
           onClick={() => onClickNext(max())}
         >
           <ArrowForwardIosOutlined style={{ fontSize: 75 }} />

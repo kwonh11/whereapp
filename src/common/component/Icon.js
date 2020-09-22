@@ -1,9 +1,4 @@
 import styled from "styled-components";
-import dongaIcon from "../images/donga.png";
-import googleIcon from "../images/google.png";
-import haniIcon from "../images/hani.png";
-import sbsIcon from "../images/sbs.png";
-import segyeIcon from "../images/segye.png";
 
 function getURL(iconName) {
   console.log(iconName);
@@ -34,7 +29,6 @@ const IconBox = styled.div`
 `;
 
 export default function IconComponent(props) {
-  // hover action 은 나중에 넣어서 애니메이션 구현
   const { name, hoverAction, size = "100px", margin = "10px", ...rest } = props;
 
   return <IconBox name={name} size={size} margin={margin} {...rest} />;

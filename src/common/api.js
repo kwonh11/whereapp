@@ -6,7 +6,7 @@ const axiosConfig = {
 };
 
 export function callApiScrap(article) {
-  return axios.post("/user/scrap", data, axiosConfig);
+  return axios.post("/user/scrap", {}, axiosConfig);
 }
 
 // 검색 후 응답되는 배열은

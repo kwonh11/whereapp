@@ -13,7 +13,7 @@ const Container = styled.nav`
   position: fixed;
   left: 0;
   right: 0;
-  z-index: 9998;
+  z-index: 1000;
   display: flex;
   justify-content: center;
   align-items: center;
