@@ -14,13 +14,14 @@ const SliderContainer = styled.div`
   align-items: center;
   padding-top: 80px;
   position: relative;
+  padding-bottom: 150px;
+  background-color: #f1f1f1;
 `;
 const CardContainer = styled.div`
   width: 100%;
   height: 105%;
   position: relative;
-  left: ${(props) => props.active * -344}px;
-  padding-bottom:5px;
+  left: ${(props) => props.active * - 495}px;
   display: flex;
   justify-content: start;
   align-items: center;
@@ -28,6 +29,7 @@ const CardContainer = styled.div`
 `;
 const ArrowContainer = styled.div`
   position: absolute;
+  top: 75px;
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -51,7 +53,7 @@ const PrevArrow = styled.span`
   color: #c1c1c1;
   opacity: ${(props) => (props.visible === "none" ? 0 : 0.75)};
   width: 100px;
-  height: 440px;
+  height: 505px;
   z-index: ${(props) => (props.visible === "none" ? -10 : 10)};
   transition: all 0.3s ease-out;
   ${(props) => (props.visible === "none" ? "" : ArrowHoverAction)};
@@ -70,7 +72,7 @@ export default function Slider(props) {
     setTimeout(()=> setActive(0), 300);
   },[])
   React.useEffect(()=>{
-    setCardsPerPage(Math.floor(document.documentElement.clientWidth / 337));
+    setCardsPerPage(Math.floor(document.documentElement.clientWidth / 495));
   },[document.documentElement.clientWidth]);
 
   const onClickPrev = () => {
@@ -81,7 +83,7 @@ export default function Slider(props) {
     const index = active + cardsPerPage < max ? active + cardsPerPage : max;
     setActive(index);
   };
-  
+
   return (
     <SliderContainer device={"web"}>
       <ArrowContainer device={"web"}>
