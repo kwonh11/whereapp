@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import LoginBtn from "./LoginBtn";
 import { Button } from "@material-ui/core";
 import LogoImage from "../../images/logo.png";
+import Search from "./Search";
 
 const Container = styled.nav`
   height: 70px;
@@ -25,18 +26,11 @@ const Inner = styled.div`
   justify-content: space-between;
   padding: 0 10px;
 `;
-const RightItem = styled.ul`
+
+const RightItem = styled.div`
   display: flex;
-  & li {
-    margin-right: 10px;
-    display: flex;
-    align-items: center;
-    /* & + & {
-      margin-right: 10px;
-    } */
-    & a {
-      color: rgb(40, 42, 53);
-    }
+  & form {
+    margin-right: 20px;
   }
 `;
 const Logo = styled(Button)`
@@ -53,22 +47,13 @@ export default function GNB() {
   return (
     <Container>
       <Inner>
+        <Link to="/">
+          <Logo image={LogoImage} />
+        </Link>
         <RightItem>
-          <li>
-            <Link to="/">
-              <Logo image={LogoImage} />
-            </Link>
-          </li>
-          <li>
-            <Link to="/news">언론사별 보기</Link>
-          </li>
-          <li>
-            <Link to="/news">속보</Link>
-          </li>
-        </RightItem>
-        <div>
+          <Search />
           <LoginBtn />
-        </div>
+        </RightItem>
       </Inner>
     </Container>
   );

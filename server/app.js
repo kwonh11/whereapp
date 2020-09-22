@@ -10,6 +10,7 @@ require("dotenv").config();
 const passportConfig = require("./passport");
 const connect = require("./schemas");
 const authRouter = require("./routes/auth");
+const locationRouter = require("./routes/location");
 
 const app = express();
 connect();
@@ -21,7 +22,7 @@ app.listen(app.get("port"), () => {
 });
 app.use(middlewares.logger);
 app.use(morgan("dev"));
-app.use(express.json({extended: true}));
+app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: false }));
 app.use("/img", express.static(path.join(__dirname, "uploads")));
 app.use(cookieParser("secret"));
@@ -42,3 +43,4 @@ app.use(passport.session());
 
 app.use("/", express.static(path.join(__dirname, "view")));
 app.use("/auth", authRouter);
+app.use("/location", locationRouter);
