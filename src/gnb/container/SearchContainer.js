@@ -5,21 +5,27 @@ import { getUsersLocation } from "../../common/api";
 
 export default function SearchContainer() {
   useEffect(() => {
-    getUsersLocation().then((location) => setLocation({ ...location }));
+    getUsersLocation().then((location) => {
+      sessionStorage.setItem("location", JSON.stringify(location));
+      setLocation({ ...location });
+    });
   }, []);
 
   const [location, setLocation] = useState({});
   const [address, setAddress] = useState("");
 
   const handleGetLocation = (e) => {
-    console.log(location);
-    axios
-      .get("/location", {
-        params: {
-          location: location,
-        },
-      })
-      .then((res) => setAddress(res.data));
+    try {
+      axios
+        .get("/location", {
+          params: {
+            location: location,
+          },
+        })
+        .then((res) => setAddress(res.data));
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return <Search handleGetLocation={handleGetLocation} address={address} />;

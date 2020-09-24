@@ -1,0 +1,20 @@
+import CorpCategoryContainer from "../container/CorpCategoryContainer";
+import styled from "styled-components";
+import PlaceContainer from "../container/PlaceContainer";
+
+const Container = styled.section`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+export default function PlacePage() {
+  console.log('PlacePage')
+  return (
+    <Container>
+      {/* <CorpCategoryContainer /> */}
+      <PlaceContainer />
+    </Container>
+  );
+}

@@ -1,6 +1,6 @@
 import { Router, Route, Switch } from "react-router-dom";
 import ChatPage from "./chat/page/ChatPage";
-import NewsPage from "./news/page/NewsPage";
+import PlacePage from "./place/page/PlacePage";
 import HomePage from "./home/page/HomePage";
 import { createBrowserHistory } from "history";
 import styled, { createGlobalStyle } from "styled-components";
@@ -8,7 +8,6 @@ import reset from "styled-reset";
 import GNBPage from "./gnb/page/GNBPage";
 import DetailPage from "./detail/page/DetailPage";
 import UserPage from "./user/page/UserPage";
-import Modal from "./common/component/Modal";
 import Footer from "./common/component/Footer";
 import SliderContainer from "./home/container/SliderContainer";
 
@@ -40,26 +39,25 @@ const AppContainer = styled.div`
 export default function App() {
   console.log("app!!!!!!!!!");
   return (
-  <React.Fragment>
-    <Router history={customHistory}>
-      <GNBPage />
-      <Switch>
-        <Route path="/" exact component={SliderContainer} />
-      </Switch>
-      <AppContainer>
-        <GlobalStyle />
+    <React.Fragment>
+      <Router history={customHistory}>
+        <GNBPage />
+        <Switch>
+          <Route path="/" exact component={SliderContainer} />
+        </Switch>
+        <AppContainer>
+          <GlobalStyle />
           <Switch>
             <Route path="/user/:tab" component={UserPage} />
-            <Route path="/detail" component={DetailPage} />
             <Route path="/chat" component={ChatPage} />
-            <Route path="/news/:id" component={DetailPage} />
-            <Route path="/news" component={NewsPage} />
+            <Route path="/place/:id" component={DetailPage} />
+            <Route path="/place" component={PlacePage} />
             <Route path="/" exact component={HomePage} />
           </Switch>
           <ChatPage />
-      </AppContainer>
-    </Router>
-    <Footer />
-  </React.Fragment>
+        </AppContainer>
+      </Router>
+      <Footer />
+    </React.Fragment>
   );
 }
