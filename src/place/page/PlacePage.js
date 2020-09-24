@@ -10,7 +10,7 @@ const Container = styled.section`
 `;
 
 export default function PlacePage() {
-  console.log('PlacePage')
+  console.log("PlacePage");
   return (
     <Container>
       {/* <CorpCategoryContainer /> */}

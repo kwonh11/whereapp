@@ -1,7 +1,8 @@
 import Slider from '../component/Slider';
 
 const news = [
-    { 
+    {
+        contentId:1,
         image:"http://www.jinju.go.kr/CmsMultiFile/view.do?multifileId=MF00000541&idx=13391",
         type: "12", 
         title:`진주남강유등축제`,
@@ -12,6 +13,7 @@ const news = [
         readCount: 100,
     },
     { 
+        contentId:2,
         image:"http://tong.visitkorea.or.kr/cms/resource/50/495150_image2_1.jpg",
         type:"14", 
         title:`진주남강유등축제`,
@@ -22,6 +24,7 @@ const news = [
         readCount: 1500,
     },
     { 
+        contentId:3,
         image: "http://tong.visitkorea.or.kr/cms/resource/21/2554921_image2_1.jpg",
         type:"15", 
         title:`진주남강유등축제`,
@@ -32,6 +35,7 @@ const news = [
         readCount: 3500,
     },
     { 
+        contentId:4,
         image:"http://tong.visitkorea.or.kr/cms/resource/20/2657520_image2_1.jpg",
         type:"25", 
         title:`진주남강유등축제`,
@@ -42,6 +46,7 @@ const news = [
         readCount: 3000,
     },
     { 
+        contentId:5,
         image:"http://tong.visitkorea.or.kr/cms/resource/06/2524206_image2_1.JPG",
         type:"28", 
         title:`진주남강유등축제`,

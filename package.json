@@ -6,9 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "npx webpack && npx nodemon ./server/app",
-    "client": "npx webpack-dev-server",
-    "server": "npx nodemon ./server/app",
-    "cs": "npx webpack && npm run server",
+    "c": "npx webpack-dev-server",
+    "s": "npx nodemon ./server/app",
+    "cs": "npx webpack && npm run s",
     "build": "npx webpack"
   },
   "proxy": "http://localhost:8000",
