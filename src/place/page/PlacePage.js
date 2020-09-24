@@ -1,6 +1,6 @@
-import CorpCategoryContainer from "../container/CorpCategoryContainer";
 import styled from "styled-components";
 import PlaceContainer from "../container/PlaceContainer";
+import qs from "qs";
 
 const Container = styled.section`
   display: flex;
@@ -9,12 +9,15 @@ const Container = styled.section`
   align-items: center;
 `;
 
-export default function PlacePage() {
+export default function PlacePage({ location }) {
   console.log("PlacePage");
+  const query = qs.parse(location.search, {
+    ignoreQueryPrefix: true,
+  });
+
   return (
     <Container>
-      {/* <CorpCategoryContainer /> */}
-      <PlaceContainer />
+      <PlaceContainer query={query} />
     </Container>
   );
 }

@@ -1,7 +1,6 @@
 import qs from "qs";
 import styled, { css } from "styled-components";
-import { withRouter } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Typography,
@@ -169,7 +168,7 @@ const ContentsContainer = styled.div`
 `;
 
 function ViewTypePage({ location, data }) {
-  let query = qs.parse(location.search, {
+  const query = qs.parse(location.search, {
     ignoreQueryPrefix: true,
   });
 

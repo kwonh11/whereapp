@@ -2,9 +2,9 @@ import { useState } from "react";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 import ViewListIcon from "@material-ui/icons/ViewList";
 import ViewModuleIcon from "@material-ui/icons/ViewModule";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import styled from "styled-components";
-import { withRouter } from "react-router-dom";
+import qs from "qs";
 
 const ToggleBtn = styled(ToggleButton)`
   padding: 0 !important;
@@ -19,7 +19,11 @@ const ToggleBtn = styled(ToggleButton)`
   }
 `;
 
-function ViewButton({ match }) {
+function ViewButton({ match, location }) {
+  const query = qs.parse(location.search, {
+    ignoreQueryPrefix: true,
+  });
+
   const [view, setView] = useState("card");
 
   const handleView = (event, newView) => {
@@ -29,13 +33,23 @@ function ViewButton({ match }) {
   return (
     <ToggleButtonGroup value={view} exclusive onChange={handleView}>
       <ToggleBtn value="card">
-        <Link to={`${match.path}?view=card`}>
+        <Link
+          to={{
+            pathname: location.pathname,
+            search: qs.stringify({ ...query, view: "card" }),
+          }}
+        >
           <ViewModuleIcon />
         </Link>
       </ToggleBtn>
 
       <ToggleBtn value="list">
-        <Link to={`${match.path}?view=list`}>
+        <Link
+          to={{
+            pathname: location.pathname,
+            search: qs.stringify({ ...query, view: "list" }),
+          }}
+        >
           <ViewListIcon />
         </Link>
       </ToggleBtn>
