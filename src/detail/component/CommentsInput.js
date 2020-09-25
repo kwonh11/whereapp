@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import { Avatar, IconButton, Snackbar } from '@material-ui/core';
-import { Favorite as FavoriteIcon, Share as ShareIcon } from '@material-ui/icons';
+import { Divider, Snackbar } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 
 const CommentsWrap = styled.div`
     position: static !important;
+    margin-top: 50px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -38,22 +38,12 @@ const Characters = styled.div`
     display: flex;
     align-self: flex-end;
 `;
-const ActionsWrap = styled.div`
-    width: 100%;
-    padding: 10px;
-    margin-left: calc(2.5% - 3px);
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-`;
+
 
 export default function Comments(props) {
     const [inputValue, setInputValue] = React.useState("");
     const [sendable, setSendable] = React.useState(true);
     const [snack, setSnack] = React.useState(false);
-
-    //test
-    const {handleScrap, handleShare} = props;
 
     React.useEffect(()=>{
         if (inputValue.length > 300) setSendable(false);
@@ -80,14 +70,6 @@ export default function Comments(props) {
                     300글자 이하로 작성해주세요
                 </Alert>
             </Snackbar>
-            <ActionsWrap>
-                <IconButton aria-label="add to favorites" onClick={handleScrap}>
-                    <FavoriteIcon />
-                </IconButton>
-                <IconButton aria-label="share" onClick={handleShare}>
-                    <ShareIcon />
-                </IconButton>
-            </ActionsWrap>
             <StyledTextField
             id="outlined-textarea"
             onChange={handleChange}
@@ -110,6 +92,7 @@ export default function Comments(props) {
                     입 력
                 </StyledButton>
             </InputDatas>
+            <Divider />
         </CommentsWrap>
     )
 }

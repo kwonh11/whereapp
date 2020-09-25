@@ -1,9 +1,10 @@
 import styled from "styled-components";
-import { Avatar, Paper } from "@material-ui/core";
+import { Avatar, Paper, IconButton } from "@material-ui/core";
 import CommentsInput from './CommentsInput';
 import Comments from './Comments';
 import {getCategory} from '../../common/categoryCode';
 import { makeStyles } from "@material-ui/core/styles";
+import { Favorite as FavoriteIcon, Share as ShareIcon } from '@material-ui/icons';
 
 const DetailContainer = styled(Paper)`
   display: flex;
@@ -74,6 +75,13 @@ const DescriptionWrap = styled.div`
   font-weight: bold;
   padding: 4px;
 `;
+const ActionsWrap = styled.div`
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+`;
 const useStyle = makeStyles(() => ({
   typeAvatar: {
     fontSize: "small",
@@ -81,7 +89,7 @@ const useStyle = makeStyles(() => ({
     backgroundColor: "#484848",
     margin: "8px 5px 0 0"
   },
-}))
+}));
 export default function Detail({ place, handleScrap, handleShare, loading, comments }) {
   const {contentId, image, type, title, date, address, tel, dist, readCount} = place;
   const classes = useStyle();
@@ -109,6 +117,14 @@ export default function Detail({ place, handleScrap, handleShare, loading, comme
             주소 : {address} <br/>
             전화번호 : {tel} <br/>
           </DescriptionWrap>
+          <ActionsWrap>
+                <IconButton aria-label="add to favorites" onClick={handleScrap}>
+                    <FavoriteIcon />
+                </IconButton>
+                <IconButton aria-label="share" onClick={handleShare}>
+                    <ShareIcon />
+                </IconButton>
+            </ActionsWrap>
       </ImageContainer>
       <CommentsInput handleScrap={handleScrap} handleShare={handleShare} comments={comments} />
       <Comments comments={comments} loading={loading} />

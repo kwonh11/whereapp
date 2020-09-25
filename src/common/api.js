@@ -1,29 +1,14 @@
 import axios from "axios";
-import qs from "qs";
 
 const axiosConfig = {
   baseURL: "http://localhost:8000",
 };
-const Comments = [
-  {
-    commenter: "ggyu",
-    content: "여기 가보고 싶어요",
-    createAt: Date.now().toLocaleString,
-  },
-  { 
-    commenter: "ggyu",
-    content: "여기 가보고 싶어요",
-    createAt: Date.now().toLocaleString,
-  }
-];
 
-// 데이터 추가하는 부분 만들기 , 클로저 이용한 레퍼런스 제거
+// 데이터 추가하는 부분 만들기 , 클로저 이용한 레퍼런스 분리
 export function callApiComments(page) {
   console.log(`page ${page}에 해당하는 데이터 목록 FETCH`);
-  return new Promise((resolve,reject)=> {
-    resolve(Comments);
-  })
-}
+};
+
 export function callApiScrap(article) {
   return axios.post("/user/scrap", {}, axiosConfig);
 };
@@ -33,7 +18,7 @@ export function callApiScrap(article) {
 export function callApiSearchByKeyword(keyword) {
   if (!keyword) return;
   return axios.get(`/news/search/${keyword}`);
-}
+};
 
 export function callApiAreaBasedList(latitude, longitude) {
   return axios.get(``);
