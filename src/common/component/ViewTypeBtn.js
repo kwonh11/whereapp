@@ -6,20 +6,22 @@ import { Link, withRouter } from "react-router-dom";
 import styled from "styled-components";
 import qs from "qs";
 
-const ToggleBtn = styled(ToggleButton)`
-  padding: 0 !important;
-  & a {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #3f63bf;
-    width: 100%;
-    height: 100%;
-    padding: 11px;
+const ToggleBtnGroup = styled(ToggleButtonGroup)`
+  & button {
+    padding: 0 !important;
+    & a {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #3f63bf;
+      width: 100%;
+      height: 100%;
+      padding: 11px;
+    }
   }
 `;
 
-function ViewButton({ match, location }) {
+function ViewButton({ location }) {
   const query = qs.parse(location.search, {
     ignoreQueryPrefix: true,
   });
@@ -31,8 +33,8 @@ function ViewButton({ match, location }) {
   };
 
   return (
-    <ToggleButtonGroup value={view} exclusive onChange={handleView}>
-      <ToggleBtn value="card">
+    <ToggleBtnGroup value={view} exclusive onChange={handleView}>
+      <ToggleButton value="card">
         <Link
           to={{
             pathname: location.pathname,
@@ -41,9 +43,9 @@ function ViewButton({ match, location }) {
         >
           <ViewModuleIcon />
         </Link>
-      </ToggleBtn>
+      </ToggleButton>
 
-      <ToggleBtn value="list">
+      <ToggleButton value="list">
         <Link
           to={{
             pathname: location.pathname,
@@ -52,8 +54,8 @@ function ViewButton({ match, location }) {
         >
           <ViewListIcon />
         </Link>
-      </ToggleBtn>
-    </ToggleButtonGroup>
+      </ToggleButton>
+    </ToggleBtnGroup>
   );
 }
 

@@ -14,6 +14,7 @@ export default function PlaceContainer({ query }) {
   const [allPlace, setAllPlace] = useState(null);
   const [selectPlace, setSelectPlace] = useState(null);
   const [tab, setTab] = useState(0);
+  const [order, setOrder] = useState(0);
 
   const handleSelectTab = (id, tab) => {
     tab
@@ -33,6 +34,7 @@ export default function PlaceContainer({ query }) {
           },
         })
         .then((res) => {
+          console.log(res.data.item);
           setAllPlace([...res.data.item]);
           setSelectPlace([...res.data.item]);
         });

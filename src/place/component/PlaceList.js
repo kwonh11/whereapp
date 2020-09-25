@@ -1,8 +1,18 @@
 import ViewTypeBtn from "../../common/component/ViewTypeBtn";
+import ViewSelectFilter from "../../common/component/ViewSelectFilter";
 import ViewTypePage from "../../common/component/ViewTypePage";
 import { AppBar, Tabs, Tab } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import qs from "qs";
+import styled from "styled-components";
+
+const FilterWrap = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: 10px 0;
+`;
 
 const category = [
   { title: "전체" },
@@ -16,7 +26,13 @@ const category = [
   { title: "음식점", id: 39 },
 ];
 
-export default function PlaceList({ place, query, tab, handleSelectTab }) {
+export default function PlaceList({
+  place,
+  query,
+  tab,
+  handleSelectTab,
+  order,
+}) {
   console.log("PlaceList");
 
   return (
@@ -37,8 +53,10 @@ export default function PlaceList({ place, query, tab, handleSelectTab }) {
           ))}
         </Tabs>
       </AppBar>
-
-      <ViewTypeBtn />
+      <FilterWrap>
+        <ViewTypeBtn />
+        <ViewSelectFilter />
+      </FilterWrap>
       <ViewTypePage data={place} />
     </>
   );

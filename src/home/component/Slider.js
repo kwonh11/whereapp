@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import ItemCard from "./Card";
+import ItemCard from "../../common/component/Card";
 import {
   ArrowBackIosOutlined,
   ArrowForwardIosOutlined,
@@ -21,7 +21,7 @@ const CardContainer = styled.div`
   width: 100%;
   height: 105%;
   position: relative;
-  left: ${(props) => props.active * - 495}px;
+  left: ${(props) => props.active * -495}px;
   display: flex;
   justify-content: start;
   align-items: center;
@@ -68,12 +68,12 @@ export default function Slider(props) {
   const [cardsPerPage, setCardsPerPage] = React.useState(1);
 
   const max = React.useCallback(() => items.length - 1, [items]);
-  React.useEffect(()=>{
-    setTimeout(()=> setActive(0), 300);
-  },[])
-  React.useEffect(()=>{
+  React.useEffect(() => {
+    setTimeout(() => setActive(0), 300);
+  }, []);
+  React.useEffect(() => {
     setCardsPerPage(Math.floor(document.documentElement.clientWidth / 495));
-  },[document.documentElement.clientWidth]);
+  }, [document.documentElement.clientWidth]);
 
   const onClickPrev = () => {
     const index = active - cardsPerPage > 0 ? active - cardsPerPage : 0;
@@ -91,7 +91,7 @@ export default function Slider(props) {
           <ArrowBackIosOutlined style={{ fontSize: 75 }} />
         </PrevArrow>
         <NextArrow
-          visible={active+cardsPerPage >= max() ? "none" : ""}
+          visible={active + cardsPerPage >= max() ? "none" : ""}
           onClick={() => onClickNext(max())}
         >
           <ArrowForwardIosOutlined style={{ fontSize: 75 }} />

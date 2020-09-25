@@ -7,26 +7,13 @@ import {
   List,
   ListItem,
   ListItemText,
-  Card,
-  CardActionArea,
-  CardActions,
-  CardContent,
-  CardMedia,
   Button,
 } from "@material-ui/core";
 //test 중
 import { callApiScrap } from "../../common/api";
+import Card from "./Card";
 
 const useStyles = makeStyles({
-  root: {
-    maxWidth: 345,
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-  },
-  media: {
-    height: 140,
-  },
   list: {
     width: "100%",
   },
@@ -109,50 +96,17 @@ function ListView({ data }) {
   );
 }
 
-function CardView({ data, path }) {
-  const classes = useStyles();
-
+function CardView({ data }) {
   // redux 구축 후 store에서 정확한 article을 매개변수로 사용하는
   // 로직으로 바꾸기
   const testHandleOnClickScrap = (article) => {
     callApiScrap(article).catch((err) => console.log(err));
   };
 
-  return data.map((place, idx) => (
-    <Card className={classes.root} key={idx}>
-      <CardActionArea>
-        <CardMedia
-          className={classes.media}
-          image={place.firstimage}
-          title={place.title}
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            {place.title}
-          </Typography>
-          {path === "/place" && (
-            <Typography variant="body2" color="textSecondary" component="p">
-              {place.addr1}
-            </Typography>
-          )}
-        </CardContent>
-      </CardActionArea>
-      <CardActions>
-        <Button size="small" color="primary">
-          <Link to={`/place/${place.contentid}`}> 자세히</Link>
-        </Button>
-        {path === "/place" && (
-          <Button size="small" color="primary" onClick={testHandleOnClickScrap}>
-            스크랩
-          </Button>
-        )}
-      </CardActions>
-    </Card>
-  ));
+  return data.map((place, idx) => <Card key={idx} item={place} />);
 }
 
 const ContentsContainer = styled.div`
-  margin-top: 10px;
   ${(props) =>
     props.view === "card" &&
     css`
@@ -165,6 +119,24 @@ const ContentsContainer = styled.div`
     css`
       display: block;
     `};
+  & .MuiPaper-root {
+    min-width: 300px;
+    width: 310px;
+    height: 350px;
+    margin: 0;
+
+    & .MuiCardHeader-title {
+      flex: 1;
+      font-size: 18px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
 `;
 
 function ViewTypePage({ location, data }) {
@@ -179,7 +151,7 @@ function ViewTypePage({ location, data }) {
   return (
     <ContentsContainer view={query.view}>
       {query.view === "card" ? (
-        <CardView data={data} path={location.pathname} />
+        <CardView data={data} />
       ) : (
         <ListView data={data} />
       )}
