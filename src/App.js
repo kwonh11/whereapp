@@ -55,9 +55,9 @@ export default function App() {
             <Route path="/" exact component={HomePage} />
           </Switch>
           <ChatPage />
-        </AppContainer>
-      </Router>
-      <Footer />
-    </React.Fragment>
+      </AppContainer>
+      <Route path="/" exact component={Footer} />
+    </Router>
+  </React.Fragment>
   );
 }

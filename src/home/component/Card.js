@@ -5,8 +5,9 @@ import {Card, CardHeader, CardMedia, CardContent,
     Avatar, IconButton, Typography, CardActions} from "@material-ui/core";
 import { Favorite as FavoriteIcon, Share as ShareIcon } from '@material-ui/icons';
 import { blue, red } from "@material-ui/core/colors";
-import CATEGORY_CODE from '../../common/categoryCode';
+import { getCategory } from '../../common/categoryCode';
 import { Link } from 'react-router-dom';
+import onImage from '../../images/on.png';
 
 const StyledCard = styled(Card)`
   transition: all 0.7s ease-out;
@@ -30,6 +31,16 @@ const MarksWrap = styled.div`
     margin: 0 4px;
   }
 `;
+const OnLabel = styled.div`
+  position: absolute;
+  width: 70px;
+  height: 90px;
+  padding: 10px;
+  background-image: url(${(props) => props.image});
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+`
 const useStyles = makeStyles((theme) => ({
     root: {
       width: 480,
@@ -73,37 +84,55 @@ const Badge = styled.span`
     margin: 0 3px;
     color: ${props => props.color === "red"? "red" : "green"};
   `;
-// image, title, description, category 를 입력받아 Card를 리턴하는 컴포넌트 함수
+function DateFormat(date) {
+  const year = date.substring(0,4);
+  const month = date.substring(4,6);
+  const day = date.substring(6,8);
+  return [year,month-1,day];
+}
+function inRange(startDate, endDate) {
+  const start = new Date(...DateFormat(startDate)).getTime();
+  const end = new Date(...DateFormat(endDate)).getTime();
+  const now = new Date().getTime();
+  return now >= start && now <= end;
+}
+
+const Title = (props) => {
+  const { title, readCount, dist } = props;
+  return (
+    <React.Fragment>
+      {title} 
+      {readCount >=2000 && <Badge color="red"> 추천 </Badge> }
+      {dist < 1000 && <Badge color="green"> 가까움 </Badge> }
+    </React.Fragment>
+  )
+}
+const sessionSave = (item) => {
+  sessionStorage.setItem("currentPlace", JSON.stringify(item));
+}
 export default function NewsCard( props ) {
     const classes = useStyles();
     const {item} = props;
-    const {contentId, image, type, title, date, address, readCount, tel, dist} = props.item;
+    const {contentId, image, type, title, eventStartDate, eventEndDate, address, readCount, tel, dist
+    } = props.item;
 
-    const Title = (props) => {
-      const { title, readCount, dist } = props;
-      return (
-        <React.Fragment>
-          {title} 
-          {readCount >=2000 && <Badge color="red"> 추천 </Badge> }
-          {dist < 1000 && <Badge color="green"> 가까움 </Badge> }
-        </React.Fragment>
-      )
-    }
     return (
         <StyledCard className={classes.root}>
           <Link to={(location)=>{
-            sessionStorage.setItem("currentPlace", JSON.stringify(item));
+            sessionSave(item);
           return `/place/${contentId}`;
           }}>
+            {inRange(eventStartDate, eventEndDate) && <OnLabel image={onImage} /> }
             <CardMedia
               className={classes.media}
               image={image}
               title={title}
-            />
+            >
+            </CardMedia>
           </Link>
           <CardHeader
             title={<Title title={title} readCount={readCount} dist={dist}/>}
-            subheader={date}
+            subheader={`${eventStartDate} - ${eventEndDate}`}
           />
           <CardContent className={classes.content}>
             <Typography variant="body2" color="textSecondary" component="p">
@@ -121,7 +150,7 @@ export default function NewsCard( props ) {
             </CardActions>
             <MarksWrap>
               <Avatar aria-label="category" className={classes.typeAvatar}>
-                  {CATEGORY_CODE.find(item=> item.code == type).name}
+                  {getCategory(type)}
               </Avatar>
               <Avatar aria-label="distance" className={dist >= 1000? classes.red : classes.green} >
                   {`${dist/1000}km`}

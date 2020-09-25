@@ -1,7 +1,10 @@
 import styled from "styled-components";
-import { Paper } from "@material-ui/core";
+import { Avatar, Paper, IconButton } from "@material-ui/core";
+import CommentsInput from './CommentsInput';
 import Comments from './Comments';
 import {getCategory} from '../../common/categoryCode';
+import { makeStyles } from "@material-ui/core/styles";
+import { Favorite as FavoriteIcon, Share as ShareIcon } from '@material-ui/icons';
 
 const DetailContainer = styled(Paper)`
   display: flex;
@@ -44,25 +47,23 @@ const TitleContainer = styled.div`
   padding: 4px;
   display: flex;
   justify-content: space-between;
+  flex-direction: row;
 `;
-const TitleWrap = styled.span`
+const TitleWrap = styled.div`
   padding: 4px;
-  font-size: 2rem;
+  font-size: 1.9rem;
   font-weight: bolder;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `;
-const HitWrap = styled.span`
+const DateWrap = styled.div`
   height: 30px;
-  padding: 4px;
-  margin: 20px 0;
+  padding: 0 3px;
+  margin-top: 9px;
   font-size: 1rem;
   color: #777;
-`;
-const DateWrap = styled.span`
-  height: 30px;
-  padding: 4px 0;
-  margin: 20px 0;
-  font-size: 1rem;
-  color: #777;
+  align-self: end;
 `;
 const BadgeWrap = styled.div`
   height: 30px;
@@ -74,20 +75,39 @@ const DescriptionWrap = styled.div`
   font-weight: bold;
   padding: 4px;
 `;
-export default function Detail({ place, handleScrap, handleShare }) {
+const ActionsWrap = styled.div`
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+`;
+const useStyle = makeStyles(() => ({
+  typeAvatar: {
+    fontSize: "small",
+    fontWeight: "bold",
+    backgroundColor: "#484848",
+    margin: "8px 5px 0 0"
+  },
+}));
+export default function Detail({ place, handleScrap, handleShare, loading, comments }) {
   const {contentId, image, type, title, date, address, tel, dist, readCount} = place;
+  const classes = useStyle();
   return (
     <DetailContainer elevation={3}>
       <ImageContainer>
           <Image src={image} />
           <TitleContainer>
             <TitleWrap>
-              {title} &nbsp; 
+              <Avatar aria-label="category" className={classes.typeAvatar}>
+                  {getCategory(type)}
+              </Avatar>
+              {title} 
               <DateWrap>{date}</DateWrap>
             </TitleWrap>
-            <HitWrap>
+            <DateWrap>
               {`조회수 : ${readCount}`}
-            </HitWrap>
+            </DateWrap>
           </TitleContainer>
           <BadgeWrap>
             {readCount >=2000 && <Badge color="red"> 추천 </Badge> }
@@ -96,10 +116,18 @@ export default function Detail({ place, handleScrap, handleShare }) {
           <DescriptionWrap>
             주소 : {address} <br/>
             전화번호 : {tel} <br/>
-            카테고리 : {getCategory(type)} <br/>
           </DescriptionWrap>
+          <ActionsWrap>
+                <IconButton aria-label="add to favorites" onClick={handleScrap}>
+                    <FavoriteIcon />
+                </IconButton>
+                <IconButton aria-label="share" onClick={handleShare}>
+                    <ShareIcon />
+                </IconButton>
+            </ActionsWrap>
       </ImageContainer>
-      <Comments handleScrap={handleScrap} handleShare={handleShare}/>
+      <CommentsInput handleScrap={handleScrap} handleShare={handleShare} comments={comments} />
+      <Comments comments={comments} loading={loading} />
     </DetailContainer>
   );
 }

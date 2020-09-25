@@ -9,47 +9,47 @@ import FoodImage from '../images/food.png';
 
 const categoryCode = [
     {
-        code: 12,
+        type: 12,
         name: "관광지",
         image: tourImage
     },
     {
-        code: 14,
+        type: 14,
         name: "문화",
         image: cultureImage
     },
     {
-        code: 15,
+        type: 15,
         name: "축제",
         image: festaImage 
     },
     {
-        code: 25,
+        type: 25,
         name: "코스",
         image: courseImage
     },
     {
-        code: 28,
+        type: 28,
         name: "레포츠",
         image: leportsImage
     },
     {
-        code: 32,
+        type: 32,
         name: "숙박",
         image: houseImage
     },
     {
-        code: 38,
+        type: 38,
         name: "쇼핑",
         image: shoppingImage
     },
     {
-        code: 39,
+        type: 39,
         name: "음식점",
         image: FoodImage
     }
 ];
 export default categoryCode;
-export const getCategory = (code) => {
-    return categoryCode.find(category => category.code == code).name;
+export const getCategory = (type) => {
+    return categoryCode.find(category => category.type == type).name;
 }
