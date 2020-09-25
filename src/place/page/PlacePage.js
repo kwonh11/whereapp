@@ -1,6 +1,6 @@
 import CorpCategoryContainer from "../container/CorpCategoryContainer";
 import styled from "styled-components";
-import NewsContainer from "../container/PlaceContainer";
+import PlaceContainer from "../container/PlaceContainer";
 
 const Container = styled.section`
   display: flex;
@@ -9,10 +9,12 @@ const Container = styled.section`
   align-items: center;
 `;
 
-export default function NewsPage() {
+export default function PlacePage() {
+  console.log("PlacePage");
   return (
     <Container>
-      <NewsContainer />
+      {/* <CorpCategoryContainer /> */}
+      <PlaceContainer />
     </Container>
   );
 }

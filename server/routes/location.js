@@ -1,5 +1,6 @@
 const express = require("express");
 const { Client, Status } = require("@googlemaps/google-maps-services-js");
+const axios = require("axios");
 
 const router = express.Router();
 
@@ -20,6 +21,19 @@ router.get("/", (req, res, next) => {
     .catch((e) => {
       console.log(e);
     });
+});
+
+router.get("/search", async (req, res, next) => {
+  const location = JSON.parse(req.query.location);
+
+  try {
+    const data = await axios.get(
+      `http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey=${process.env.TOUR_KEY}&mapX=${location.lng}&mapY=${location.lat}&radius=2000&listYN=Y&MobileOS=ETC&MobileApp=Where&_type=json`
+    );
+    res.json(data.data.response.body.items);
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 module.exports = router;
