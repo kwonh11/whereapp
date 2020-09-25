@@ -2,24 +2,30 @@ import { useState } from "react";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 import ViewListIcon from "@material-ui/icons/ViewList";
 import ViewModuleIcon from "@material-ui/icons/ViewModule";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import styled from "styled-components";
-import { withRouter } from "react-router-dom";
+import qs from "qs";
 
-const ToggleBtn = styled(ToggleButton)`
-  padding: 0 !important;
-  & a {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #3f63bf;
-    width: 100%;
-    height: 100%;
-    padding: 11px;
+const ToggleBtnGroup = styled(ToggleButtonGroup)`
+  & button {
+    padding: 0 !important;
+    & a {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #3f63bf;
+      width: 100%;
+      height: 100%;
+      padding: 11px;
+    }
   }
 `;
 
-function ViewButton({ match }) {
+function ViewButton({ location }) {
+  const query = qs.parse(location.search, {
+    ignoreQueryPrefix: true,
+  });
+
   const [view, setView] = useState("card");
 
   const handleView = (event, newView) => {
@@ -27,19 +33,29 @@ function ViewButton({ match }) {
   };
 
   return (
-    <ToggleButtonGroup value={view} exclusive onChange={handleView}>
-      <ToggleBtn value="card">
-        <Link to={`${match.path}?view=card`}>
+    <ToggleBtnGroup value={view} exclusive onChange={handleView}>
+      <ToggleButton value="card">
+        <Link
+          to={{
+            pathname: location.pathname,
+            search: qs.stringify({ ...query, view: "card" }),
+          }}
+        >
           <ViewModuleIcon />
         </Link>
-      </ToggleBtn>
+      </ToggleButton>
 
-      <ToggleBtn value="list">
-        <Link to={`${match.path}?view=list`}>
+      <ToggleButton value="list">
+        <Link
+          to={{
+            pathname: location.pathname,
+            search: qs.stringify({ ...query, view: "list" }),
+          }}
+        >
           <ViewListIcon />
         </Link>
-      </ToggleBtn>
-    </ToggleButtonGroup>
+      </ToggleButton>
+    </ToggleBtnGroup>
   );
 }
 
