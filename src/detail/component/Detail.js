@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Avatar, Paper, IconButton } from "@material-ui/core";
+import { Avatar, Paper, IconButton, Divider } from "@material-ui/core";
 import CommentsInput from './CommentsInput';
 import Comments from './Comments';
 import {getCategory} from '../../common/categoryCode';
@@ -130,4 +130,4 @@ export default function Detail({ place, handleScrap, handleShare, loading, comme
       <Comments comments={comments} loading={loading} />
     </DetailContainer>
   );
-}
+};
