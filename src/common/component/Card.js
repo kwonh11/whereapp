@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Card,
@@ -143,12 +143,9 @@ export default function NewsCard(props) {
         </CardActions>
         <MarksWrap>
           <Avatar className={classes.typeAvatar}>
-            {CATEGORY_CODE.find((item) => item.code === contenttypeid).name}
+            {CATEGORY_CODE.find((item) => item.type === contenttypeid).name}
           </Avatar>
-          <Avatar
-            aria-label="distance"
-            className={dist >= 1000 ? classes.red : classes.green}
-          >
+          <Avatar className={dist >= 1000 ? classes.red : classes.green}>
             {`${dist / 1000}km`}
           </Avatar>
         </MarksWrap>
