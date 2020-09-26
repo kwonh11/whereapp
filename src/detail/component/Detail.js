@@ -2,9 +2,11 @@ import styled from "styled-components";
 import { Avatar, Paper, IconButton, Divider } from "@material-ui/core";
 import CommentsInput from './CommentsInput';
 import Comments from './Comments';
-import {getCategory} from '../../common/categoryCode';
+import { getCategory } from '../../common/categoryCode';
 import { makeStyles } from "@material-ui/core/styles";
 import { Favorite as FavoriteIcon, Share as ShareIcon } from '@material-ui/icons';
+import { callApiDetailIntro } from '../../common/api';
+import { withRouter } from "react-router-dom";
 
 const DetailContainer = styled(Paper)`
   display: flex;
@@ -90,31 +92,49 @@ const useStyle = makeStyles(() => ({
     margin: "8px 5px 0 0"
   },
 }));
-export default function Detail({ place, handleScrap, handleShare, loading, comments }) {
-  const {contentId, image, type, title, date, address, tel, dist, readCount} = place;
+
+function Detail( props ) {
+  const {place, handleScrap, handleShare, comments, match} = props;
+  const {firstimage, title, date, addr1, tel, dist, readcount} = place;
+  const {contentid, contenttypeid} = match.params;
   const classes = useStyle();
+
+  const [addtionalInfo, setAddtionalInfo] = React.useState({});
+
+  React.useLayoutEffect(() => {
+    callApiDetailIntro(contenttypeid, contentid)
+      .then(res => {
+        console.log(`DetailIntro API 호출 ${contenttypeid} ${contentid}`);
+        setAddtionalInfo({...res});
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    }, []);
+    
+    console.log(addtionalInfo);
   return (
     <DetailContainer elevation={3}>
       <ImageContainer>
-          <Image src={image} />
+          <Image src={firstimage} />
           <TitleContainer>
             <TitleWrap>
               <Avatar aria-label="category" className={classes.typeAvatar}>
-                  {getCategory(type)}
+                  {getCategory(contenttypeid)}
               </Avatar>
               {title} 
-              <DateWrap>{date}</DateWrap>
+              <DateWrap>{date? date : ''}</DateWrap>
             </TitleWrap>
             <DateWrap>
-              {`조회수 : ${readCount}`}
+              {`조회수 : ${readcount}`}
             </DateWrap>
           </TitleContainer>
           <BadgeWrap>
-            {readCount >=2000 && <Badge color="red"> 추천 </Badge> }
+            {readcount >=2000 && <Badge color="red"> 추천 </Badge> }
             {dist < 1000 && <Badge color="green"> 가까움 </Badge> }
           </BadgeWrap>
           <DescriptionWrap>
-            주소 : {address} <br/>
+            주소 : {addr1} <br/>
             전화번호 : {tel} <br/>
           </DescriptionWrap>
           <ActionsWrap>
@@ -126,8 +146,10 @@ export default function Detail({ place, handleScrap, handleShare, loading, comme
                 </IconButton>
             </ActionsWrap>
       </ImageContainer>
-      <CommentsInput handleScrap={handleScrap} handleShare={handleShare} comments={comments} />
-      <Comments comments={comments} loading={loading} />
+      <CommentsInput handleScrap={handleScrap} handleShare={handleShare} />
+      <Comments comments={comments} />
     </DetailContainer>
   );
 };
+
+export default withRouter(Detail);

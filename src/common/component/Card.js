@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Card,
@@ -112,7 +112,7 @@ export default function NewsCard(props) {
       <Link
         to={(location) => {
           sessionStorage.setItem("currentPlace", JSON.stringify(place));
-          return `/place/${contentid}`;
+          return `/place/${contenttypeid}/${contentid}`;
         }}
       >
         <CardMedia className={classes.media} image={firstimage} title={title} />
@@ -145,10 +145,7 @@ export default function NewsCard(props) {
           <Avatar className={classes.typeAvatar}>
             {getCategory(contenttypeid)}
           </Avatar>
-          <Avatar
-            aria-label="distance"
-            className={dist >= 1000 ? classes.red : classes.green}
-          >
+          <Avatar className={dist >= 1000 ? classes.red : classes.green}>
             {`${dist / 1000}km`}
           </Avatar>
         </MarksWrap>

@@ -11,6 +11,7 @@ const passportConfig = require("./passport");
 const connect = require("./schemas");
 const authRouter = require("./routes/auth");
 const locationRouter = require("./routes/location");
+const placeRouter = require("./routes/place");
 
 const app = express();
 connect();
@@ -44,3 +45,4 @@ app.use(passport.session());
 app.use("/", express.static(path.join(__dirname, "view")));
 app.use("/auth", authRouter);
 app.use("/location", locationRouter);
+app.use("/place", placeRouter);
