@@ -15,8 +15,8 @@ const CommentContainer = styled.div`
 const Container = styled.div`
     width: 100%;
     height: ${props => props.height};
+    border-bottom: 1px solid rgba(0,0,0,0.2);
     display: flex;
-    padding-top: 25px;
     flex-direction: column;
     justify-content: center;
     transition: all 0.3s ease-out;
@@ -24,7 +24,7 @@ const Container = styled.div`
 const CommenterWrap = styled.div`
     width: 100%;
     height: 30px;
-    padding: 20px 0 20px 0;
+    margin: 30px 0;
     display: flex;
     align-items: flex-end;
     justify-content: flex-start;
@@ -49,8 +49,6 @@ const DateWrap = styled.div`
     width: 120px;
     height: 30px;
     align-self: flex-end;
-`;
-const ButtonWrap = styled.div`
 `;
 const FilterWrap = styled.div`
     width: 100%;
@@ -79,7 +77,9 @@ const ReplyContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
+    border-top: 1px solid rgba(0,0,0,0.2);
 `;
+const ButtonWrap = styled.div``;
 function getDateString(createAt) {
     const date = new Date(createAt);
     const year = date.getFullYear();
@@ -109,7 +109,6 @@ function Reply({reply}) {
                         {getDateString(createAt)}
                     </DateWrap>
                 </InfoWrap>
-                <Divider />
             </ReplyContainer>
             )})
         }
@@ -135,7 +134,6 @@ export default function Comments(props) {
              | 
              <ByLikeButton sort={sort} onClick={()=>handleClickSort("like")}> 좋아요순 </ByLikeButton>
         </FilterWrap>
-        <Divider />
         {
         comments.map((comment,i) => {
             const { commenter, content, createAt, like, likeCount, reply } = comment;
@@ -163,7 +161,6 @@ export default function Comments(props) {
                         </Button>
                     </ButtonWrap>
                 </InfoWrap>
-                <Divider />
                 {on && <CommentsInput />}
                 <Reply reply={reply} />
             </Container>

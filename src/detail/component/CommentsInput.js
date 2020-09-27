@@ -6,12 +6,11 @@ import { Alert } from '@material-ui/lab';
 
 const CommentsWrap = styled.div`
     position: static !important;
-    margin-top: 50px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 300px;
+    height: 250px;
     width: 100%;
 `;
 const StyledButton = styled(Button)`

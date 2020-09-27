@@ -1,11 +1,10 @@
 const dictionary = {
+    inprogress: "진행중",
     resultCode: "결과코드",
     resultMsg: "결과메시지",
     numOfRows: "한 페이지 결과 수",
     pageNo: "페이지 번호",
     totalCount: "전체 결과 수",
-    contentid: "콘텐츠ID",
-    contenttypeid: "콘텐츠타입ID",,
     accomcount: "수용인원",
     chkbabycarriage: "유모차대여 정보",
     chkcreditcard: "신용카드가능 정보",
@@ -135,4 +134,4 @@ const dictionary = {
     lcnsno:	"인허가번호",
 };
 
-export default (en) => dictionary[en];
+export default (en) => dictionary[en] ? dictionary[en] : '';

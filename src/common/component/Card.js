@@ -91,7 +91,7 @@ const Badge = styled.span`
   color: ${(props) => (props.color === "red" ? "red" : "green")};
 `;
 // image, title, description, category 를 입력받아 Card를 리턴하는 컴포넌트 함수
-export default function NewsCard(props) {
+export default function PlaceCard(props) {
   const classes = useStyles();
   const { place } = props;
   const {
@@ -121,7 +121,7 @@ export default function NewsCard(props) {
         title={title}
         subheader={
           <>
-            {readcount >= 2000 && <Badge color="red"> 추천 </Badge>}
+            {readcount >= 2000 && <Badge color="red"> 인기 </Badge>}
             {dist < 1000 && <Badge color="green"> 가까움 </Badge>}
           </>
         }

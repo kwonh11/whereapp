@@ -9,9 +9,9 @@ router.get("/", (req, res) => {
     const {contentId ,contentTypeId} = req.query;
     axios.get(
         `http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailIntro?ServiceKey=${process.env.TOUR_KEY}&contentId=${contentId}&contentTypeId=${contentTypeId}&MobileOS=ETC&MobileApp=Where&_type=json`)
-    .then(response => {
-        console.log(response.data.response.body.data.items);
-        res.json(response.data.response.body.data.items);
+    .then(result => {
+        console.log(result.data.response.body.items.item);
+        res.json(result.data.response.body.items.item);
     })
     .catch(err => {
         console.log(err);
