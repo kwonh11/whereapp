@@ -21,7 +21,9 @@ export function callApiDetailIntro(contentTypeId, contentId) {
   return axios.get("/place", {
     params: {
       contentId,
-      contentTypeId
+      contentTypeId,
+      mapinfoYN: "Y",
+      overviewYN: "Y"
     }
   });
 };

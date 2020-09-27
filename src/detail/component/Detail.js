@@ -1,14 +1,16 @@
 import styled from "styled-components";
-import { Avatar, Paper, IconButton, Divider } from "@material-ui/core";
+import { Avatar, Paper, IconButton, Divider, Chip } from "@material-ui/core";
 import CommentsInput from './CommentsInput';
 import Comments from './Comments';
 import { getCategory } from '../../common/categoryCode';
 import { makeStyles } from "@material-ui/core/styles";
 import { Favorite as FavoriteIcon, Share as ShareIcon } from '@material-ui/icons';
 import { callApiDetailIntro } from '../../common/api';
+import isInProgress from '../../common/isInProgressDate';
 import toKorean from '../../common/toKorean';
 import { withRouter } from "react-router-dom";
 import { blue, red } from "@material-ui/core/colors";
+import Map from './Map';
 
 const DetailContainer = styled(Paper)`
   display: flex;
@@ -103,7 +105,7 @@ const DescriptionWrap = styled.div`
 `;
 const ActionsWrap = styled.div`
   width: 100%;
-  margin-top: 100px;
+  margin-top: 50px;
   margin-right: 50px;
   display: flex;
   justify-content: flex-end;
@@ -151,6 +153,15 @@ const AdditionalContainer = styled.div`
   align-items: center;
   box-sizing: border-box;
 `;
+const AdditionalHeader = styled.div`
+  width: 50%;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-size: 1.8rem;
+`;
 const AdditionalWrap = styled.div`
   min-height: 22px;
   padding: 6px 0;
@@ -175,6 +186,23 @@ const AdditionalRight = styled.div`
   width: 50%;
   font-weight: bold;
   color: ${props => props.color === "red" ? "red" : ""};
+`;
+const StyledChip = styled(Chip)`
+  $ .MuiChip-label {
+    padding: 20px;
+  }
+`;
+const ShorterDivider = styled(Divider)`
+  width: 100%;
+  margin: 30px 0 0 10px !important;
+`;
+const MapContainer = styled.div`
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 500px;
 `;
 const useStyles = makeStyles((theme) => ({
   green: {
@@ -203,54 +231,35 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function getTimeString(date) {
-  const [year, month, day] = [date.slice(0,4), date.slice(4,6), date.slice(6,8)];
-  const resultDate = new Date();
-  resultDate.setFullYear(year, month-1, day);
-  return resultDate.getTime();
-}
-function isInProgress(eventStartDate, eventEndDate) {
-  const now = new Date().getTime();
-  const start = getTimeString(eventStartDate);
-  const end = getTimeString(eventEndDate);
-  return start <= now && now <= end ? true : false;
-}
-// function Value( props ) {
-//   const {children, isHtml} = props;
-//   const divRef = React.useRef();
-//   React.useLayoutEffect(()=>{
-//     if (isHtml) {
-//       divRef.current.innerHTML = children;
-//     } else {
-//       divRef.current.innerText = children;
-//     }
-//   },[])
-//   return (
-//     <span ref={divRef} />
-//   )
-// };
+
+
 function Detail( props ) {
   const classes = useStyles();
   const {place, handleScrap, handleShare, comments, match} = props;
   const {firstimage, title, date, addr1, tel, dist, readcount} = place;
   const {contentid, contenttypeid} = match.params;
 
-  const [addtionalInfo, setAddtionalInfo] = React.useState([]);
-  const inProgressRef = React.useRef(false);
+  const [addtionalInfo, setAddtionalInfo] = React.useState({
+    origin: {},
+    destination: {},
+    isInProgress: false,
+    additional: []
+  });
 
   React.useEffect(() => {
     callApiDetailIntro(contenttypeid, contentid)
       .then(res => {
-        console.log(`DetailIntro API 호출 ${contenttypeid} ${contentid}`);
-        const additional = Object.entries(res.data);
-        console.log(`추가데이터`);
-        console.log(additional);
-        if( res.eventstartdate && res.eventenddate ) {
-          inProgressRef.current = isInProgress(res.eventstartdate, res.eventenddate);
-        } else {
-          inProgressRef.current = false;
-        }
-        setAddtionalInfo(additional);
+        console.log(`DetailCommonIntro API 호출 ${contenttypeid} ${contentid}`);
+
+        setAddtionalInfo({
+          origin: JSON.parse(sessionStorage.getItem("location")), 
+          destination: {
+            lat: res.data.mapy,
+            lng: res.data.mapx
+          },
+          inProgress: isInProgress(res.eventstartdate, res.eventenddate),
+          additional: Object.entries(res.data)
+        });
       })
       .catch(err => {
         console.log(err);
@@ -264,25 +273,17 @@ function Detail( props ) {
           <CategoryWrap>
             {getCategory(contenttypeid)}
           </CategoryWrap>
-          <TitleWrap>
-            {title}
-          </TitleWrap>
+          <TitleWrap> {title} </TitleWrap>
           <BadgeWrap>
-            <DateWrap>
-              {date}
-            </DateWrap>
-            {inProgressRef.current && <Badge color="blue"> 진행중 </Badge> }
+            <DateWrap> {date} </DateWrap>
+            {addtionalInfo.isInProgress && <Badge color="blue"> 진행중 </Badge> }
             {readcount >=2000 && <Badge color="red"> 인기 </Badge> }
             {dist < 1000 && <Badge color="green"> 가까움 </Badge> }
           </BadgeWrap>
           <ShortDivider />
           <InfoContainer>
-            <InfoWrap>
-              {addr1}
-            </InfoWrap>
-            <InfoWrap>
-              {tel}
-            </InfoWrap>
+            <InfoWrap> {addr1} </InfoWrap>
+            <InfoWrap> {tel} </InfoWrap>
           </InfoContainer>
         </TitleContainer>
       </HeaderContainer>
@@ -295,17 +296,20 @@ function Detail( props ) {
       </ImageContainer>
 
       <AdditionalContainer>
-        {addtionalInfo.map((info, i) => {
+        <AdditionalHeader>
+          상세정보
+          <ShorterDivider />
+        </AdditionalHeader>
+        {addtionalInfo.additional.map((info, i) => {
           const key = toKorean(info[0]);
           if (key && info[1]) {
             return (
               <AdditionalWrap key={i}>
                 <AdditionalInfo>
-                    <AdditionalLeft> {key}</AdditionalLeft>
-                    <AdditionalRight color={info[1]==="없음" || info[1]==="불가" ? "red":"normal"}>
-                       {info[1]}
-                    </AdditionalRight>
-                    {/* <Value isHtml={isHtml}> {info[1]} </Value> */}
+                    <AdditionalLeft>
+                      <StyledChip variant="outlined" label={key} />
+                    </AdditionalLeft>
+                    <AdditionalRight color={info[1]==="없음" || info[1]==="불가" ? "red":"normal"} dangerouslySetInnerHTML={{__html: info[1] }} />
                 </AdditionalInfo>
             </AdditionalWrap> 
             )
@@ -313,6 +317,12 @@ function Detail( props ) {
           return null;
         })}
       </AdditionalContainer>
+
+      <MapContainer>
+        <Map 
+        origin={addtionalInfo.origin} 
+        destination={addtionalInfo.destination} />
+      </MapContainer>
 
       <ActionsWrap>
           <IconButton aria-label="add to favorites" onClick={handleScrap} style={{fontSize: "1.6rem"}}>
@@ -322,6 +332,8 @@ function Detail( props ) {
               <ShareIcon />
           </IconButton>
       </ActionsWrap>
+      
+
       <CommentsInput />
       <Comments comments={comments}/>
     </DetailContainer>

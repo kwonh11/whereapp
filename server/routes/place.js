@@ -5,18 +5,26 @@ require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 
-router.get("/", (req, res) => {
-    const {contentId ,contentTypeId} = req.query;
-    axios.get(
-        `http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailIntro?ServiceKey=${process.env.TOUR_KEY}&contentId=${contentId}&contentTypeId=${contentTypeId}&MobileOS=ETC&MobileApp=Where&_type=json`)
-    .then(result => {
-        console.log(result.data.response.body.items.item);
-        res.json(result.data.response.body.items.item);
-    })
-    .catch(err => {
-        console.log(err);
-    })
-})
+router.get("/", async (req, res) => {
+    const {contentId ,contentTypeId, mapinfoYN, overviewYN} = req.query;
+    let additional = {};
+
+    const commonIntroURL = `http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?ServiceKey=${process.env.TOUR_KEY}&contentId=${contentId}&contentTypeId=${contentTypeId}&mapinfoYN=Y&overviewYN=Y&MobileOS=ETC&MobileApp=Where&_type=json`;
+    const detailIntroURL = `http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailIntro?ServiceKey=${process.env.TOUR_KEY}&contentId=${contentId}&contentTypeId=${contentTypeId}&MobileOS=ETC&MobileApp=Where&_type=json`;
+
+    await axios.all([axios.get(commonIntroURL), axios.get(detailIntroURL)])
+        .then(axios.spread((commonResult, detailResult) => {
+            additional = {
+                ...commonResult.data.response.body.items.item,
+                ...detailResult.data.response.body.items.item
+            };
+            console.log(additional);
+            res.json(additional);
+        }))
+        .catch(err => {
+            console.log(err);
+        });
+});
 
 
 
