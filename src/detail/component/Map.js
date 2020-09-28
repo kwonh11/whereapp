@@ -1,4 +1,6 @@
-import { GoogleMap, LoadScript, DirectionsService, DirectionsRenderer } from '@react-google-maps/api';
+import { 
+    GoogleMap, LoadScript, DirectionsService, DirectionsRenderer, Marker 
+} from '@react-google-maps/api';
 
 
 const options = {
@@ -12,6 +14,9 @@ function Directions (props) {
     const [directions, setDirections] = React.useState();
     const {origin, destination} = props;
     const count = React.useRef(0);
+    
+    console.log(origin);
+    console.log(destination);
 
     React.useEffect(()=>{
         count.current = 0;
@@ -29,7 +34,11 @@ function Directions (props) {
     return (
         <>
             <DirectionsService 
-                options={{origin, destination, travelMode: 'WALKING'}}
+                options={{
+                    destination: destination,
+                    origin: origin,
+                    travelMode: 'TRANSIT'
+                }}
                 callback={directionsCallback}
             />
             <DirectionsRenderer directions={directions} options={options} />
@@ -37,21 +46,37 @@ function Directions (props) {
     );
 };
 
+function toFloatLatLng(obj) {
+    const lat = parseFloat(obj.lat);
+    const lng  = parseFloat(obj.lng);
+    return { lat, lng };
+}
+function toCoordinatesString(obj) {
+    const coordinates = Object.values(obj).join(',');
+    console.log(coordinates)
+    return coordinates;
+}
+
 export default function Map(props) {
     const {origin, destination} = props;
-    return (
-        <LoadScript googleMapsApiKey={process.env.GOOGLE_MAPS_API_KEY}>
-            <GoogleMap
-                mapContainerStyle={{
-                    height: "100%",
-                    width: "100%"
-                }}
-                zoom={16}
-                center={origin? origin: JSON.parse(sessionStorage.getItem("location"))}
-                >
-                    <Directions origin={origin} destination={destination} />
-            </GoogleMap>
-        </LoadScript>
-    )
+    
+    if( origin.lat && origin.lng && destination.lat && destination.lng ) {
+        return (
+            <LoadScript googleMapsApiKey={"AIzaSyALHpeFI7Zg9iOcp7DjETfJNZkcPRByN58"}>
+                <GoogleMap
+                    mapContainerStyle={{
+                        height: "100%",
+                        width: "100%"
+                    }}
+                    zoom={16}
+                    center={toFloatLatLng(origin)}
+                    >
+                        <Marker position={toFloatLatLng(destination)} />
+                        <Directions origin={toFloatLatLng(origin)} destination={toFloatLatLng(destination)} />
+                </GoogleMap>
+            </LoadScript>
+        )
+    }
+    return null;
 };
 
