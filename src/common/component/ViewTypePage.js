@@ -12,7 +12,7 @@ import {
 //test 중
 import { callApiScrap } from "../../common/api";
 import Card from "./Card";
-import CATEGORY_CODE from "../categoryCode";
+import { getCategory } from "../categoryCode";
 import { blue, red } from "@material-ui/core/colors";
 
 const useStyles = makeStyles({
@@ -124,9 +124,7 @@ function ListView({ data }) {
             <IconWrap>
               <Avatar className={classes.typeAvatar}>
                 {
-                  CATEGORY_CODE.find(
-                    (item) => item.type === place.contenttypeid
-                  ).name
+                  getCategory(place.contenttypeid)
                 }
               </Avatar>
               <Avatar
@@ -143,13 +141,7 @@ function ListView({ data }) {
 }
 
 function CardView({ data }) {
-  // redux 구축 후 store에서 정확한 article을 매개변수로 사용하는
-  // 로직으로 바꾸기
-  const testHandleOnClickScrap = (article) => {
-    callApiScrap(article).catch((err) => console.log(err));
-  };
-
-  return data.map((place, idx) => <Card key={idx} item={place} />);
+  return data.map((place, idx) => <Card key={idx} place={place} />);
 }
 
 const ContentsContainer = styled.div`

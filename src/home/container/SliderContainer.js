@@ -63,8 +63,8 @@ const news = [
   },
 ];
 // 더미데이터 뉴스
-const testNews = [...news, ...news, ...news.slice(0, 2)];
+const places = [...news, ...news, ...news.slice(0, 2)];
 
 export default function SliderContainer(props) {
-  return <Slider items={testNews} />;
+  return <Slider places={places} />;
 }
