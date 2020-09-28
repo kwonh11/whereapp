@@ -24,7 +24,7 @@ function Directions (props) {
     },[origin.lat, origin.lng, destination.lat, destination.lng]);
 
     const directionsCallback = (result, status) => {
-        console.log(result, status);
+        // console.log(result, status);
         if (status === "OK" && count.current === 0) {
             count.current += 1;
             setDirections(result);

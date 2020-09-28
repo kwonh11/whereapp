@@ -1,15 +1,16 @@
 import styled from "styled-components";
 import { Avatar, Paper, IconButton, Divider, Chip } from "@material-ui/core";
-import CommentsInput from './CommentsInput';
-import Comments from './Comments';
-import { getCategory } from '../../common/categoryCode';
 import { makeStyles } from "@material-ui/core/styles";
 import { Favorite as FavoriteIcon, Share as ShareIcon } from '@material-ui/icons';
-import { callApiDetailIntro } from '../../common/api';
-import isInProgress from '../../common/isInProgressDate';
-import toKorean from '../../common/toKorean';
-import { withRouter } from "react-router-dom";
 import { blue, red } from "@material-ui/core/colors";
+import { withRouter } from "react-router-dom";
+import isInProgress from '../../common/isInProgressDate';
+import { getCategory } from '../../common/categoryCode';
+import { callApiDetailIntro } from '../../common/api';
+import Overview from './Overview';
+import AdditionalInfo from './Additional';
+import CommentsInput from './CommentsInput';
+import Comments from './Comments';
 import Map from './Map';
 
 const DetailContainer = styled(Paper)`
@@ -98,11 +99,6 @@ const Badge = styled.span`
   margin-top: 14px;
   margin-right: 5px;
 `;
-const DescriptionWrap = styled.div`
-  fontSize: 1rem;
-  font-weight: bold;
-  padding: 4px;
-`;
 const ActionsWrap = styled.div`
   width: 100%;
   margin-top: 50px;
@@ -125,7 +121,7 @@ const InfoContainer = styled.div`
   align-items: center;
 `;
 const CategoryWrap = styled.div`
-  display: flex;
+display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -144,65 +140,13 @@ const InfoWrap = styled.div`
   font-size: 1.2rem;
   font-weight: bold;
 `;
-const AdditionalContainer = styled.div`
-  width: 1000px;
-  padding-top: 100px;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  box-sizing: border-box;
-`;
-const AdditionalHeader = styled.div`
-  width: 50%;
-  height: 150px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  font-size: 1.8rem;
-`;
-const AdditionalWrap = styled.div`
-  min-height: 22px;
-  padding: 6px 0;
-  width: 50%;
-  display: flex;
-  justify-content: space-around;
-  flex-direction: column;
-  align-items: flex-start;
-`;
-const AdditionalInfo = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-`;
-const AdditionalLeft = styled.div`
-  display: inline;
-  width: 50%;
-  font-weight: bold;
-`;
-const AdditionalRight = styled.div`
-  width: 50%;
-  font-weight: bold;
-  color: ${props => props.color === "red" ? "red" : ""};
-`;
-const StyledChip = styled(Chip)`
-  $ .MuiChip-label {
-    padding: 20px;
-  }
-`;
-const ShorterDivider = styled(Divider)`
-  width: 100%;
-  margin: 30px 0 0 10px !important;
-`;
 const MapContainer = styled.div`
-  margin-top: 50px;
+  padding: 50px 0;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 500px;
+  height: 600px;
 `;
 const useStyles = makeStyles((theme) => ({
   green: {
@@ -239,7 +183,7 @@ function Detail( props ) {
   const {firstimage, title, date, addr1, tel, dist, readcount} = place;
   const {contentid, contenttypeid} = match.params;
 
-  const [addtionalInfo, setAddtionalInfo] = React.useState({
+  const [additionalInfo, setAdditionalInfo] = React.useState({
     origin: {},
     destination: {},
     isInProgress: false,
@@ -251,12 +195,13 @@ function Detail( props ) {
       .then(res => {
         console.log(`DetailCommonIntro API 호출 ${contenttypeid} ${contentid}`);
 
-        setAddtionalInfo({
+        setAdditionalInfo({
           origin: JSON.parse(sessionStorage.getItem("location")), 
           destination: {
             lat: res.data.mapy,
             lng: res.data.mapx
           },
+          overview: res.data.overview,
           inProgress: isInProgress(res.eventstartdate, res.eventenddate),
           additional: Object.entries(res.data)
         });
@@ -276,7 +221,7 @@ function Detail( props ) {
           <TitleWrap> {title} </TitleWrap>
           <BadgeWrap>
             <DateWrap> {date} </DateWrap>
-            {addtionalInfo.isInProgress && <Badge color="blue"> 진행중 </Badge> }
+            {additionalInfo.isInProgress && <Badge color="blue"> 진행중 </Badge> }
             {readcount >=2000 && <Badge color="red"> 인기 </Badge> }
             {dist < 1000 && <Badge color="green"> 가까움 </Badge> }
           </BadgeWrap>
@@ -295,33 +240,14 @@ function Detail( props ) {
         <Image src={firstimage} />
       </ImageContainer>
 
-      <AdditionalContainer>
-        <AdditionalHeader>
-          상세정보
-          <ShorterDivider />
-        </AdditionalHeader>
-        {addtionalInfo.additional.map((info, i) => {
-          const key = toKorean(info[0]);
-          if (key && info[1]) {
-            return (
-              <AdditionalWrap key={i}>
-                <AdditionalInfo>
-                    <AdditionalLeft>
-                      <StyledChip variant="outlined" label={key} />
-                    </AdditionalLeft>
-                    <AdditionalRight color={info[1]==="없음" || info[1]==="불가" ? "red":"normal"} dangerouslySetInnerHTML={{__html: info[1] }} />
-                </AdditionalInfo>
-            </AdditionalWrap> 
-            )
-          }
-          return null;
-        })}
-      </AdditionalContainer>
+      <Overview description={additionalInfo.overview} />
+
+      <AdditionalInfo additional={additionalInfo.additional} />
 
       <MapContainer>
         <Map 
-        origin={addtionalInfo.origin} 
-        destination={addtionalInfo.destination} />
+        origin={additionalInfo.origin} 
+        destination={additionalInfo.destination} />
       </MapContainer>
 
       <ActionsWrap>
@@ -333,7 +259,6 @@ function Detail( props ) {
           </IconButton>
       </ActionsWrap>
       
-
       <CommentsInput />
       <Comments comments={comments}/>
     </DetailContainer>
