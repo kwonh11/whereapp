@@ -53,7 +53,7 @@ const CommentSchema = new Schema({
     default: 0
   },
   reply: {
-    type: [ReplySchema] 
+    type: [ReplySchema]
   }
 });
 
