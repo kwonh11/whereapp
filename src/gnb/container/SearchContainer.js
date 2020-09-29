@@ -4,8 +4,11 @@ import axios from "axios";
 import { getUsersLocation } from "../../common/api";
 
 export default function SearchContainer() {
+  console.log("SearchContainer");
+
   useEffect(() => {
     getUsersLocation().then((location) => {
+      console.log(location);
       sessionStorage.setItem("location", JSON.stringify(location));
       setLocation({ ...location });
     });

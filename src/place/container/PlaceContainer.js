@@ -2,8 +2,14 @@ import { useEffect, useState } from "react";
 import PlaceList from "../component/PlaceList";
 import axios from "axios";
 
-export default function PlaceContainer({ query }) {
+export default function PlaceContainer({ query, match }) {
   console.log("PlaceContainer");
+
+  const [allPlace, setAllPlace] = useState(null);
+  const [selectedPlace, setSelectedPlace] = useState(null);
+  const [tab, setTab] = useState(0);
+  const [order, setOrder] = useState(0);
+
   let location;
   useEffect(() => {
     location = JSON.parse(sessionStorage.getItem("location"));
@@ -11,17 +17,15 @@ export default function PlaceContainer({ query }) {
     getPlace();
   }, []);
 
-  const [allPlace, setAllPlace] = useState(null);
-  const [selectPlace, setSelectPlace] = useState(null);
-  const [tab, setTab] = useState(0);
-  const [order, setOrder] = useState(0);
+  useEffect(() => {
+    const id = parseInt(match.params.type);
+    id
+      ? setSelectedPlace(allPlace.filter((place) => place.contenttypeid === id))
+      : setSelectedPlace(allPlace);
+  }, [tab]);
 
-  const handleSelectTab = (id, tab) => {
-    tab
-      ? setSelectPlace(allPlace.filter((place) => place.contenttypeid === id))
-      : setSelectPlace(allPlace);
-
-    setTab(tab);
+  const handleChangeTab = (e, newValue) => {
+    setTab(newValue);
   };
 
   const getPlace = () => {
@@ -36,21 +40,21 @@ export default function PlaceContainer({ query }) {
         .then((res) => {
           console.log(res.data.item);
           setAllPlace([...res.data.item]);
-          setSelectPlace([...res.data.item]);
+          setSelectedPlace([...res.data.item]);
         });
     } catch (error) {
       console.error(error);
     }
   };
 
-  if (!selectPlace) return null;
+  if (!selectedPlace) return null;
 
   return (
     <PlaceList
-      place={selectPlace}
-      query={query}
-      handleSelectTab={handleSelectTab}
+      place={selectedPlace}
+      handleChangeTab={handleChangeTab}
       tab={tab}
+      query={query}
     />
   );
 }

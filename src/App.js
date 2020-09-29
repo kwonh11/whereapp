@@ -50,14 +50,13 @@ export default function App() {
           <Switch>
             <Route path="/user/:tab" component={UserPage} />
             <Route path="/chat" component={ChatPage} />
-            <Route path="/place/:id" component={DetailPage} />
-            <Route path="/place" component={PlacePage} />
+            <Route path="/place/:type?" component={PlacePage} />
             <Route path="/" exact component={HomePage} />
           </Switch>
           <ChatPage />
-      </AppContainer>
-      <Route path="/" exact component={Footer} />
-    </Router>
-  </React.Fragment>
+        </AppContainer>
+        <Route path="/" exact component={Footer} />
+      </Router>
+    </React.Fragment>
   );
 }
