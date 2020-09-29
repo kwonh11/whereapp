@@ -112,7 +112,7 @@ export default function NewsCard(props) {
       <Link
         to={(location) => {
           sessionStorage.setItem("currentPlace", JSON.stringify(item));
-          return `/place/${contentid}`;
+          return `/detail/${contentid}`;
         }}
       >
         <CardMedia className={classes.media} image={firstimage} title={title} />
@@ -137,7 +137,7 @@ export default function NewsCard(props) {
           <IconButton>
             <FavoriteIcon />
           </IconButton>
-          <IconButton aria-label="share">
+          <IconButton>
             <ShareIcon />
           </IconButton>
         </CardActions>

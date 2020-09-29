@@ -25,8 +25,9 @@ export default function PlaceList({
   place,
   tab,
   handleChangeTab,
-  order,
+  arrange,
   query,
+  handleChangeArrange,
 }) {
   console.log("PlaceList");
 
@@ -57,7 +58,10 @@ export default function PlaceList({
       </AppBar>
       <FilterWrap>
         <ViewTypeBtn />
-        <ViewSelectFilter />
+        <ViewSelectFilter
+          arrange={arrange}
+          handleChangeArrange={handleChangeArrange}
+        />
       </FilterWrap>
       <ViewTypePage data={place} />
     </>

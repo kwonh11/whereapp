@@ -8,14 +8,13 @@ export default function PlaceContainer({ query, match }) {
   const [allPlace, setAllPlace] = useState(null);
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [tab, setTab] = useState(0);
-  const [order, setOrder] = useState(0);
+  const [arrange, setArrange] = useState("A");
 
   let location;
   useEffect(() => {
     location = JSON.parse(sessionStorage.getItem("location"));
-    console.log(location.lng);
     getPlace();
-  }, []);
+  }, [arrange]);
 
   useEffect(() => {
     const id = parseInt(match.params.type);
@@ -28,6 +27,10 @@ export default function PlaceContainer({ query, match }) {
     setTab(newValue);
   };
 
+  const handleChangeArrange = (e) => {
+    setArrange(e.target.value);
+  };
+
   const getPlace = () => {
     console.log("getPlace");
     try {
@@ -35,6 +38,7 @@ export default function PlaceContainer({ query, match }) {
         .get("/location/search", {
           params: {
             location: location,
+            arrange: arrange,
           },
         })
         .then((res) => {
@@ -55,6 +59,8 @@ export default function PlaceContainer({ query, match }) {
       handleChangeTab={handleChangeTab}
       tab={tab}
       query={query}
+      arrange={arrange}
+      handleChangeArrange={handleChangeArrange}
     />
   );
 }

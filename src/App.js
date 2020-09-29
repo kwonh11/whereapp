@@ -50,6 +50,7 @@ export default function App() {
           <Switch>
             <Route path="/user/:tab" component={UserPage} />
             <Route path="/chat" component={ChatPage} />
+            <Route path="/detail/:id" component={DetailPage} />
             <Route path="/place/:type?" component={PlacePage} />
             <Route path="/" exact component={HomePage} />
           </Switch>
