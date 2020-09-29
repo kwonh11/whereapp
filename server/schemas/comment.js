@@ -5,23 +5,57 @@ const {
   Types: { ObjectId },
 } = Schema;
 
-const commentSchema = new Schema({
+const ReplySchema = new Schema({
+  id: {
+    type: Number,
+    unique: true,
+    required: true
+  },
   commenter: {
-    type: ObjectId,
-    ref: "User",
+    type: String,
+    required: true
   },
   content: {
     type: String,
+    required: true,
+  },
+  createAt: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+const CommentSchema = new Schema({
+  contentId: {
+    type: String,
     require: true,
+  },
+  id: {
+    type: Number,
+    unique: true,
+    required: true
+  },
+  commenter: {
+    type: ObjectId,
+    ref: "User",
   },
   createAt: {
     type: Date,
     default: Date.now,
   },
-  article: {
-    type: ObjectId,
-    ref: "Article",
+  content: {
+    type: String,
+    require: true,
   },
+  like: {
+    type: Number,
+    require: true,
+    default: 0
+  },
+  reply: {
+    type: [ReplySchema]
+  }
 });
 
-module.exports = mongoose.model("Comment", commentSchema);
+commentSchema.index({id: 1});
+module.exports = mongoose.model("Comment", CommentSchema);

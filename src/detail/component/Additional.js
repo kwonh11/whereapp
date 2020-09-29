@@ -43,7 +43,7 @@ const AdditionalLeft = styled.div`
 const AdditionalRight = styled.div`
   width: 50%;
   font-weight: bold;
-  color: ${props => props.color === "red" ? "red" : ""};
+  color: ${props => props.color === "red" ? "red" : props.color === "blue"? "blue" : ""};
 `;
 const StyledChip = styled(Chip)`
   $ .MuiChip-label {
@@ -72,7 +72,9 @@ export default function AdditionalInfos({ additional }) {
                     <AdditionalLeft>
                       <StyledChip variant="outlined" label={key} />
                     </AdditionalLeft>
-                    <AdditionalRight color={info[1]==="없음" || info[1]==="불가" ? "red":"normal"} dangerouslySetInnerHTML={{__html: info[1] }} />
+                    <AdditionalRight 
+                    color={info[1]==="없음" || info[1]==="불가" ? "red" :
+                    info[1]==="있음" || info[1]==="가능" ? "blue" :""} dangerouslySetInnerHTML={{__html: info[1] }} />
                 </AdditionalInfo>
             </AdditionalWrap> 
             )
