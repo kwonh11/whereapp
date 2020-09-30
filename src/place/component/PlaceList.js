@@ -2,10 +2,8 @@ import ViewTypeBtn from "../../common/component/ViewTypeBtn";
 import ViewSelectFilter from "../../common/component/ViewSelectFilter";
 import ViewTypePage from "../../common/component/ViewTypePage";
 import { AppBar, Tabs, Tab } from "@material-ui/core";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 import CATEGORY_CODE from "../../common/categoryCode";
-import qs from "qs";
 
 const FilterWrap = styled.div`
   display: flex;
@@ -26,7 +24,6 @@ export default function PlaceList({
   tab,
   handleChangeTab,
   arrange,
-  query,
   handleChangeArrange,
 }) {
   console.log("PlaceList");
@@ -34,25 +31,10 @@ export default function PlaceList({
   return (
     <>
       <AppBar position="static">
-        <Tabs value={tab} onChange={handleChangeTab} variant="fullWidth">
-          <StyledTab
-            label="전체"
-            component={Link}
-            to={{
-              pathname: "/place",
-              search: qs.stringify({ ...query }),
-            }}
-          />
-          {CATEGORY_CODE.map((item, idx) => (
-            <StyledTab
-              key={idx}
-              label={item.name}
-              component={Link}
-              to={{
-                pathname: `/place/${item.type}`,
-                search: qs.stringify({ ...query }),
-              }}
-            />
+        <Tabs value={tab.idx} onChange={handleChangeTab} variant="fullWidth">
+          <StyledTab label="전체" />
+          {CATEGORY_CODE.map((item) => (
+            <StyledTab key={item.type} id={item.type} label={item.name} />
           ))}
         </Tabs>
       </AppBar>

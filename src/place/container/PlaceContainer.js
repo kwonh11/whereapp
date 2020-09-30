@@ -2,29 +2,23 @@ import { useEffect, useState } from "react";
 import PlaceList from "../component/PlaceList";
 import axios from "axios";
 
-export default function PlaceContainer({ query, match }) {
+export default function PlaceContainer() {
   console.log("PlaceContainer");
 
-  const [allPlace, setAllPlace] = useState(null);
-  const [selectedPlace, setSelectedPlace] = useState(null);
-  const [tab, setTab] = useState(0);
+  const [selectedPlace, setSelectedPlace] = useState([]);
+  const [tab, setTab] = useState({ idx: 0, typeId: "" });
   const [arrange, setArrange] = useState("A");
 
   let location;
+
   useEffect(() => {
     location = JSON.parse(sessionStorage.getItem("location"));
     getPlace();
-  }, [arrange]);
-
-  useEffect(() => {
-    const id = parseInt(match.params.type);
-    id
-      ? setSelectedPlace(allPlace.filter((place) => place.contenttypeid === id))
-      : setSelectedPlace(allPlace);
-  }, [tab]);
+  }, [arrange, tab]);
 
   const handleChangeTab = (e, newValue) => {
-    setTab(newValue);
+    console.log("handleChangeTab");
+    setTab({ idx: newValue, typeId: e.currentTarget.id });
   };
 
   const handleChangeArrange = (e) => {
@@ -39,12 +33,18 @@ export default function PlaceContainer({ query, match }) {
           params: {
             location: location,
             arrange: arrange,
+            contentTypeId: tab.typeId,
           },
         })
         .then((res) => {
-          console.log(res.data.item);
-          setAllPlace([...res.data.item]);
-          setSelectedPlace([...res.data.item]);
+          let data = [];
+          if (res.data) {
+            data = Array.isArray(res.data.item)
+              ? res.data.item
+              : [res.data.item];
+          }
+
+          setSelectedPlace([...data]);
         });
     } catch (error) {
       console.error(error);
@@ -58,7 +58,6 @@ export default function PlaceContainer({ query, match }) {
       place={selectedPlace}
       handleChangeTab={handleChangeTab}
       tab={tab}
-      query={query}
       arrange={arrange}
       handleChangeArrange={handleChangeArrange}
     />

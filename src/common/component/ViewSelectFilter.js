@@ -38,8 +38,8 @@ export default function ViewSelectFilter({ arrange, handleChangeArrange }) {
     return (
       <FormControl variant="outlined" className={classes.formControl}>
         <Select native value={value} onChange={handleChangeArrange}>
-          {selectList.map((item) => (
-            <option key={item.value} value={item.value}>
+          {selectList.map((item, idx) => (
+            <option key={idx} value={item.value}>
               {item.title}
             </option>
           ))}
