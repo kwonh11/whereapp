@@ -1,8 +1,8 @@
 import createReducer from '../../common/createReducer';
 
 export const types = {
-    SET_ORIGIN : "detail/SET_ORIGIN",                     // GNB의 현재위치 GPS좌표
-    
+    SET_PLACELIST : "detail/SET_PLACELIST",               // 초기로딩 후 PlaceCard리스트
+
     // CARD 클릭 시
     SET_LOADING : "detial/SET_LOADING",                   // LOADING
     SET_IDS : "detail/SET_IDS",                           // 카드 클릭시 params의 contentid, contentidtype 설정
@@ -20,7 +20,7 @@ export const types = {
 };
 
 export const actions = {
-    setOrigin: (origin) => ({ type: types.SET_ORIGIN, origin}),
+    setPlaceList: (placeList) => ({type: types.SET_PLACELIST, placeList}),
     setLoading: (isLoading) => ({type: types.SET_LOADING_CARD, isLoading}),
     setIds: (ids) => ({type: types.SET_IDS, ids}),
     setPlace: (place) => ({type: types.SET_PLACE, place}),
@@ -36,7 +36,8 @@ export const actions = {
 
 const INITIAL_STATE = {
     isLoading: false,
-    origin: { lat: "", lng: ""},
+
+    placeList: [],
     ids : {
         contentId: "",
         contentTypeId: "",
@@ -69,7 +70,7 @@ const INITIAL_STATE = {
 };
 
 const reducer = createReducer(INITIAL_STATE, {
-    [types.SET_ORIGIN]: (state, action) => {state.origin = action.origin},
+    [types.SET_PLACELIST]: (state, action) => {state.placeList = action.placeList},
     [types.SET_LOADING]: (state, action) => {state.isLoading = action.isLoading},
     [types.SET_IDS]: (state, action) => {state.ids = action.ids},
     [types.SET_PLACE]: (state, action) => {state.place = action.place},

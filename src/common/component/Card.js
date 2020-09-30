@@ -91,7 +91,7 @@ const Badge = styled.span`
   color: ${(props) => (props.color === "red" ? "red" : "green")};
 `;
 // image, title, description, category 를 입력받아 Card를 리턴하는 컴포넌트 함수
-export default function PlaceCard(props) {
+export default function PlaceCard( props ) {
   const classes = useStyles();
   const { place } = props;
   const {

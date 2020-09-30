@@ -28,8 +28,7 @@ export function callApiDetailIntro(contentTypeId, contentId) {
   });
 };
 
-// 유저 위치 재확인후 저장
-// redux에 유저 위치 저장하는 로직 필요
+// 유저 위치 확인
 export function getUsersLocation() {
   console.log("getUsersLocation");
 

@@ -12,9 +12,8 @@ const Container = styled(Paper)`
   min-width: 1300px;
   position: relative;
   padding: 30px;
+  margin-top: 100px;
 `;
-
-
 
 export default function DetailPage() {
 
