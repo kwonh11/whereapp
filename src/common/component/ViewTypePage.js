@@ -1,6 +1,5 @@
-import qs from "qs";
 import styled, { css } from "styled-components";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Typography,
@@ -9,8 +8,6 @@ import {
   ListItemText,
   Avatar,
 } from "@material-ui/core";
-//test 중
-import { callApiScrap } from "../../common/api";
 import Card from "./Card";
 import { getCategory } from "../categoryCode";
 import { blue, red } from "@material-ui/core/colors";
@@ -87,9 +84,7 @@ const TitleWrap = styled.div`
 
 function ListView({ data }) {
   const classes = useStyles();
-  const testHandleOnClickScrap = (article) => {
-    callApiScrap(article).catch((err) => console.log(err));
-  };
+  
   return (
     <List className={classes.list}>
       {data.map((place, idx) => (
@@ -114,7 +109,6 @@ function ListView({ data }) {
                   }
                 />
                 {place.readcount >= 2000 && <Badge color="red"> 추천 </Badge>}
-
                 {place.dist < 1000 && <Badge color="green"> 가까움 </Badge>}
               </TitleWrap>
               <ListItemText primary={place.addr1} secondary={place.addr2} />
@@ -178,24 +172,12 @@ const ContentsContainer = styled.div`
   }
 `;
 
-function ViewTypePage({ location, data }) {
-  const query = qs.parse(location.search, {
-    ignoreQueryPrefix: true,
-  });
-
-  if (!Object.keys(query).length) {
-    query.view = "card";
-  }
-
+function ViewTypePage({ listType, data }) {
   return (
-    <ContentsContainer view={query.view}>
-      {query.view === "card" ? (
-        <CardView data={data} />
-      ) : (
-        <ListView data={data} />
-      )}
+    <ContentsContainer view={listType}>
+      {listType === "card" ? <CardView data={data} /> : <ListView data={data} />}
     </ContentsContainer>
   );
-}
+};
 
 export default withRouter(ViewTypePage);

@@ -27,11 +27,11 @@ const category = [
 ];
 
 export default function PlaceList({
-  place,
-  query,
+  placeList,
   tab,
   handleSelectTab,
-  order,
+  setPlaceListType,
+  listType
 }) {
   console.log("PlaceList");
 
@@ -43,21 +43,16 @@ export default function PlaceList({
             <Tab
               key={idx}
               label={item.title}
-              component={Link}
-              to={{
-                pathname: "/place",
-                search: qs.stringify({ ...query, tab: item.id }),
-              }}
               onClick={() => handleSelectTab(item.id, idx)}
             />
           ))}
         </Tabs>
       </AppBar>
       <FilterWrap>
-        <ViewTypeBtn />
+        <ViewTypeBtn setPlaceListType={setPlaceListType} listType={listType}/>
         <ViewSelectFilter />
       </FilterWrap>
-      <ViewTypePage data={place} />
+      <ViewTypePage data={placeList} listType={listType}/>
     </>
   );
 }

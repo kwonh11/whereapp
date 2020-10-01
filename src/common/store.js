@@ -1,10 +1,19 @@
 import locationReducer from '../gnb/state';
 import detailReducer from '../detail/state';
-import {combineReducers, createStore} from 'redux';
+import placeReducer from '../place/state';
+import {combineReducers, createStore, applyMiddleware} from 'redux';
+import logger from 'redux-logger';
+import createSagaMiddleware from 'redux-saga';
+import locationSaga from '../gnb/state/saga';
 
 const reducer = combineReducers({
     location: locationReducer,
-    detail: detailReducer
+    detail: detailReducer,
+    place: placeReducer
 });
-const store = createStore(reducer);
+
+const sagaMiddleware = createSagaMiddleware();
+
+const store = createStore(reducer, applyMiddleware(sagaMiddleware, logger));
 export default store;
+sagaMiddleware.run(locationSaga);

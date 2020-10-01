@@ -1,7 +1,6 @@
 import createReducer from '../../common/createReducer';
 
 export const types = {
-    SET_PLACELIST : "detail/SET_PLACELIST",               // 초기로딩 후 PlaceCard리스트
 
     // CARD 클릭 시
     SET_LOADING : "detial/SET_LOADING",                   // LOADING
@@ -20,8 +19,7 @@ export const types = {
 };
 
 export const actions = {
-    setPlaceList: (placeList) => ({type: types.SET_PLACELIST, placeList}),
-    setLoading: (isLoading) => ({type: types.SET_LOADING_CARD, isLoading}),
+    setLoading: (isLoading) => ({type: types.SET_LOADING, isLoading}),
     setIds: (ids) => ({type: types.SET_IDS, ids}),
     setPlace: (place) => ({type: types.SET_PLACE, place}),
     setAdditional: (additional) => ({type: types.SET_ADDITIONAL, additional}),
@@ -36,8 +34,6 @@ export const actions = {
 
 const INITIAL_STATE = {
     isLoading: false,
-
-    placeList: [],
     ids : {
         contentId: "",
         contentTypeId: "",
@@ -70,7 +66,6 @@ const INITIAL_STATE = {
 };
 
 const reducer = createReducer(INITIAL_STATE, {
-    [types.SET_PLACELIST]: (state, action) => {state.placeList = action.placeList},
     [types.SET_LOADING]: (state, action) => {state.isLoading = action.isLoading},
     [types.SET_IDS]: (state, action) => {state.ids = action.ids},
     [types.SET_PLACE]: (state, action) => {state.place = action.place},

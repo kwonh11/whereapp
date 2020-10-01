@@ -4,12 +4,7 @@ const axiosConfig = {
   baseURL: "http://localhost:8000",
 };
 
-
-export function callApiScrap(article) {
-  return axios.post("/user/scrap", {}, axiosConfig);
-};
-
-export function callApiLocationBasedList(location) {
+export function callApiGetAddress(location) {
   return axios.get("/location", {
     params: {
       location: location,
@@ -43,3 +38,10 @@ export function getUsersLocation() {
   return getLocation();
 };
 
+export function callApiLocationBasedList(location) {
+  return axios.get("/location/search",{
+    params: {
+      location: location
+    },
+  });
+};

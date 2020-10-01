@@ -2,7 +2,7 @@ import PlaceCard from '../component/Card';
 import connect from 'react-redux';
 
 
-function CardContainer() {
+function ViewContainer() {
     const handleOnClickCard = () => {
 
     }

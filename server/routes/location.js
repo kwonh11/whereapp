@@ -25,7 +25,6 @@ router.get("/", (req, res, next) => {
 
 router.get("/search", async (req, res, next) => {
   const location = JSON.parse(req.query.location);
-
   try {
     const data = await axios.get(
       `http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey=${process.env.TOUR_KEY}&mapX=${location.lng}&mapY=${location.lat}&radius=2000&listYN=Y&MobileOS=ETC&MobileApp=Where&_type=json`
