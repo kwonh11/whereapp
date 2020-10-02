@@ -13,6 +13,7 @@ function SearchContainer() {
   useEffect(() => {
     getUsersLocation().then((location) => {
       sessionStorage.setItem("location", JSON.stringify(location));
+      
       // location객체의 값을 store에 저장한다. dispatch setOrigin이용
       // saga를 이용해서
       // setOrigin을 watching 하다가
