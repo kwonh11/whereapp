@@ -1,16 +1,23 @@
 import Detail from "../component/Detail";
 import { getCategory } from '../../common/categoryCode';
-import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
 
 function DetailContainer(props) {
-  const {place, match} = props;
-  const {contentid, contenttypeid} = match.params;
+  const {place, ids} = props;
 
   return (
   <React.Fragment>
-    <Detail place={place} category={getCategory(contenttypeid)}/>
+    <Detail place={place} category={getCategory(ids.contentTypeId)}/>
   </React.Fragment>
   );
 };
 
-export default withRouter(DetailContainer);
+const mapStateToProps = state => ({
+  place: state.detail.place,
+  ids: state.detail.ids
+});
+
+export default connect(
+  mapStateToProps,
+  null
+)(DetailContainer);

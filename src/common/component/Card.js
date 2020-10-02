@@ -17,6 +17,9 @@ import {
 import { blue, red } from "@material-ui/core/colors";
 import { getCategory } from "../categoryCode";
 import { Link } from "react-router-dom";
+import defaultImage from '../../images/defaultImage.png';
+import { connect } from 'react-redux';
+import { actions, types } from '../../detail/state';
 
 const StyledCard = styled(Card)`
   width: 480px;
@@ -91,9 +94,9 @@ const Badge = styled.span`
   color: ${(props) => (props.color === "red" ? "red" : "green")};
 `;
 // image, title, description, category 를 입력받아 Card를 리턴하는 컴포넌트 함수
-export default function PlaceCard( props ) {
+function PlaceCard( props ) {
   const classes = useStyles();
-  const { place } = props;
+  const { place, setIds, setPlace } = props;
   const {
     contentid,
     contenttypeid,
@@ -105,24 +108,24 @@ export default function PlaceCard( props ) {
     readcount,
     tel,
     dist,
-  } = props.place;
-
+    isClose,
+    isPopular
+  } = place;
+  const handleClickCard = () => {
+    setIds();
+    setPlace();
+  }
   return (
     <StyledCard>
-      <Link
-        to={(location) => {
-          sessionStorage.setItem("currentPlace", JSON.stringify(place));
-          return `/place/${contenttypeid}/${contentid}`;
-        }}
-      >
-        <CardMedia className={classes.media} image={firstimage} title={title} />
+      <Link to={`/place/${contenttypeid}/${contentid}`}>
+        <CardMedia className={classes.media} image={firstimage || defaultImage} title={title} onClick={handleClickCard}/>
       </Link>
       <CardHeader
         title={title}
         subheader={
           <>
-            {readcount >= 2000 && <Badge color="red"> 인기 </Badge>}
-            {dist < 1000 && <Badge color="green"> 가까움 </Badge>}
+            {isPopular >= 2000 && <Badge color="red"> 인기 </Badge>}
+            {isClose < 1000 && <Badge color="green"> 가까움 </Badge>}
           </>
         }
       />
@@ -145,11 +148,29 @@ export default function PlaceCard( props ) {
           <Avatar className={classes.typeAvatar}>
             {getCategory(contenttypeid)}
           </Avatar>
-          <Avatar className={dist >= 1000 ? classes.red : classes.green}>
-            {`${dist / 1000}km`}
+          <Avatar className={isClose ? classes.green : classes.red}>
+          {`${ Math.ceil(dist/10) / 100}km`}
           </Avatar>
         </MarksWrap>
       </BottomIconsWrap>
     </StyledCard>
   );
 }
+
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    setIds: () => dispatch({type: types.SET_IDS, ids : { contentId: props.place.contentid, contentTypeId: props.place.contenttypeid}}),
+    setPlace: () => dispatch({
+      type: types.SET_PLACE, 
+      place: {
+        isClose: props.place.dist <= 1000, 
+        isPopular: props.readcount >= 2500,
+        ...props.place 
+      }})
+  }
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(PlaceCard);

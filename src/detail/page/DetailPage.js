@@ -17,11 +17,9 @@ const Container = styled(Paper)`
 
 export default function DetailPage() {
 
-  const [place, setPlace] = React.useState(JSON.parse(sessionStorage.getItem("currentPlace")));
-
   return (
     <Container>
-      <DetailContainer place={place}/>
+      <DetailContainer />
       <AdditionalContainer />
       <CommentsContainer />
     </Container>

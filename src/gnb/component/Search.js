@@ -24,13 +24,13 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Search({ handleGetLocation, address }) {
+export default function Search({ requestAreaBasedList, address }) {
   const classes = useStyles();
 
   return (
     <Paper component="form" className={classes.root} elevation={3}>
       <Link to="/place">
-        <IconButton className={classes.iconButton} onClick={handleGetLocation}>
+        <IconButton className={classes.iconButton} onClick={requestAreaBasedList}>
           <LocationOnIcon />
         </IconButton>
       </Link>

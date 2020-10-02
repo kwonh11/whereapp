@@ -4,16 +4,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { blue, red } from "@material-ui/core/colors";
 
 
-
-// const DetailContainer = styled(Paper)`
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: center;
-//   align-items: center;
-//   min-width: 1300px;
-//   position: relative;
-//   padding: 30px;
-// `;
 const HeaderContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -157,8 +147,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Detail( props ) {
   const classes = useStyles();
-  const {place, additionalInfo, category} = props;
-  const {firstimage, title, date, addr1, tel, dist, readcount} = place;
+  const {place, category} = props;
+  const {firstimage, title, date, addr1, tel, dist, readcount, isClose, isPopular} = place;
 
   return (
     <React.Fragment>
@@ -171,8 +161,8 @@ export default function Detail( props ) {
           <BadgeWrap>
             <DateWrap> {date} </DateWrap>
             {/* {additionalInfo.isInProgress && <Badge color="blue"> 진행중 </Badge> } */}
-            {readcount >=2000 && <Badge color="red"> 인기 </Badge> }
-            {dist < 1000 && <Badge color="green"> 가까움 </Badge> }
+            {isPopular && <Badge color="red"> 인기 </Badge> }
+            {isClose && <Badge color="green"> 가까움 </Badge> }
           </BadgeWrap>
           <ShortDivider />
           <InfoContainer>

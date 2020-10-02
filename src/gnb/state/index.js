@@ -1,23 +1,31 @@
 import createReducer from '../../common/createReducer';
 
 export const types = {
+    REQUEST_AREA_BASED_LIST: "locaion/REQUEST_AREA_BASED_LIST",
+    REQUEST_LOCATION: "locaion/REQUEST_LOCATION",
     SET_ORIGIN: "location/SET_ORIGIN",
-    SET_REVERSE_GEOCODE_ORIGIN: "location/SET_REVERSE_GEOCODE_ORIGIN"
+    SET_ADDRESS: "location/SET_ADDRESS",
+    SET_ERROR: "location/SET_ERROR"
 };
 
 export const actions = {
+    requestAreaBasedList: () => ({type: types.REQUEST_AREA_BASED_LIST}),
+    requestLocation: () => ({type: types.REQUEST_LOCATION}),
     setOrigin: (origin) => ({ type: types.SET_ORIGIN, origin}),
-    setReverseGeocoded: (reverseGeocoded) => ({type: types.SET_REVERSE_GEOCODE_ORIGIN, reverseGeocoded})
+    setAddress: (address) => ({type: types.SET_ADDRESS, address}),
+    setError: (error) => ({type: types.SET_ERROR, error})
 };
 
 const INITIAL_STATE = {
     origin: { lat: "", lng: ""},
-    reverseGeocded: ""
+    address: "",
+    error: ""
 };
 
 const reducer = createReducer(INITIAL_STATE, {
     [types.SET_ORIGIN]: (state, action) => {state.origin = action.origin},
-    [types.SET_REVERSE_GEOCODE_ORIGIN]: (state, action) => {state.reverseGeocoded = action.reverseGeocoded}
+    [types.SET_ADDRESS]: (state, action) => {state.address = action.address},
+    [types.SET_ERROR]: (state, action) => {state.error = action.error}
 });
 
 export default reducer;

@@ -9,15 +9,11 @@ const Container = styled.section`
   align-items: center;
 `;
 
-export default function PlacePage({ location }) {
-  console.log("PlacePage");
-  const query = qs.parse(location.search, {
-    ignoreQueryPrefix: true,
-  });
+export default function PlacePage() {
 
   return (
     <Container>
-      <PlaceContainer query={query} />
+      <PlaceContainer />
     </Container>
   );
 }
