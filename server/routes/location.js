@@ -25,6 +25,7 @@ router.get("/", (req, res, next) => {
 
 router.get("/search", async (req, res, next) => {
   const location = JSON.parse(req.query.location);
+  console.log(location);
   try {
     const data = await axios.get(
       `http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey=${process.env.TOUR_KEY}&mapX=${location.lng}&mapY=${location.lat}&radius=2000&listYN=Y&MobileOS=ETC&MobileApp=Where&_type=json`
@@ -34,5 +35,21 @@ router.get("/search", async (req, res, next) => {
     console.error(error);
   }
 });
+
+router.get("/best",async (req, res) => {
+  await axios.get(
+    `http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchFestival?ServiceKey=${process.env.TOUR_KEY}&areaCode=1&numOfRows=20&pageNo=1&arrange=Q&MobileOS=ETC&MobileApp=Where`
+  ).
+  then(result => {
+    const placeList = result.data.response.body.items.item;
+    placeList.sort((a, b) => {
+      return b.readcount - a.readcount;
+    })
+    res.json(placeList.slice(0, 10));
+  })
+  .catch(err => {
+    console.log(err);
+  })
+})
 
 module.exports = router;

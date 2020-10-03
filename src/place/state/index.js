@@ -17,7 +17,7 @@ export const actions = {
 const INITIAL_STATE = {
     placeList: [],
     listType: "card",
-    isLoading: false,
+    isLoading: true,
     categoryCode: 0,
 };
 

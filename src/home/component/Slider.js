@@ -5,6 +5,7 @@ import {
   ArrowForwardIosOutlined,
 } from "@material-ui/icons";
 
+
 const SliderContainer = styled.div`
   width: 100%;
   height: 105%;
@@ -16,6 +17,8 @@ const SliderContainer = styled.div`
   position: relative;
   padding-bottom: 150px;
   background-color: #f1f1f1;
+  opacity: ${props => props.fade === "in" ? 1 : 0.3};
+  transition: opacity 0.3s ease-out;
 `;
 const CardContainer = styled.div`
   width: 100%;
@@ -27,6 +30,7 @@ const CardContainer = styled.div`
   align-items: center;
   transition: all 0.3s ease-out;
 `;
+
 const ArrowContainer = styled.div`
   position: absolute;
   top: 75px;
@@ -63,15 +67,17 @@ const NextArrow = styled(PrevArrow)`
 `;
 
 export default function Slider(props) {
-  const { places } = props;
-  const [active, setActive] = React.useState(9);
+  const { bestPlaceList, isLoading} = props;
+  const [active, setActive] = React.useState(0);
+  const [fade, setFade] = React.useState(false);
   const [cardsPerPage, setCardsPerPage] = React.useState(1);
 
-  const max = React.useCallback(() => places.length - 1, [places]);
+  const max = React.useCallback(() => bestPlaceList.length - 1, [bestPlaceList]);
 
   React.useEffect(() => {
-    setTimeout(() => setActive(0), 200);
-  }, []);
+    setTimeout(() => setFade(true), 200);
+  }, [isLoading]);
+
   React.useEffect(() => {
     setCardsPerPage(Math.floor(document.documentElement.clientWidth / 495));
   }, [document.documentElement.clientWidth]);
@@ -86,7 +92,7 @@ export default function Slider(props) {
   };
 
   return (
-    <SliderContainer device={"web"}>
+    <SliderContainer device={"web"} fade={fade? "in" : "out"}>
       <ArrowContainer device={"web"}>
         <PrevArrow visible={active <= 0 ? "none" : ""} onClick={onClickPrev}>
           <ArrowBackIosOutlined style={{ fontSize: 75 }} />
@@ -98,12 +104,17 @@ export default function Slider(props) {
           <ArrowForwardIosOutlined style={{ fontSize: 75 }} />
         </NextArrow>
       </ArrowContainer>
-      <CardContainer active={active} page={cardsPerPage}>
-        {/* testNews는 이 후 saga->api->store 를 통해 전달된 response에 따라 변경*/}
-        {places.map((place, index) => {
-          return <PlaceCard key={index} place={place} />;
-        })}
-      </CardContainer>
+        <CardContainer active={active} page={cardsPerPage}>
+          {bestPlaceList.map((place, index) => {
+            return (<PlaceCard 
+              key={index}
+              place={{
+                dist: place.dist, isClose: place.dist <= 1000, 
+                isPopular: place.readcount >= 2500, 
+                isOnline: place.addr1.includes("온라인"),
+                ...place}} />);
+          })}
+        </CardContainer>
     </SliderContainer>
   );
 }

@@ -2,10 +2,8 @@ import { getUsersLocation, callApiGetAddress, callApiLocationBasedList } from '.
 import { actions, types } from './index';
 import { actions as detailActions } from '../../detail/state';
 import { actions as placeActions } from '../../place/state';
-import { fork, all, put, call, take } from 'redux-saga/effects';
+import { fork, all, put, call, take, delay } from 'redux-saga/effects';
 
-
-const delay = (ms) => new Promise(res => setTimeout(res, ms));
 
 // 최초 접속시 user의 location을 얻고 reverse geocode하고 저장한다.
 export function* fetchLocation(action) {
@@ -35,7 +33,6 @@ export function* fetchAreaBasedList(action) {
     while(true) {
         yield take(types.REQUEST_AREA_BASED_LIST);
         yield put(actions.setError(""));
-        yield put(detailActions.setLoading(true));
         try {
 
             // getlocation
@@ -44,9 +41,9 @@ export function* fetchAreaBasedList(action) {
             
             // reverse geocode
             const address = yield call(callApiGetAddress, usersLocation);
+            yield put(actions.setAddress(address.data));
             
             // redux에서 history관리하고 place 주소로 이동 시킴
-            yield put(actions.setAddress(address.data));
             yield put(placeActions.setPlaceListLoading(true));
             const placeList = yield call(callApiLocationBasedList, usersLocation);
             yield put(placeActions.setPlaceList(placeList.data.item));
@@ -56,10 +53,8 @@ export function* fetchAreaBasedList(action) {
             yield put(actions.setOrigin({}));
             yield put(actions.setAddress(""));
         }
-        
+        yield delay(1000);
         yield put(placeActions.setPlaceListLoading(false));
-        yield put(detailActions.setLoading(false));
-
     };
 };
 

@@ -14,12 +14,13 @@ import {
   Favorite as FavoriteIcon,
   Share as ShareIcon,
 } from "@material-ui/icons";
-import { blue, red } from "@material-ui/core/colors";
+import { blue, green, red } from "@material-ui/core/colors";
 import { getCategory } from "../categoryCode";
 import { Link } from "react-router-dom";
 import defaultImage from '../../images/defaultImage.png';
 import { connect } from 'react-redux';
 import { actions, types } from '../../detail/state';
+
 
 const StyledCard = styled(Card)`
   width: 480px;
@@ -66,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "bold",
     backgroundColor: "#484848",
   },
-  green: {
+  blue: {
     marginRight: "20px",
     fontSize: "x-small",
     fontWeight: "bold",
@@ -80,9 +81,19 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
     backgroundColor: red[900],
   },
+  green: {
+    marginRight: "20px",
+    fontSize: "x-small",
+    fontWeight: "bold",
+    color: "white",
+    backgroundColor: green[900],
+  },
   content: {
     padding: "0 16px",
   },
+  small: {
+    fontSize: "1.35rem"
+  }
 }));
 const Badge = styled.span`
   font-size: 0.8rem;
@@ -93,10 +104,11 @@ const Badge = styled.span`
   margin: 0 3px;
   color: ${(props) => (props.color === "red" ? "red" : "green")};
 `;
+
 // image, title, description, category 를 입력받아 Card를 리턴하는 컴포넌트 함수
 function PlaceCard( props ) {
   const classes = useStyles();
-  const { place, setIds, setPlace } = props;
+  const { place, setIds, setPlace, simple } = props;
   const {
     contentid,
     contenttypeid,
@@ -108,8 +120,10 @@ function PlaceCard( props ) {
     readcount,
     tel,
     dist,
+    isOnline,
     isClose,
-    isPopular
+    isPopular,
+    isLoading
   } = place;
   const handleClickCard = () => {
     setIds();
@@ -121,19 +135,24 @@ function PlaceCard( props ) {
         <CardMedia className={classes.media} image={firstimage || defaultImage} title={title} onClick={handleClickCard}/>
       </Link>
       <CardHeader
+        className={classes.small}
         title={title}
         subheader={
           <>
-            {isPopular >= 2000 && <Badge color="red"> 인기 </Badge>}
-            {isClose < 1000 && <Badge color="green"> 가까움 </Badge>}
+            {isPopular && <Badge color="red"> 인기 </Badge>}
+            {isOnline ? (<Badge color="green"> 온라인 </Badge>) :
+            isClose? (<Badge color="green"> 가까움 </Badge>) : 
+            null}
           </>
         }
       />
       <CardContent className={classes.content}>
         <Typography variant="body2" color="textSecondary" component="p">
           {addr1}
-          <br />
         </Typography>
+        {!simple && <Typography variant="body2" color="textSecondary" component="p">
+          {tel}
+        </Typography>}
       </CardContent>
       <BottomIconsWrap>
         <CardActions disableSpacing>
@@ -148,8 +167,8 @@ function PlaceCard( props ) {
           <Avatar className={classes.typeAvatar}>
             {getCategory(contenttypeid)}
           </Avatar>
-          <Avatar className={isClose ? classes.green : classes.red}>
-          {`${ Math.ceil(dist/10) / 100}km`}
+          <Avatar className={isOnline? classes.green : isClose ? classes.blue : classes.red}>
+          {isOnline? "Online" :  Math.ceil(dist/100)/10 +"KM"}
           </Avatar>
         </MarksWrap>
       </BottomIconsWrap>
@@ -164,12 +183,10 @@ const mapDispatchToProps = (dispatch, props) => {
       type: types.SET_PLACE, 
       place: {
         isClose: props.place.dist <= 1000, 
-        isPopular: props.readcount >= 2500,
         ...props.place 
       }})
   }
 };
-
 export default connect(
   null,
   mapDispatchToProps

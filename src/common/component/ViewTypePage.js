@@ -12,6 +12,7 @@ import Card from "./Card";
 import { getCategory } from "../categoryCode";
 import { blue, red } from "@material-ui/core/colors";
 
+
 const useStyles = makeStyles({
   list: {
     display: "grid",
@@ -133,9 +134,17 @@ function ListView({ data }) {
     </List>
   );
 }
-
 function CardView({ data }) {
-  return data.map((place, idx) => <Card key={idx} place={place} />);
+  return data.map((place, idx) => 
+  (<Card 
+    key={idx} 
+    place={{
+      ...place, 
+      isClose: place.dist <= 1000, 
+      isPopular: place.readcount >= 3000,
+      isOnline: place.addr1.includes("온라인")
+    }} simple={true}/>)
+  );
 }
 
 const ContentsContainer = styled.div`
@@ -157,7 +166,8 @@ const ContentsContainer = styled.div`
     width: 310px;
     height: 350px;
     margin: 0;
-
+    transition: opacity 0.4s ease-out;
+    opacity: ${props => props.isLoading? 0.3 : 1}
     & .MuiCardHeader-title {
       flex: 1;
       font-size: 18px;
@@ -172,9 +182,9 @@ const ContentsContainer = styled.div`
   }
 `;
 
-function ViewTypePage({ listType, data }) {
+function ViewTypePage({ listType, data, isLoading }) {
   return (
-    <ContentsContainer view={listType}>
+    <ContentsContainer view={listType} isLoading={isLoading}>
       {listType === "card" ? <CardView data={data} /> : <ListView data={data} />}
     </ContentsContainer>
   );

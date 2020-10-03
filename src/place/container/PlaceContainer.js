@@ -5,7 +5,7 @@ import { actions } from '../state';
 import { withRouter } from "react-router-dom";
 
 function PlaceContainer(props) {
-  const {placeList, listType} = props;
+  const {placeList, listType, isLoading} = props;
   const {setPlaceList, setPlaceListType, setPlaceListCategoryCode, setPlaceListLoading} = props;
 
   const [selectPlace, setSelectPlace] = useState(null);
@@ -23,6 +23,7 @@ function PlaceContainer(props) {
   return (
     <PlaceList
       placeList={selectPlace || placeList}
+      isLoading={isLoading}
       handleSelectTab={handleSelectTab}
       tab={tab}
       setPlaceListType={setPlaceListType}
@@ -35,7 +36,6 @@ const mapStateToProps = (state, props) => ({
   placeList: state.place.placeList,
   listType: state.place.listType,
   isLoading: state.place.isLoading,
-  props: props
 })
 export default connect(
   mapStateToProps,

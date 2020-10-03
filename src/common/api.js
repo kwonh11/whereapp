@@ -12,6 +12,10 @@ export function callApiGetAddress(location) {
   });
 };
 
+export function callApiBestList() {
+  return axios.get("/location/best");
+};
+
 export function callApiDetailIntro(contentTypeId, contentId) {
   return axios.get("/place", {
     params: {

@@ -117,7 +117,7 @@ const InfoWrap = styled.div`
 `;
 
 const useStyles = makeStyles((theme) => ({
-  green: {
+  blue: {
     position: "absolute",
     top: "0",
     width: "70px",
@@ -173,8 +173,8 @@ export default function Detail( props ) {
       </HeaderContainer>
 
       <ImageContainer>
-        <Avatar className={dist >= 1000 ? classes.red : classes.green}>
-          {`${ Math.ceil(dist/10) / 100}km`}
+        <Avatar className={isClose ? classes.blue : classes.red}>
+          { Math.ceil(dist/100)/10 +"KM"}
         </Avatar>
         <Image src={firstimage} />
       </ImageContainer>

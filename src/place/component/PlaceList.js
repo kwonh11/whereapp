@@ -5,6 +5,7 @@ import { AppBar, Tabs, Tab } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import qs from "qs";
 import styled from "styled-components";
+import { Skeleton } from "@material-ui/lab";
 
 const FilterWrap = styled.div`
   display: flex;
@@ -12,6 +13,30 @@ const FilterWrap = styled.div`
   align-items: center;
   width: 100%;
   margin: 10px 0;
+`;
+const ContentsContainer = styled.div`
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  & .MuiPaper-root {
+    min-width: 300px;
+    width: 310px;
+    height: 350px;
+    margin: 0;
+
+    & .MuiCardHeader-title {
+      flex: 1;
+      font-size: 18px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
 `;
 
 const category = [
@@ -26,15 +51,23 @@ const category = [
   { title: "음식점", id: 39 },
 ];
 
+const SkeletonCard = () => (
+  <div>
+    <Skeleton width={310} height={230} />
+    <Skeleton width={100} height={50} />
+    <Skeleton width={200} height={20} />
+    <Skeleton width={310} height={40} />
+  </div>
+);
+
 export default function PlaceList({
   placeList,
   tab,
   handleSelectTab,
   setPlaceListType,
-  listType
+  listType,
+  isLoading
 }) {
-  console.log("PlaceList");
-
   return (
     <>
       <AppBar position="static">
@@ -52,7 +85,24 @@ export default function PlaceList({
         <ViewTypeBtn setPlaceListType={setPlaceListType} listType={listType}/>
         <ViewSelectFilter />
       </FilterWrap>
-      <ViewTypePage data={placeList} listType={listType}/>
+      {
+        isLoading?
+        (
+          <ContentsContainer>
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+          </ContentsContainer>
+        ):
+        (
+          <ViewTypePage data={placeList} listType={listType} isLoading={isLoading}/>
+        )
+      }
     </>
   );
 }
