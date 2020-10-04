@@ -72,6 +72,10 @@ export default function PlaceList({
     setTab(index > 0 ? index: 0);
   } ,[]);
 
+  const handleClickTab = (tab, categoryId) => {
+    setTab(tab);
+    handleSelectTab(categoryId);
+  } 
   return (
     <>
       <AppBar position="static">
@@ -80,7 +84,9 @@ export default function PlaceList({
             <Tab
               key={idx}
               label={item.title}
-              onClick={() => handleSelectTab(item.id)}
+              onClick={() => {
+                handleClickTab(idx, item.id);
+              }}
             />
           ))}
         </Tabs>
