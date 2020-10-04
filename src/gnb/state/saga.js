@@ -53,7 +53,7 @@ export function* fetchAreaBasedList(action) {
             yield put(actions.setOrigin({}));
             yield put(actions.setAddress(""));
         }
-        yield delay(1000);
+        yield delay(500);
         yield put(placeActions.setPlaceListLoading(false));
     };
 };

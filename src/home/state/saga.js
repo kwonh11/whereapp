@@ -23,7 +23,7 @@ export function* fetchBestList(action) {
         } catch(err) {
             yield put(actions.setError(err));
         }
-        yield delay(1000);
+        yield delay(500);
         yield put(actions.setLoading(false));
     }
 };

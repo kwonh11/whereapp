@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Avatar, Divider } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { blue, red } from "@material-ui/core/colors";
+import { blue, green, red } from "@material-ui/core/colors";
 
 
 const HeaderContainer = styled.div`
@@ -76,7 +76,7 @@ const Badge = styled.span`
   font-weight: bold;
   border-radius: 15px;
   padding: 5px;
-  background-color: ${props => props.color === "red"? "red" : props.color === "blue"? "blue" : "green"};
+  background-color: ${props => props.color};
   color: #fff;
   margin-top: 14px;
   margin-right: 5px;
@@ -141,6 +141,18 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: red[900],
     zIndex:500,
   },
+  green: {
+    position: "absolute",
+    top: "0",
+    width: "70px",
+    height: "70px",
+    margin: "20px",
+    fontSize: "large",
+    fontWeight: "bold",
+    color: "white",
+    backgroundColor: green[900],
+    zIndex:500,
+  },
 }));
 
 
@@ -148,7 +160,9 @@ const useStyles = makeStyles((theme) => ({
 export default function Detail( props ) {
   const classes = useStyles();
   const {place, category} = props;
-  const {firstimage, title, date, addr1, tel, dist, readcount, isClose, isPopular} = place;
+  const {
+    firstimage, title, date, addr1, tel, dist, readcount, isClose, isOnline, isPopular
+  } = place;
 
   return (
     <React.Fragment>
@@ -162,7 +176,8 @@ export default function Detail( props ) {
             <DateWrap> {date} </DateWrap>
             {/* {additionalInfo.isInProgress && <Badge color="blue"> 진행중 </Badge> } */}
             {isPopular && <Badge color="red"> 인기 </Badge> }
-            {isClose && <Badge color="green"> 가까움 </Badge> }
+            {isClose && <Badge color="blue"> 가까움 </Badge> }
+            {isOnline && <Badge color="green"> 온라인 </Badge> }
           </BadgeWrap>
           <ShortDivider />
           <InfoContainer>
@@ -173,8 +188,8 @@ export default function Detail( props ) {
       </HeaderContainer>
 
       <ImageContainer>
-        <Avatar className={isClose ? classes.blue : classes.red}>
-          { Math.ceil(dist/100)/10 +"KM"}
+        <Avatar className={isOnline? classes.green : isClose ? classes.blue : classes.red}>
+          { isOnline? "Online" : Math.ceil(dist/100)/10 +"KM"}
         </Avatar>
         <Image src={firstimage} />
       </ImageContainer>
