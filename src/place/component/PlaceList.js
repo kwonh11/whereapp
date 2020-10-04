@@ -2,8 +2,6 @@ import ViewTypeBtn from "../../common/component/ViewTypeBtn";
 import ViewSelectFilter from "../../common/component/ViewSelectFilter";
 import ViewTypePage from "../../common/component/ViewTypePage";
 import { AppBar, Tabs, Tab } from "@material-ui/core";
-import { Link } from "react-router-dom";
-import qs from "qs";
 import styled from "styled-components";
 import { Skeleton } from "@material-ui/lab";
 
@@ -62,12 +60,18 @@ const SkeletonCard = () => (
 
 export default function PlaceList({
   placeList,
-  tab,
+  isLoading,
   handleSelectTab,
+  categoryCode,
   setPlaceListType,
   listType,
-  isLoading
 }) {
+  const [tab, setTab] = React.useState(0);
+  React.useEffect(()=>{
+    const index = category.findIndex(item => item.id === categoryCode);
+    setTab(index > 0 ? index: 0);
+  } ,[]);
+
   return (
     <>
       <AppBar position="static">
@@ -76,7 +80,7 @@ export default function PlaceList({
             <Tab
               key={idx}
               label={item.title}
-              onClick={() => handleSelectTab(item.id, idx)}
+              onClick={() => handleSelectTab(item.id)}
             />
           ))}
         </Tabs>

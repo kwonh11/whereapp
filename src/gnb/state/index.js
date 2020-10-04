@@ -1,8 +1,8 @@
 import createReducer from '../../common/createReducer';
 
 export const types = {
-    REQUEST_AREA_BASED_LIST: "locaion/REQUEST_AREA_BASED_LIST",
-    REQUEST_LOCATION: "locaion/REQUEST_LOCATION",
+    REQUEST_AREA_BASED_LIST: "location/REQUEST_AREA_BASED_LIST",
+    REQUEST_LOCATION: "location/REQUEST_LOCATION",
     SET_ORIGIN: "location/SET_ORIGIN",
     SET_ADDRESS: "location/SET_ADDRESS",
     SET_ERROR: "location/SET_ERROR"

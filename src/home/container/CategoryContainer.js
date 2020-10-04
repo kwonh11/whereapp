@@ -2,6 +2,9 @@ import React from "react";
 import Category from "../component/Category";
 import styled from 'styled-components';
 import CATEGORY_CODE from '../../common/categoryCode';
+import { Link } from "react-router-dom";
+import { types } from '../state';
+import { connect } from "react-redux";
 
 const Container = styled.div`
   width: 100%;
@@ -16,9 +19,12 @@ const Rise = styled.div`
   transition: all 0.5s ease-out ${props => props.index * 0.15}s;
 `;
 
-export default function CategoryContainer() {
+function CategoryContainer(props) {
   const [target, setTarget] = React.useState(null);
   const [rise, setRise] = React.useState("0");
+
+  const { setCategoryCode } = props;
+
   React.useEffect(()=> {
     let observer;
     if (target) {
@@ -35,15 +41,32 @@ export default function CategoryContainer() {
     }
     return ()=> observer && observer.disconnect();
   },[target]);
+
+  const handleClickCategory = (e) => {
+    console.log(`handleclickCategory => ${e.currentTarget.dataset.categoryCode}`)
+    setCategoryCode(Number(e.currentTarget.dataset.categoryCode));
+  };
+
   return (
     <Container ref={setTarget}>
       {
         CATEGORY_CODE.map((item, i) => (
-          <Rise key={item.name} rise={rise} index={i+1}>
-            <Category image={item.image} name={item.name} />
+          <Rise key={item.name} rise={rise} index={i+1} data-category-code={item.type} onClick={handleClickCategory}>
+            <Link to={"/place"}>
+              <Category image={item.image} name={item.name}/>
+            </Link>
           </Rise>
         ))
       }
     </Container>
   )
-}
+};
+
+const mapDispatchToProps = dispatch => ({
+  setCategoryCode: (categoryCode) => dispatch({type: types.REQUEST_CATEGORY_CODE, categoryCode})
+});
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(CategoryContainer);

@@ -43,7 +43,6 @@ export function* fetchAreaBasedList(action) {
             const address = yield call(callApiGetAddress, usersLocation);
             yield put(actions.setAddress(address.data));
             
-            // redux에서 history관리하고 place 주소로 이동 시킴
             yield put(placeActions.setPlaceListLoading(true));
             const placeList = yield call(callApiLocationBasedList, usersLocation);
             yield put(placeActions.setPlaceList(placeList.data.item));
