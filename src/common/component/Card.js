@@ -15,7 +15,7 @@ import {
   Share as ShareIcon,
 } from "@material-ui/icons";
 import { blue, red } from "@material-ui/core/colors";
-import CATEGORY_CODE from "../categoryCode";
+import { getCategory } from "../categoryCode";
 import { Link } from "react-router-dom";
 
 const StyledCard = styled(Card)`
@@ -91,9 +91,9 @@ const Badge = styled.span`
   color: ${(props) => (props.color === "red" ? "red" : "green")};
 `;
 // image, title, description, category 를 입력받아 Card를 리턴하는 컴포넌트 함수
-export default function NewsCard(props) {
+export default function PlaceCard(props) {
   const classes = useStyles();
-  const { item } = props;
+  const { place } = props;
   const {
     contentid,
     contenttypeid,
@@ -105,14 +105,14 @@ export default function NewsCard(props) {
     readcount,
     tel,
     dist,
-  } = props.item;
+  } = props.place;
 
   return (
     <StyledCard>
       <Link
         to={(location) => {
-          sessionStorage.setItem("currentPlace", JSON.stringify(item));
-          return `/detail/${contentid}`;
+          sessionStorage.setItem("currentPlace", JSON.stringify(place));
+          return `/place/${contenttypeid}/${contentid}`;
         }}
       >
         <CardMedia className={classes.media} image={firstimage} title={title} />
@@ -121,7 +121,7 @@ export default function NewsCard(props) {
         title={title}
         subheader={
           <>
-            {readcount >= 2000 && <Badge color="red"> 추천 </Badge>}
+            {readcount >= 2000 && <Badge color="red"> 인기 </Badge>}
             {dist < 1000 && <Badge color="green"> 가까움 </Badge>}
           </>
         }
@@ -143,7 +143,7 @@ export default function NewsCard(props) {
         </CardActions>
         <MarksWrap>
           <Avatar className={classes.typeAvatar}>
-            {CATEGORY_CODE.find((item) => item.type === contenttypeid).name}
+            {getCategory(contenttypeid)}
           </Avatar>
           <Avatar className={dist >= 1000 ? classes.red : classes.green}>
             {`${dist / 1000}km`}

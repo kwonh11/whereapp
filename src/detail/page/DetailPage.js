@@ -3,8 +3,7 @@ import styled from "styled-components";
 
 const DetailPageContainer = styled.section``;
 
-export default function DetailPage({ match }) {
-  console.log(`id : ${match.params.id}`);
+export default function DetailPage() {
   return (
     <DetailPageContainer>
       <DetailContainer />

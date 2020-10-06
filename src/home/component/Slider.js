@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import ItemCard from "../../common/component/Card";
+import PlaceCard from "../../common/component/Card";
 import {
   ArrowBackIosOutlined,
   ArrowForwardIosOutlined,
@@ -63,13 +63,14 @@ const NextArrow = styled(PrevArrow)`
 `;
 
 export default function Slider(props) {
-  const { items } = props;
+  const { places } = props;
   const [active, setActive] = React.useState(9);
   const [cardsPerPage, setCardsPerPage] = React.useState(1);
 
-  const max = React.useCallback(() => items.length - 1, [items]);
+  const max = React.useCallback(() => places.length - 1, [places]);
+
   React.useEffect(() => {
-    setTimeout(() => setActive(0), 300);
+    setTimeout(() => setActive(0), 200);
   }, []);
   React.useEffect(() => {
     setCardsPerPage(Math.floor(document.documentElement.clientWidth / 495));
@@ -99,8 +100,8 @@ export default function Slider(props) {
       </ArrowContainer>
       <CardContainer active={active} page={cardsPerPage}>
         {/* testNews는 이 후 saga->api->store 를 통해 전달된 response에 따라 변경*/}
-        {items.map((item, index) => {
-          return <ItemCard key={index} item={item} />;
+        {places.map((place, index) => {
+          return <PlaceCard key={index} place={place} />;
         })}
       </CardContainer>
     </SliderContainer>

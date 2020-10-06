@@ -64,31 +64,8 @@ const Comments = [
 ];
 
 export default function DetailContainer() {
-  const [loading, setLoading] = React.useState(false);
   const [comments, setComments] = React.useState(Comments);
-
-  // lazy loading
-  // const scrollEvent = async () => {
-  //   const scrollHeight = document.documentElement.scrollHeight;
-  //   const scrollTop = document.documentElement.scrollTop;
-  //   const clientHeight = document.documentElement.clientHeight;
-
-  //   if (scrollTop + clientHeight >= scrollHeight - 100 && !loading) {
-  //     console.log("페이지 끝 ");
-  //     const storageDatas = JSON.parse(sessionStorage.getItem("comments"));
-  //     const commentList = storageDatas? [...storageDatas, ...Comments] : [...Comments];
-  //     sessionStorage.setItem("comments", JSON.stringify(commentList));
-  //     await setLoading(true);
-  //     await setComments(commentList);
-  //     setTimeout(()=>setLoading(false), 2000);
-  //   };
-  // };
-  // React.useEffect(()=>{
-  //   window.addEventListener('scroll', scrollEvent);
-  //   return () => window.removeEventListener('scroll', scrollEvent);
-  // },[]);
-  
-  const place = JSON.parse(sessionStorage.getItem("currentPlace"));
+  const [place, setPlace] = React.useState(JSON.parse(sessionStorage.getItem("currentPlace")));
 
   const handleShare = () => {
     console.log("share");
@@ -99,7 +76,7 @@ export default function DetailContainer() {
 
   return (
   <React.Fragment>
-    <Detail place={place} handleShare={handleShare} handleScrap={handleScrap} loading={loading} comments={comments} />
+    <Detail place={place} handleShare={handleShare} handleScrap={handleScrap} comments={comments} />
   </React.Fragment>
   );
 };
