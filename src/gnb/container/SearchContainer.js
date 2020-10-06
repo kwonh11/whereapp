@@ -12,10 +12,11 @@ export default function SearchContainer() {
       sessionStorage.setItem("location", JSON.stringify(location));
       setLocation({ ...location });
     });
-  }, []);
+  }, [address, predictions]);
 
   const [location, setLocation] = useState({});
   const [address, setAddress] = useState("");
+  const [predictions, setPredictions] = useState([]);
 
   const handleGetLocation = (e) => {
     try {
@@ -31,5 +32,33 @@ export default function SearchContainer() {
     }
   };
 
-  return <Search handleGetLocation={handleGetLocation} address={address} />;
+  const handleKeyUp = (e) => {
+    console.log("handleKeyUp");
+    console.log(e.target.value);
+    setAddress(e.target.value);
+
+    try {
+      axios
+        .get("/location/autocomplete", {
+          params: {
+            input: e.target.value,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          setPredictions(res.data);
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <Search
+      handleGetLocation={handleGetLocation}
+      address={address}
+      handleKeyUp={handleKeyUp}
+      predictions={predictions}
+    />
+  );
 }

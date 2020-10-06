@@ -3,9 +3,9 @@ const { Client, Status } = require("@googlemaps/google-maps-services-js");
 const axios = require("axios");
 
 const router = express.Router();
+const client = new Client({});
 
 router.get("/", (req, res, next) => {
-  const client = new Client({});
   client
     .reverseGeocode({
       params: {
@@ -17,6 +17,28 @@ router.get("/", (req, res, next) => {
     })
     .then((r) => {
       res.json(r.data.results[0].formatted_address);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+});
+
+router.get("/autocomplete", async (req, res, next) => {
+  const { input } = req.query;
+  console.log("--autocomplete");
+  console.log(input);
+  client
+    .placeAutocomplete({
+      params: {
+        input: input,
+        language: "ko",
+        key: process.env.GOOGLE_MAPS_API_KEY,
+      },
+      timeout: 1000,
+    })
+    .then((r) => {
+      console.log(r.data.predictions);
+      res.json(r.data.predictions);
     })
     .catch((e) => {
       console.log(e);
