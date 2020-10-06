@@ -41,6 +41,7 @@ router.get("/best",async (req, res) => {
     `http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchFestival?ServiceKey=${process.env.TOUR_KEY}&areaCode=1&numOfRows=20&pageNo=1&arrange=Q&MobileOS=ETC&MobileApp=Where`
   ).
   then(result => {
+    console.log(result.data);
     const placeList = result.data.response.body.items.item;
     placeList.sort((a, b) => {
       return b.readcount - a.readcount;
