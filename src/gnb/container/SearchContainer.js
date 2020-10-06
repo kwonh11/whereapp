@@ -4,13 +4,12 @@ import { connect } from 'react-redux';
 import {actions} from '../state';
 
 function SearchContainer(props) {
-
+  console.log("SearchContainer");
   const { address, requestLocation, requestAreaBasedList } = props;
 
   useEffect(() => {
     requestLocation();
   }, []);
-
 
   return <Search requestAreaBasedList={requestAreaBasedList} address={address} />;
 };
@@ -24,4 +23,3 @@ export default connect(
   mapStateToProps,
   actions
 )(SearchContainer);
-

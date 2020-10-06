@@ -159,7 +159,7 @@ function PlaceCard( props ) {
           <IconButton>
             <FavoriteIcon />
           </IconButton>
-          <IconButton aria-label="share">
+          <IconButton>
             <ShareIcon />
           </IconButton>
         </CardActions>

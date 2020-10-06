@@ -1,7 +1,7 @@
 import React from "react";
 import Category from "../component/Category";
 import styled from 'styled-components';
-import CATEGORY_CODE from '../../common/categoryCode';
+import CATEGORY from '../../common/categoryCode';
 import { Link } from "react-router-dom";
 import { types } from '../state';
 import { connect } from "react-redux";
@@ -50,8 +50,8 @@ function CategoryContainer(props) {
   return (
     <Container ref={setTarget}>
       {
-        CATEGORY_CODE.map((item, i) => (
-          <Rise key={item.name} rise={rise} index={i+1} data-category-code={item.type} onClick={handleClickCategory}>
+        CATEGORY.map((item, i) => (
+          <Rise key={item.name} rise={rise} index={i+1} data-category-code={item.id} onClick={handleClickCategory}>
             <Link to={"/place"}>
               <Category image={item.image} name={item.name}/>
             </Link>

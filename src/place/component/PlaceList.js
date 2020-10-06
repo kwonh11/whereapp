@@ -4,6 +4,7 @@ import ViewTypePage from "../../common/component/ViewTypePage";
 import { AppBar, Tabs, Tab } from "@material-ui/core";
 import styled from "styled-components";
 import { Skeleton } from "@material-ui/lab";
+import CATEGORY from '../../common/categoryCode';
 
 const FilterWrap = styled.div`
   display: flex;
@@ -37,17 +38,11 @@ const ContentsContainer = styled.div`
   }
 `;
 
-const category = [
-  { title: "전체" },
-  { title: "관광지", id: 12 },
-  { title: "문화", id: 14 },
-  { title: "축제", id: 15 },
-  { title: "여행코스", id: 25 },
-  { title: "레포츠", id: 28 },
-  { title: "숙박", id: 32 },
-  { title: "쇼핑", id: 38 },
-  { title: "음식점", id: 39 },
-];
+const StyledTab = styled(Tab)`
+  &.MuiTab-root {
+    min-width: auto;
+  }
+`;
 
 const SkeletonCard = () => (
   <div>
@@ -68,8 +63,8 @@ export default function PlaceList({
 }) {
   const [tab, setTab] = React.useState(0);
   React.useEffect(()=>{
-    const index = category.findIndex(item => item.id === categoryCode);
-    setTab(index > 0 ? index: 0);
+    const index = CATEGORY.findIndex(item => item.id === categoryCode) + 1;
+    setTab(index >= 1 ? index: 0);
   } ,[]);
 
   const handleClickTab = (tab, categoryId) => {
@@ -80,12 +75,13 @@ export default function PlaceList({
     <>
       <AppBar position="static">
         <Tabs value={tab}>
-          {category.map((item, idx) => (
-            <Tab
-              key={idx}
-              label={item.title}
+          <StyledTab label="전체" onClick={() => handleClickTab(0, "")}/>
+          {CATEGORY.map((item, idx) => (
+            <StyledTab
+              key={idx+1}
+              label={item.name}
               onClick={() => {
-                handleClickTab(idx, item.id);
+                handleClickTab(idx+1, item.id);
               }}
             />
           ))}

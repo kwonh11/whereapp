@@ -18,7 +18,7 @@ const INITIAL_STATE = {
     placeList: [],
     listType: "card",
     isLoading: true,
-    categoryCode: 0,
+    categoryCode: "",
 };
 
 const reducer = createReducer(INITIAL_STATE, {

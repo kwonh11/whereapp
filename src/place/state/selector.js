@@ -8,7 +8,7 @@ export const makePlaceListWithCategoryCode = () => {
         [getPlaceList, getCategoryCode],
         (placeList, categoryCode) => {
             if (!categoryCode) return placeList;
-            return placeList.filter(place => place.contenttypeid === categoryCode)
+            return placeList.filter(place => place.contenttypeid === categoryCode);
         }
     )
 }

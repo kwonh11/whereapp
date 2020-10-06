@@ -74,7 +74,7 @@ export default function AdditionalInfos({ additional }) {
                     </AdditionalLeft>
                     <AdditionalRight 
                     color={info[1]==="없음" || info[1]==="불가" ? "red" :
-                    info[1]==="있음" || info[1]==="가능" ? "blue" :""} dangerouslySetInnerHTML={{__html: info[1] }} />
+                    info[1]==="있음" || info[1]==="가능" || info[1] === "무료" ? "blue" :""} dangerouslySetInnerHTML={{__html: info[1] }} />
                 </AdditionalInfo>
             </AdditionalWrap> 
             )
