@@ -9,18 +9,38 @@ const useStyles = makeStyles({
   },
 });
 
-export default function ViewSelectFilter({ order }) {
+export default function ViewSelectFilter({ arrange, handleChangeArrange }) {
   const classes = useStyles();
-  const orderList = ["push", "latest", "comments"];
-  //담은 순, 최신 순, 댓글 많은 순
+  const arrangeList = [
+    {
+      value: "A",
+      title: "제목순",
+    },
+    {
+      value: "B",
+      title: "인기순",
+    },
+    {
+      value: "C",
+      title: "최근수정순",
+    },
+    {
+      value: "D",
+      title: "등록순",
+    },
+    {
+      value: "E",
+      title: "거리순",
+    },
+  ];
 
   const makeSelect = (selectList, value) => {
     return (
       <FormControl variant="outlined" className={classes.formControl}>
-        <Select native value={value}>
-          {selectList.map((item) => (
-            <option key={item} value={item}>
-              {item}
+        <Select native value={value} onChange={handleChangeArrange}>
+          {selectList.map((item, idx) => (
+            <option key={idx} value={item.value}>
+              {item.title}
             </option>
           ))}
         </Select>
@@ -29,8 +49,8 @@ export default function ViewSelectFilter({ order }) {
   };
   return (
     <div>
-      {makeSelect(orderList, order)}
-      {makeSelect(["1000m", "2000m"], order)}
+      {makeSelect(arrangeList, arrange)}
+      {makeSelect(["1000m", "2000m"], arrange)}
     </div>
   );
 }

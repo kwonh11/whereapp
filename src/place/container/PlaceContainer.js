@@ -2,26 +2,27 @@ import { useEffect, useState } from "react";
 import PlaceList from "../component/PlaceList";
 import axios from "axios";
 
-export default function PlaceContainer({ query }) {
+export default function PlaceContainer() {
   console.log("PlaceContainer");
+
+  const [selectedPlace, setSelectedPlace] = useState([]);
+  const [tab, setTab] = useState({ idx: 0, typeId: "" });
+  const [arrange, setArrange] = useState("A");
+
   let location;
+
   useEffect(() => {
     location = JSON.parse(sessionStorage.getItem("location"));
-    console.log(location.lng);
     getPlace();
-  }, []);
+  }, [arrange, tab]);
 
-  const [allPlace, setAllPlace] = useState(null);
-  const [selectPlace, setSelectPlace] = useState(null);
-  const [tab, setTab] = useState(0);
-  const [order, setOrder] = useState(0);
+  const handleChangeTab = (e, newValue) => {
+    console.log("handleChangeTab");
+    setTab({ idx: newValue, typeId: e.currentTarget.id });
+  };
 
-  const handleSelectTab = (id, tab) => {
-    tab
-      ? setSelectPlace(allPlace.filter((place) => place.contenttypeid === id))
-      : setSelectPlace(allPlace);
-
-    setTab(tab);
+  const handleChangeArrange = (e) => {
+    setArrange(e.target.value);
   };
 
   const getPlace = () => {
@@ -31,26 +32,34 @@ export default function PlaceContainer({ query }) {
         .get("/location/search", {
           params: {
             location: location,
+            arrange: arrange,
+            contentTypeId: tab.typeId,
           },
         })
         .then((res) => {
-          console.log(res.data.item);
-          setAllPlace([...res.data.item]);
-          setSelectPlace([...res.data.item]);
+          let data = [];
+          if (res.data) {
+            data = Array.isArray(res.data.item)
+              ? res.data.item
+              : [res.data.item];
+          }
+
+          setSelectedPlace([...data]);
         });
     } catch (error) {
       console.error(error);
     }
   };
 
-  if (!selectPlace) return null;
+  if (!selectedPlace) return null;
 
   return (
     <PlaceList
-      place={selectPlace}
-      query={query}
-      handleSelectTab={handleSelectTab}
+      place={selectedPlace}
+      handleChangeTab={handleChangeTab}
       tab={tab}
+      arrange={arrange}
+      handleChangeArrange={handleChangeArrange}
     />
   );
 }
