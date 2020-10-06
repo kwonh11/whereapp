@@ -1,82 +1,27 @@
 import Detail from "../component/Detail";
+import { getCategory } from '../../common/categoryCode';
+import { connect } from "react-redux";
 
-const Comments = [
-  {
-    id: 1,
-    commenter: "ggyu",
-    content: "여기 가보고 싶어요",
-    createAt: Date.now(),
-    like: false,
-    likeCount: 50,
-    reply : []
-  },
-  {
-    id: 2,
-    commenter: "hyuk",
-    content: "추천 합니다.",
-    createAt: Date.now(),
-    like: true,
-    likeCount: 40,
-    reply : []
-  },
-  {
-    id: 3,
-    commenter: "ggyu",
-    content: "여기 가보고 싶어요",
-    createAt: Date.now(),
-    like: false,
-    likeCount: 50,
-    reply : []
-  },
-  {
-    id: 4,
-    commenter: "hyuk",
-    content: "추천 합니다.",
-    createAt: Date.now(),
-    like: true,
-    likeCount: 40,
-    reply : [
-      {
-        commenter: "hyuk",
-        content: "저도 추천 합니다.",
-        createAt: Date.now(),
-      }
-    ]
-  },
-  {
-    id: 5,
-    commenter: "ggyu",
-    content: "여기 가보고 싶어요",
-    createAt: Date.now(),
-    like: false,
-    likeCount: 50,
-    reply : []
-  },
-  {
-    id: 6,
-    commenter: "hyuk",
-    content: "추천 합니다.",
-    createAt: Date.now(),
-    like: true,
-    likeCount: 40,
-    reply : []
-  },
-];
-
-export default function DetailContainer() {
-  const [comments, setComments] = React.useState(Comments);
-  const [place, setPlace] = React.useState(JSON.parse(sessionStorage.getItem("currentPlace")));
-
-  const handleShare = () => {
-    console.log("share");
-  }
-  const handleScrap = () => {
-    console.log("scrap");
-  }
+function DetailContainer(props) {
+  const {place, ids} = props;
 
   return (
   <React.Fragment>
-    <Detail place={place} handleShare={handleShare} handleScrap={handleScrap} comments={comments} />
+    <Detail place={place} category={getCategory(ids.contentTypeId)}/>
   </React.Fragment>
   );
 };
+
+const mapStateToProps = state => ({
+  place: {
+    isClose: state.detail.dist <= 1000,
+    isPopular: state.detail.readcount >= 3000,
+    isOnline: state.detail.place.addr1.includes("온라인"),
+    ...state.detail.place,
+  },
+  ids: state.detail.ids
+});
+export default connect(
+  mapStateToProps,
+  null
+)(DetailContainer);

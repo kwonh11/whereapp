@@ -21,42 +21,22 @@ const ToggleBtnGroup = styled(ToggleButtonGroup)`
   }
 `;
 
-function ViewButton({ location }) {
-  const query = qs.parse(location.search, {
-    ignoreQueryPrefix: true,
-  });
+function ViewButton({setPlaceListType, listType}) {
 
-  const [view, setView] = useState("card");
-
-  const handleView = (event, newView) => {
-    setView(newView);
+  const handleView = (event, viewType) => {
+    setPlaceListType(viewType);
   };
 
   return (
-    <ToggleBtnGroup value={view} exclusive onChange={handleView}>
+    <ToggleBtnGroup value={listType} exclusive onChange={handleView}>
       <ToggleButton value="card">
-        <Link
-          to={{
-            pathname: location.pathname,
-            search: qs.stringify({ ...query, view: "card" }),
-          }}
-        >
-          <ViewModuleIcon />
-        </Link>
+        <ViewModuleIcon />
       </ToggleButton>
-
       <ToggleButton value="list">
-        <Link
-          to={{
-            pathname: location.pathname,
-            search: qs.stringify({ ...query, view: "list" }),
-          }}
-        >
-          <ViewListIcon />
-        </Link>
+        <ViewListIcon />
       </ToggleButton>
     </ToggleBtnGroup>
   );
 }
 
-export default withRouter(ViewButton);
+export default ViewButton;

@@ -1,13 +1,13 @@
 import createReducer from '../../common/createReducer';
 
 export const types = {
-    SET_ORIGIN : "detail/SET_ORIGIN",                     // GNB의 현재위치 GPS좌표
-    
+
     // CARD 클릭 시
     SET_LOADING : "detial/SET_LOADING",                   // LOADING
+    SET_DETAILS: "detail/SET_DETAILS",                    // saga 트리거
     SET_IDS : "detail/SET_IDS",                           // 카드 클릭시 params의 contentid, contentidtype 설정
     SET_PLACE : "detail/SET_PLACE",                       // DETAIL 화면
-    SET_ADDITIONAL : "detail/SET_ADDITIONAL",             // 소개 API
+    SET_ADDITIONAL : "detail/SET_ADDITIONAL",             // 소개 API를 이용한 추가데이터 
     
     // 댓글 관련
     SET_COMMENTS : "detail/SET_COMMENTS",                 // API로 댓글 불러오기
@@ -16,12 +16,15 @@ export const types = {
     ADD_LIKE : "detail/ADD_LIKE",                         // 댓글 좋아요
     CANCLE_LIKE : "detail/CANCLE_LIKE",                   // 좋아요 취소
     ADD_REPLY : "detail/ADD_REPLY",                       // 대댓글 작성
-    REMOVE_REPLY : "detail/REMOVE_REPLY"                  // 대댓글 삭제
+    REMOVE_REPLY : "detail/REMOVE_REPLY",                 // 대댓글 삭제
+
+    // 에러
+    SET_ERROR: "detail/SET_ERROR"
 };
 
 export const actions = {
-    setOrigin: (origin) => ({ type: types.SET_ORIGIN, origin}),
-    setLoading: (isLoading) => ({type: types.SET_LOADING_CARD, isLoading}),
+    setLoading: (isLoading) => ({type: types.SET_LOADING, isLoading}),
+    setDetails: (contentTypeId, contentId) => ({type: types.SET_DETAILS, contentTypeId, contentId}),
     setIds: (ids) => ({type: types.SET_IDS, ids}),
     setPlace: (place) => ({type: types.SET_PLACE, place}),
     setAdditional: (additional) => ({type: types.SET_ADDITIONAL, additional}),
@@ -31,12 +34,12 @@ export const actions = {
     addLike: (contentId, id) => ({type: types.ADD_LIKE, contentId, id}),
     cancleLike: (contentId, id) => ({type: types.CANCLE_LIKE, contentId, id}),
     addReply: (contentId, id, reply) => ({type: types.ADD_REPLY, contentId, id, reply}),
-    removeReply: (contentId, id, index) => ({type: types.REMOVE_REPLY, contentId, id, index})
+    removeReply: (contentId, id, index) => ({type: types.REMOVE_REPLY, contentId, id, index}),
+    setError: (error) => ({type: types.SET_ERROR, error})
 };
 
 const INITIAL_STATE = {
     isLoading: false,
-    origin: { lat: "", lng: ""},
     ids : {
         contentId: "",
         contentTypeId: "",
@@ -48,13 +51,17 @@ const INITIAL_STATE = {
         addr1: "", 
         tel: "", 
         dist: "", 
-        isClose: "", 
         readcount: "", 
         destination: "", 
         overview: "", 
         isInProgress: false
     },
-    additional: [],
+    additional: {
+        destination: { lat:"", lng: "" },
+        overview: "",
+        inProgress: false,
+        additional: []
+    },
     comments: [
         {
             contentId: "", 
@@ -66,10 +73,10 @@ const INITIAL_STATE = {
             like: ""
         },
     ],
+    error: ""
 };
 
 const reducer = createReducer(INITIAL_STATE, {
-    [types.SET_ORIGIN]: (state, action) => {state.origin = action.origin},
     [types.SET_LOADING]: (state, action) => {state.isLoading = action.isLoading},
     [types.SET_IDS]: (state, action) => {state.ids = action.ids},
     [types.SET_PLACE]: (state, action) => {state.place = action.place},
@@ -98,6 +105,7 @@ const reducer = createReducer(INITIAL_STATE, {
             comment.splice(action.index,1)
         }
     },
+    [types.SET_ERROR]: (state, action) => {state.error = action.error}
 });
 
 export default reducer;

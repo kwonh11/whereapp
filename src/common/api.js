@@ -4,17 +4,16 @@ const axiosConfig = {
   baseURL: "http://localhost:8000",
 };
 
-
-export function callApiScrap(article) {
-  return axios.post("/user/scrap", {}, axiosConfig);
-};
-
-export function callApiLocationBasedList(location) {
+export function callApiGetAddress(location) {
   return axios.get("/location", {
     params: {
       location: location,
     },
   });
+};
+
+export function callApiBestList() {
+  return axios.get("/location/best");
 };
 
 export function callApiDetailIntro(contentTypeId, contentId) {
@@ -28,8 +27,7 @@ export function callApiDetailIntro(contentTypeId, contentId) {
   });
 };
 
-// 유저 위치 재확인후 저장
-// redux에 유저 위치 저장하는 로직 필요
+// 유저 위치 확인
 export function getUsersLocation() {
   console.log("getUsersLocation");
 
@@ -44,3 +42,10 @@ export function getUsersLocation() {
   return getLocation();
 };
 
+export function callApiLocationBasedList(location) {
+  return axios.get("/location/search",{
+    params: {
+      location: location
+    },
+  });
+};

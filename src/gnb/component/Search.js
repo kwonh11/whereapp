@@ -27,11 +27,12 @@ const Container = styled.div`
   }
 `;
 
-const DropContainer = styled(Paper)`
-  position: absolute;
-  width: 100%;
-  top: 52px;
-`;
+// const DropContainer = styled(Paper)`
+//   position: absolute;
+//   width: 100%;
+//   top: 52px;
+// `;
+
 const useStyles = makeStyles({
   root: {
     padding: "2px 4px",
@@ -53,33 +54,32 @@ const useStyles = makeStyles({
 });
 
 export default function Search({
-  handleGetLocation,
+  requestAreaBasedList,
   address,
-  handleKeyUp,
   predictions,
 }) {
   const classes = useStyles();
 
-  const AutoCompleteList = () => {
-    console.log("AutoCompleteList");
-    return (
-      <DropContainer elevation={3}>
-        <List dense={true}>
-          {predictions.map((place) => (
-            <ListItem>
-              <ListItemIcon>
-                <LocationOnIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary={place.structured_formatting.main_text}
-                secondary={place.structured_formatting.secondary_text}
-              />
-            </ListItem>
-          ))}
-        </List>
-      </DropContainer>
-    );
-  };
+  // const AutoCompleteList = () => {
+  //   console.log("AutoCompleteList");
+  //   return (
+  //     <DropContainer elevation={3}>
+  //       <List dense={true}>
+  //         {predictions.map((place) => (
+  //           <ListItem>
+  //             <ListItemIcon>
+  //               <LocationOnIcon />
+  //             </ListItemIcon>
+  //             <ListItemText
+  //               primary={place.structured_formatting.main_text}
+  //               secondary={place.structured_formatting.secondary_text}
+  //             />
+  //           </ListItem>
+  //         ))}
+  //       </List>
+  //     </DropContainer>
+  //   );
+  // };
 
   return (
     <Container>
@@ -87,12 +87,19 @@ export default function Search({
         <Link to="/place">
           <IconButton
             className={classes.iconButton}
-            onClick={handleGetLocation}
+            onClick={requestAreaBasedList}
           >
             <LocationOnIcon />
           </IconButton>
         </Link>
         <Divider className={classes.divider} orientation="vertical" />
+        <InputBase
+        className={classes.input}
+        placeholder="Search"
+        onSubmit={(e) => e.preventDefault()}
+        value={address}
+       />
+
         {/* <InputBase
           className={classes.input}
           placeholder="Search"
@@ -102,7 +109,7 @@ export default function Search({
           onChange={handleKeyUp}
         /> */}
 
-        <Autocomplete
+        {/* <Autocomplete
           className={classes.input}
           freeSolo
           options={predictions.map(
@@ -116,7 +123,7 @@ export default function Search({
               margin="normal"
             />
           )}
-        />
+        /> */}
 
         <IconButton type="submit" className={classes.iconButton}>
           <SearchIcon />

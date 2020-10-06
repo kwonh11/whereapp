@@ -1,6 +1,5 @@
-import qs from "qs";
 import styled, { css } from "styled-components";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Typography,
@@ -9,11 +8,10 @@ import {
   ListItemText,
   Avatar,
 } from "@material-ui/core";
-//test 중
-import { callApiScrap } from "../../common/api";
 import Card from "./Card";
 import { getCategory } from "../categoryCode";
 import { blue, red } from "@material-ui/core/colors";
+
 
 const useStyles = makeStyles({
   list: {
@@ -87,9 +85,7 @@ const TitleWrap = styled.div`
 
 function ListView({ data }) {
   const classes = useStyles();
-  const testHandleOnClickScrap = (article) => {
-    callApiScrap(article).catch((err) => console.log(err));
-  };
+  
   return (
     <List className={classes.list}>
       {data.map((place, idx) => (
@@ -114,7 +110,6 @@ function ListView({ data }) {
                   }
                 />
                 {place.readcount >= 2000 && <Badge color="red"> 추천 </Badge>}
-
                 {place.dist < 1000 && <Badge color="green"> 가까움 </Badge>}
               </TitleWrap>
               <ListItemText primary={place.addr1} secondary={place.addr2} />
@@ -139,9 +134,17 @@ function ListView({ data }) {
     </List>
   );
 }
-
 function CardView({ data }) {
-  return data.map((place, idx) => <Card key={idx} place={place} />);
+  return data.map((place, idx) => 
+  (<Card 
+    key={idx} 
+    place={{
+      ...place, 
+      isClose: place.dist <= 1000, 
+      isPopular: place.readcount >= 3000,
+      isOnline: place.addr1.includes("온라인")
+    }} simple={true}/>)
+  );
 }
 
 const ContentsContainer = styled.div`
@@ -163,7 +166,8 @@ const ContentsContainer = styled.div`
     width: 310px;
     height: 350px;
     margin: 0;
-
+    transition: opacity 0.4s ease-out;
+    opacity: ${props => props.isLoading? 0.3 : 1}
     & .MuiCardHeader-title {
       flex: 1;
       font-size: 18px;
@@ -178,24 +182,12 @@ const ContentsContainer = styled.div`
   }
 `;
 
-function ViewTypePage({ location, data }) {
-  const query = qs.parse(location.search, {
-    ignoreQueryPrefix: true,
-  });
-
-  if (!Object.keys(query).length) {
-    query.view = "card";
-  }
-
+function ViewTypePage({ listType, data, isLoading }) {
   return (
-    <ContentsContainer view={query.view}>
-      {query.view === "card" ? (
-        <CardView data={data} />
-      ) : (
-        <ListView data={data} />
-      )}
+    <ContentsContainer view={listType} isLoading={isLoading}>
+      {listType === "card" ? <CardView data={data} /> : <ListView data={data} />}
     </ContentsContainer>
   );
-}
+};
 
 export default withRouter(ViewTypePage);

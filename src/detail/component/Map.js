@@ -51,17 +51,13 @@ function toFloatLatLng(obj) {
     const lng  = parseFloat(obj.lng);
     return { lat, lng };
 }
-function toCoordinatesString(obj) {
-    const coordinates = Object.values(obj).join(',');
-    console.log(coordinates)
-    return coordinates;
-}
 
 export default function Map(props) {
     const {origin, destination} = props;
     
     if( origin.lat && origin.lng && destination.lat && destination.lng ) {
         return (
+            // key
             <LoadScript googleMapsApiKey={"AIzaSyALHpeFI7Zg9iOcp7DjETfJNZkcPRByN58"}>
                 <GoogleMap
                     mapContainerStyle={{
