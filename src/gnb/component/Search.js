@@ -27,11 +27,12 @@ const Container = styled.div`
   }
 `;
 
-const DropContainer = styled(Paper)`
-  position: absolute;
-  width: 100%;
-  top: 52px;
-`;
+// const DropContainer = styled(Paper)`
+//   position: absolute;
+//   width: 100%;
+//   top: 52px;
+// `;
+
 const useStyles = makeStyles({
   root: {
     padding: "2px 4px",
