@@ -5,7 +5,6 @@ import {
   ArrowForwardIosOutlined,
 } from "@material-ui/icons";
 
-
 const SliderContainer = styled.div`
   width: 100%;
   height: 105%;
@@ -106,13 +105,15 @@ export default function Slider(props) {
       </ArrowContainer>
         <CardContainer active={active} page={cardsPerPage}>
           {bestPlaceList.map((place, index) => {
-            return (<PlaceCard 
+            return (
+            <PlaceCard 
               key={index}
               place={{
                 dist: place.dist, isClose: place.dist <= 1000, 
                 isPopular: place.readcount >= 3000, 
                 isOnline: place.addr1.includes("온라인"),
-                ...place}} />);
+                ...place}} />
+              );
           })}
         </CardContainer>
     </SliderContainer>
