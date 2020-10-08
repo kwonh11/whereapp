@@ -12,8 +12,8 @@ const ReplySchema = new Schema({
     required: true
   },
   commenter: {
-    type: String,
-    required: true
+    type: ObjectId,
+    ref: "User",
   },
   content: {
     type: String,
@@ -30,9 +30,8 @@ const CommentSchema = new Schema({
     type: String,
     require: true,
   },
-  id: {
-    type: Number,
-    required: true
+  nick: {
+    type: String,
   },
   commenter: {
     type: ObjectId,
@@ -48,11 +47,11 @@ const CommentSchema = new Schema({
   },
   like: {
     type: Number,
-    require: true,
     default: 0
   },
   reply: {
-    type: [ReplySchema]
+    type: [ReplySchema],
+    default: []
   }
 });
 

@@ -22,7 +22,9 @@ export const actions = {
 
 const INITIAL_STATE = {
   isLoggedIn: false,
-  info: null,
+  info: {
+    _id: "",
+  },
 };
 
 const reducer = createReducer(INITIAL_STATE, {

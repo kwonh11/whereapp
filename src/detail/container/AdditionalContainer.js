@@ -31,7 +31,7 @@ export default function AdditionalContainer(props) {
   
   const { origin } = useSelector(state => state.location);
   const { contentTypeId, contentId } = useSelector(state => state.detail.ids);
-  const { additional } = useSelector(state => state.detail);
+  const { additional, isLoading } = useSelector(state => state.detail);
   const isOnline = useSelector(state => state.detail.place.addr1.includes("온라인"));
 
   const dispatch = useDispatch();
@@ -45,6 +45,10 @@ export default function AdditionalContainer(props) {
 
   return (
     <React.Fragment>
+      {isLoading ?
+        <> Loading ... </>
+        :
+        <>
       <Overview description={additional.overview} />
       <AdditionalComponent additional={additional.additional} />
       <MapContainer>
@@ -60,7 +64,9 @@ export default function AdditionalContainer(props) {
         <IconButton aria-label="share" onClick={() => console.log("share")}>
           <ShareIcon />
         </IconButton>
-      </ActionsWrap>
+          </ActionsWrap>
+          </>
+      }
     </React.Fragment>
   );
 }

@@ -1,4 +1,4 @@
-import { callApiDetailIntro } from "../api";
+import { callApiCommentList, callApiDetailIntro } from "../api";
 import { actions, types } from "../reducer/detail";
 import { fork, all, put, call, take } from "redux-saga/effects";
 import isInProgress from "../isInProgressDate";
@@ -14,6 +14,7 @@ export function* fetchAdditional(action) {
     yield put(actions.setLoading(true));
     try {
       const response = yield call(callApiDetailIntro, contentTypeId, contentId);
+      const comments = yield call(callApiCommentList, contentId);
       yield put(
         actions.setAdditional({
           destination: {
@@ -28,12 +29,15 @@ export function* fetchAdditional(action) {
           additional: Object.entries(response.data),
         })
       );
+      yield put(
+        actions.setComments(comments.data)
+      );
     } catch (err) {
       yield put(actions.setError(err));
     }
     yield put(actions.setLoading(false));
   }
-}
+};
 
 export default function* watcher() {
   yield all([fork(fetchAdditional)]);

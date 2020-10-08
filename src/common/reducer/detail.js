@@ -56,7 +56,7 @@ export const actions = {
 };
 
 const INITIAL_STATE = {
-  isLoading: false,
+  isLoading: true,
   ids: {
     contentId: "",
     contentTypeId: "",
@@ -81,13 +81,7 @@ const INITIAL_STATE = {
   },
   comments: [
     {
-      contentId: "",
-      id: "",
-      commenter: "",
-      content: "",
-      createAt: "",
-      reply: "",
-      like: "",
+      reply: [],
     },
   ],
   error: "",

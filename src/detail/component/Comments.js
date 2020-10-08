@@ -125,7 +125,7 @@ export default function Comments(props) {
     };
     const handleClickComment = (e) => {
         console.log(e.currentTarget.dataset.id);
-        setCommentOn(e.currentTarget.dataset.id);
+        setCommentOn(Number(e.currentTarget.dataset.id));
     }
     return (
     <CommentContainer>
@@ -136,13 +136,13 @@ export default function Comments(props) {
         </FilterWrap>
         {
         comments.map((comment,i) => {
-            const { commenter, content, createAt, like, likeCount, reply } = comment;
-            const on = Number(commentOn) === Number(comment.id);
+            const { commenter, content, createAt, like, likeCount, reply, nick } = comment;
+            const on = commentOn === Number(comment.id);
 
             return (
             <Container key={i} height={on? `${400 + reply.length*200}px`:`${200 + reply.length*200}px`}>
                 <CommenterWrap>
-                    <Avatar style={{marginRight:"10px"}}/> {commenter}
+                    <Avatar style={{marginRight:"10px"}}/> {nick}
                 </CommenterWrap>
                 <ContentWrap>
                     {content}

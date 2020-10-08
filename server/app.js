@@ -12,6 +12,7 @@ const connect = require("./schemas");
 const authRouter = require("./routes/auth");
 const locationRouter = require("./routes/location");
 const placeRouter = require("./routes/place");
+const commentRouter = require("./routes/comment");
 
 const app = express();
 connect();
@@ -46,3 +47,4 @@ app.use("/", express.static(path.join(__dirname, "view")));
 app.use("/auth", authRouter);
 app.use("/location", locationRouter);
 app.use("/place", placeRouter);
+app.use("/comment", commentRouter);

@@ -1,9 +1,5 @@
 import axios from "axios";
 
-const axiosConfig = {
-  baseURL: "http://localhost:8000",
-};
-
 export function callApiGetAddress(location) {
   return axios.get("/location", {
     params: {
@@ -60,3 +56,19 @@ export function uploadImgAPI(formData) {
   console.log(formData);
   return axios.patch("/auth/img", formData);
 }
+
+export function callApiCommentList(contentId) {
+  return axios.get(`/comment/${contentId}`);
+};
+
+export function callApiPostComment(comment) {
+  return axios.post("/comment", { ...comment });
+};
+
+export function callApiUpdateComment(comment) {
+  return axios.patch("/comment", { ...comment });
+};
+
+export function callApiDeleteComment(comment) {
+  return axios.delete("/comment", { ...comment });
+};

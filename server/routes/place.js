@@ -26,16 +26,4 @@ router.get("/", async (req, res) => {
         });
 });
 
-router.post("/comment", async (req, res) => {
-    // const {
-    //     contentId,
-    //     commenter,
-    //     createAt,
-    //     content,
-    //     like,
-    // }
-    await axios.post()
-})
-
-
 module.exports = router;
