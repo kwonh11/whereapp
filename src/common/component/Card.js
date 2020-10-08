@@ -17,10 +17,9 @@ import {
 import { blue, green, red } from "@material-ui/core/colors";
 import { getCategory } from "../categoryCode";
 import { Link } from "react-router-dom";
-import defaultImage from '../../images/defaultImage.png';
-import { connect } from 'react-redux';
-import { actions, types } from '../../detail/state';
-
+import defaultImage from "../../images/defaultImage.png";
+import { connect } from "react-redux";
+import { actions, types } from "../../detail/state";
 
 const StyledCard = styled(Card)`
   width: 480px;
@@ -92,8 +91,8 @@ const useStyles = makeStyles((theme) => ({
     padding: "0 16px",
   },
   small: {
-    fontSize: "1.35rem"
-  }
+    fontSize: "1.35rem",
+  },
 }));
 const Badge = styled.span`
   font-size: 0.8rem;
@@ -106,7 +105,7 @@ const Badge = styled.span`
 `;
 
 // image, title, description, category 를 입력받아 Card를 리턴하는 컴포넌트 함수
-function PlaceCard( props ) {
+function PlaceCard(props) {
   const classes = useStyles();
   const { place, setIds, setPlace, simple } = props;
   const {
@@ -123,16 +122,21 @@ function PlaceCard( props ) {
     isOnline,
     isClose,
     isPopular,
-    isLoading
+    isLoading,
   } = place;
   const handleClickCard = () => {
     setIds();
     setPlace();
-  }
+  };
   return (
     <StyledCard>
       <Link to={`/place/${contenttypeid}/${contentid}`}>
-        <CardMedia className={classes.media} image={firstimage || defaultImage} title={title} onClick={handleClickCard}/>
+        <CardMedia
+          className={classes.media}
+          image={firstimage || defaultImage}
+          title={title}
+          onClick={handleClickCard}
+        />
       </Link>
       <CardHeader
         className={classes.small}
@@ -140,9 +144,11 @@ function PlaceCard( props ) {
         subheader={
           <>
             {isPopular && <Badge color="red"> 인기 </Badge>}
-            {isOnline ? (<Badge color="green"> 온라인 </Badge>) :
-            isClose? (<Badge color="green"> 가까움 </Badge>) : 
-            null}
+            {isOnline ? (
+              <Badge color="green"> 온라인 </Badge>
+            ) : isClose ? (
+              <Badge color="green"> 가까움 </Badge>
+            ) : null}
           </>
         }
       />
@@ -150,9 +156,11 @@ function PlaceCard( props ) {
         <Typography variant="body2" color="textSecondary" component="p">
           {addr1}
         </Typography>
-        {!simple && <Typography variant="body2" color="textSecondary" component="p">
-          {tel}
-        </Typography>}
+        {!simple && (
+          <Typography variant="body2" color="textSecondary" component="p">
+            {tel}
+          </Typography>
+        )}
       </CardContent>
       <BottomIconsWrap>
         <CardActions disableSpacing>
@@ -167,8 +175,12 @@ function PlaceCard( props ) {
           <Avatar className={classes.typeAvatar}>
             {getCategory(contenttypeid)}
           </Avatar>
-          <Avatar className={isOnline? classes.green : isClose ? classes.blue : classes.red}>
-          {isOnline? "Online" :  Math.ceil(dist/100)/10 +"KM"}
+          <Avatar
+            className={
+              isOnline ? classes.green : isClose ? classes.blue : classes.red
+            }
+          >
+            {isOnline ? "Online" : Math.ceil(dist / 100) / 10 + "KM"}
           </Avatar>
         </MarksWrap>
       </BottomIconsWrap>
@@ -178,16 +190,22 @@ function PlaceCard( props ) {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    setIds: () => dispatch({type: types.SET_IDS, ids : { contentId: props.place.contentid, contentTypeId: props.place.contenttypeid}}),
-    setPlace: () => dispatch({
-      type: types.SET_PLACE, 
-      place: {
-        isClose: props.place.dist <= 1000, 
-        ...props.place 
-      }})
-  }
+    setIds: () =>
+      dispatch({
+        type: types.SET_IDS,
+        ids: {
+          contentId: props.place.contentid,
+          contentTypeId: props.place.contenttypeid,
+        },
+      }),
+    setPlace: () =>
+      dispatch({
+        type: types.SET_PLACE,
+        place: {
+          isClose: props.place.dist <= 1000,
+          ...props.place,
+        },
+      }),
+  };
 };
-export default connect(
-  null,
-  mapDispatchToProps
-)(PlaceCard);
+export default connect(null, mapDispatchToProps)(PlaceCard);

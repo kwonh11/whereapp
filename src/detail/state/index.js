@@ -45,15 +45,15 @@ const INITIAL_STATE = {
         contentTypeId: "",
     },
     place: {
-        title: "", 
+        title: "",
         firstimage: "",
-        date: "", 
-        addr1: "", 
-        tel: "", 
-        dist: "", 
-        readcount: "", 
-        destination: "", 
-        overview: "", 
+        date: "",
+        addr1: "",
+        tel: "",
+        dist: "",
+        readcount: "",
+        destination: "",
+        overview: "",
         isInProgress: false
     },
     additional: {
