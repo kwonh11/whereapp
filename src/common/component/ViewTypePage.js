@@ -12,7 +12,6 @@ import Card from "./Card";
 import { getCategory } from "../categoryCode";
 import { blue, red } from "@material-ui/core/colors";
 
-
 const useStyles = makeStyles({
   list: {
     display: "grid",
@@ -85,7 +84,7 @@ const TitleWrap = styled.div`
 
 function ListView({ data }) {
   const classes = useStyles();
-  
+
   return (
     <List className={classes.list}>
       {data.map((place, idx) => (
@@ -118,9 +117,7 @@ function ListView({ data }) {
 
             <IconWrap>
               <Avatar className={classes.typeAvatar}>
-                {
-                  getCategory(place.contenttypeid)
-                }
+                {getCategory(place.contenttypeid)}
               </Avatar>
               <Avatar
                 className={place.dist >= 1000 ? classes.red : classes.green}
@@ -135,20 +132,21 @@ function ListView({ data }) {
   );
 }
 function CardView({ data }) {
-  return data.map((place, idx) => 
-  (<Card 
-    key={idx} 
-    place={{
-      ...place, 
-      isClose: place.dist <= 1000, 
-      isPopular: place.readcount >= 3000,
-      isOnline: place.addr1.includes("온라인")
-    }} simple={true}/>)
-  );
+  return data.map((place, idx) => (
+    <Card
+      key={idx}
+      place={{
+        ...place,
+        isClose: place.dist <= 1000,
+        isPopular: place.readcount >= 3000,
+        isOnline: place.addr1.includes("온라인"),
+      }}
+      simple={true}
+    />
+  ));
 }
 
 const ContentsContainer = styled.div`
-  width: 100%;
   ${(props) =>
     props.view === "card" &&
     css`
@@ -162,12 +160,6 @@ const ContentsContainer = styled.div`
       display: block;
     `};
   & .MuiPaper-root {
-    min-width: 300px;
-    width: 310px;
-    height: 350px;
-    margin: 0;
-    transition: opacity 0.4s ease-out;
-    opacity: ${props => props.isLoading? 0.3 : 1}
     & .MuiCardHeader-title {
       flex: 1;
       font-size: 18px;
@@ -179,15 +171,26 @@ const ContentsContainer = styled.div`
       overflow: hidden;
       text-overflow: ellipsis;
     }
+    width: 100%;
+    min-width: 300px;
+    width: 310px;
+    height: 350px;
+    margin: 0;
+    transition: opacity 0.4s ease-out;
+    opacity: ${(props) => (props.isLoading ? 0.3 : 1)};
   }
 `;
 
 function ViewTypePage({ listType, data, isLoading }) {
   return (
     <ContentsContainer view={listType} isLoading={isLoading}>
-      {listType === "card" ? <CardView data={data} /> : <ListView data={data} />}
+      {listType === "card" ? (
+        <CardView data={data} />
+      ) : (
+        <ListView data={data} />
+      )}
     </ContentsContainer>
   );
-};
+}
 
 export default withRouter(ViewTypePage);

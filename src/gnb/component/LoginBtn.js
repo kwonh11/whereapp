@@ -3,9 +3,11 @@ import { Button, Typography, Divider, IconButton } from "@material-ui/core";
 import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
 import Modal from "../../common/component/Modal";
-import PhotoCamera from "@material-ui/icons/PhotoCamera"; 
+import PhotoCamera from "@material-ui/icons/PhotoCamera";
 import SignIn from "./Signin";
 import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { actions } from "../../common/reducer/user";
 
 const UserContainer = styled.div`
   display: flex;
@@ -77,22 +79,20 @@ const Avatar = styled(IconButton)`
 `;
 
 export default function Login() {
-  const [login, setLogin] = useState(false);
   const [loginModal, setLoginModal] = useState(false);
   const [infoModal, setInfoModal] = useState(false);
-  const [userInfo, setUserInfo] = useState(null);
+  const [userInfo, setUserInfo] = useState(null); //ㄴㄴ
+
+  const dispatch = useDispatch();
+  const { isLoggedIn, info } = useSelector((state) => state.user);
 
   useEffect(() => {
-    axios
-      .get("/auth/checkUser")
-      .then((res) => {
-        setLogin(typeof res.data.user !== "undefined");
-        setUserInfo(res.data.user);
-      })
-      .catch((error) => {
-        setLoggedIn(false);
-      });
-  }, []);
+    console.log("------BTN useEffect");
+    console.log(info);
+
+    if (isLoggedIn) return;
+    dispatch(actions.loginInRequest());
+  }, [dispatch, isLoggedIn]);
 
   const handleClickLoginModal = () => {
     setLoginModal(!loginModal);
@@ -105,27 +105,13 @@ export default function Login() {
   const handleAddFile = (e) => {
     const formData = new FormData();
     formData.append("img", e.target.files[0]);
-
-    axios
-      .patch(`/auth/img/${userInfo.snsId}`, formData)
-      .then((res) => {
-        setUserInfo({
-          ...userInfo,
-          image: res.data.url,
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    dispatch(actions.uploadImageRequest(formData));
   };
 
   return (
     <>
-      {login ? (
-        <Avatar
-          onClick={handleClickInfoModal}
-          image={userInfo && userInfo.image}
-        />
+      {isLoggedIn ? (
+        <Avatar onClick={handleClickInfoModal} image={info.image} />
       ) : (
         <Button
           variant="outlined"
@@ -146,7 +132,7 @@ export default function Login() {
         <Modal on={infoModal} onClickClose={handleClickInfoModal}>
           <UserContainer>
             <UserInner>
-              <img src={userInfo && userInfo.image} />
+              <img src={info.image} />
               <input
                 accept="image/*"
                 style={{ display: "none" }}
@@ -165,9 +151,7 @@ export default function Login() {
                 </IconButton>
               </label>
             </UserInner>
-            <Typography variant="subtitle1">
-              {userInfo && userInfo.nick}
-            </Typography>
+            <Typography variant="subtitle1">{info.nick}</Typography>
           </UserContainer>
           <Divider />
           <Menu color="primary">

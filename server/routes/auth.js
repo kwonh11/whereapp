@@ -9,8 +9,8 @@ const path = require("path");
 const router = express.Router();
 
 router.get("/checkUser", (req, res, next) => {
-  res.status(200).json({
-    user: req.user,
+  res.json({
+    user: req.user || null,
   });
 });
 
@@ -60,9 +60,9 @@ const upload = multer({
   }),
 });
 
-router.patch("/img/:id", isLoggedIn, upload.single("img"), async (req, res) => {
+router.patch("/img", isLoggedIn, upload.single("img"), async (req, res) => {
   await User.updateOne(
-    { snsId: req.params.id },
+    { snsId: req.user.snsId },
     { image: `/img/${req.file.filename}` }
   );
 
