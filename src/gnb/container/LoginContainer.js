@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import LoginBtn from "../component/LoginBtn";
 import { actions } from "../../common/reducer/user";
+import { useSelector, useDispatch } from "react-redux";
 
-export default function LoginContainer(props) {
+export default function LoginContainer() {
   console.log("LoginContainer");
 
   const [loginModal, setLoginModal] = useState(false);
@@ -12,7 +13,7 @@ export default function LoginContainer(props) {
   const { isLoggedIn, info } = useSelector((state) => state.user);
 
   useEffect(() => {
-    console.log("------BTN useEffect");
+    console.log(isLoggedIn);
     console.log(info);
 
     if (isLoggedIn) return;
@@ -40,6 +41,8 @@ export default function LoginContainer(props) {
       handleClickLoginModal={handleClickLoginModal}
       loginModal={loginModal}
       infoModal={infoModal}
+      user={info}
+      isLoggedIn={isLoggedIn}
     />
   );
 }

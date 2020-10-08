@@ -80,11 +80,13 @@ export default function Login({
   handleClickLoginModal,
   loginModal,
   infoModal,
+  user,
+  isLoggedIn,
 }) {
   return (
     <>
       {isLoggedIn ? (
-        <Avatar onClick={handleClickInfoModal} image={info.image} />
+        <Avatar onClick={handleClickInfoModal} image={user && user.image} />
       ) : (
         <Button
           variant="outlined"
@@ -105,7 +107,7 @@ export default function Login({
         <Modal on={infoModal} onClickClose={handleClickInfoModal}>
           <UserContainer>
             <UserInner>
-              <img src={info.image} />
+              <img src={user && user.image} />
               <input
                 accept="image/*"
                 style={{ display: "none" }}
@@ -124,7 +126,7 @@ export default function Login({
                 </IconButton>
               </label>
             </UserInner>
-            <Typography variant="subtitle1">{info.nick}</Typography>
+            <Typography variant="subtitle1">{user && user.nick}</Typography>
           </UserContainer>
           <Divider />
           <Menu color="primary">

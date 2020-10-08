@@ -42,6 +42,8 @@ const ExitWrap = styled.div`
     transform: rotate(90deg);
   }
 `;
+
+// 렌더속성값
 export default function Modal(props) {
   const { on, onClickClose, children } = props;
 

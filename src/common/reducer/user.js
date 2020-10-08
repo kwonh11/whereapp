@@ -12,7 +12,7 @@ export const types = {
 
 export const actions = {
   loginInRequest: () => ({ type: types.LOGIN_IN_REQUEST }),
-  loginInSuccess: (user) => ({ type: types.LOGIN_IN_SUCCESS, user }),
+  loginInSuccess: (payload) => ({ type: types.LOGIN_IN_SUCCESS, payload }),
   loginInError: (error) => ({ type: types.LOGIN_IN_ERROR, error }),
 
   uploadImageRequest: (image) => ({ type: types.UPLOAD_IMAGE_REQUEST, image }),
@@ -27,11 +27,12 @@ const INITIAL_STATE = {
 
 const reducer = createReducer(INITIAL_STATE, {
   [types.LOGIN_IN_SUCCESS]: (state, action) => {
-    state.user = action.user;
+    state.isLoggedIn = true;
+    state.info = action.payload;
   },
 
   [types.UPLOAD_IMAGE_SUCCESS]: (state, action) => {
-    state.user.info.image = action.image;
+    state.info.image = action.image;
   },
 });
 
