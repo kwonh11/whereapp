@@ -9,9 +9,7 @@ const path = require("path");
 const router = express.Router();
 
 router.get("/checkUser", (req, res, next) => {
-  res.json({
-    user: req.user || null,
-  });
+  res.json(req.user || null);
 });
 
 router.get("/google", passport.authenticate("google", { scope: ["profile"] }));

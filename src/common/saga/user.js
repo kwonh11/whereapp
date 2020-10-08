@@ -5,12 +5,9 @@ import { put, call, takeLatest } from "redux-saga/effects";
 function* logIn() {
   try {
     const res = yield call(getUser);
-    yield put(
-      actions.loginInSuccess({
-        info: res.data.user,
-        isLoggedIn: !!res.data.user,
-      })
-    );
+    if (res.data) {
+      yield put(actions.loginInSuccess(res.data));
+    }
   } catch (error) {
     yield put(actions.loginInError(error));
   }
