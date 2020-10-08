@@ -32,7 +32,6 @@ const CommentSchema = new Schema({
   },
   id: {
     type: Number,
-    unique: true,
     required: true
   },
   commenter: {
@@ -57,5 +56,4 @@ const CommentSchema = new Schema({
   }
 });
 
-commentSchema.index({id: 1});
 module.exports = mongoose.model("Comment", CommentSchema);
