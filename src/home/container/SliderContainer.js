@@ -1,5 +1,6 @@
-import { connect } from "react-redux";
-import styled from "styled-components";
+
+import { useDispatch, useSelector } from "react-redux";
+import styled from 'styled-components';
 import Slider from "../component/Slider";
 import { types } from "../../common/reducer/home";
 import Skeleton from "@material-ui/lab/Skeleton";
@@ -17,8 +18,29 @@ const SkeletonContainer = styled.div`
   background-color: #f1f1f1;
 `;
 
-function SliderContainer(props) {
-  const { bestPlaceList, requestBestPlaceList, isLoading } = props;
+function SkeletonCard() {
+  return (
+    <div style={{margin: "0 7px"}}>
+      <Skeleton variant="rect" width={480} height={330}></Skeleton>
+      <Skeleton variant="text" width={300} height={50}></Skeleton>
+      <Skeleton variant="text" width={220} height={15} style={{marginTop: "20px"}}></Skeleton>
+      <Skeleton variant="text" width={90} height={15}></Skeleton>
+      <Skeleton variant="text" height={60}></Skeleton>
+    </div>
+  )
+}
+
+export default function SliderContainer() {
+
+  const { bestPlaceList, isLoading } = useSelector(state => ({
+    bestPlaceList: state.home.bestPlaceList,
+    isLoading: state.home.isLoading,
+  }))
+
+  const dispatch = useDispatch();
+  const requestBestPlaceList = React.useCallback(() => {
+    dispatch({ type: types.REQUEST_BEST_PLACE_LIST });
+  }, [dispatch]);
 
   React.useEffect(() => {
     requestBestPlaceList();
@@ -26,67 +48,13 @@ function SliderContainer(props) {
 
   if (isLoading) {
     return (
-      <SkeletonContainer>
-        <div style={{ margin: "0 7px" }}>
-          <Skeleton variant="rect" width={480} height={330}></Skeleton>
-          <Skeleton variant="text" width={300} height={50}></Skeleton>
-          <Skeleton
-            variant="text"
-            width={220}
-            height={15}
-            style={{ marginTop: "20px" }}
-          ></Skeleton>
-          <Skeleton variant="text" width={90} height={15}></Skeleton>
-          <Skeleton variant="text" height={60}></Skeleton>
-        </div>
-        <div style={{ margin: "0 7px" }}>
-          <Skeleton variant="rect" width={480} height={330}></Skeleton>
-          <Skeleton variant="text" width={300} height={50}></Skeleton>
-          <Skeleton
-            variant="text"
-            width={220}
-            height={15}
-            style={{ marginTop: "20px" }}
-          ></Skeleton>
-          <Skeleton variant="text" width={90} height={15}></Skeleton>
-          <Skeleton variant="text" height={60}></Skeleton>
-        </div>
-        <div style={{ margin: "0 7px" }}>
-          <Skeleton variant="rect" width={480} height={330}></Skeleton>
-          <Skeleton variant="text" width={300} height={50}></Skeleton>
-          <Skeleton
-            variant="text"
-            width={220}
-            height={15}
-            style={{ marginTop: "20px" }}
-          ></Skeleton>
-          <Skeleton variant="text" width={90} height={15}></Skeleton>
-          <Skeleton variant="text" height={60}></Skeleton>
-        </div>
-        <div style={{ margin: "0 7px" }}>
-          <Skeleton variant="rect" width={480} height={330}></Skeleton>
-          <Skeleton variant="text" width={300} height={50}></Skeleton>
-          <Skeleton
-            variant="text"
-            width={220}
-            height={15}
-            style={{ marginTop: "20px" }}
-          ></Skeleton>
-          <Skeleton variant="text" width={90} height={15}></Skeleton>
-          <Skeleton variant="text" height={60}></Skeleton>
-        </div>
-      </SkeletonContainer>
-    );
+          <SkeletonContainer>
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+          </SkeletonContainer>
+    )
   }
-  return <Slider bestPlaceList={bestPlaceList} />;
-}
-
-const mapStateToProps = (state) => ({
-  bestPlaceList: state.home.bestPlaceList,
-  isLoading: state.home.isLoading,
-});
-const mapDispatchToProps = (dispatch) => ({
-  requestBestPlaceList: () => dispatch({ type: types.REQUEST_BEST_PLACE_LIST }),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(SliderContainer);
+  return <Slider bestPlaceList={bestPlaceList}/>;
+};

@@ -1,38 +1,46 @@
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from 'react-redux';
+import { createSelector } from 'reselect';
 import PlaceList from "../component/PlaceList";
-import { actions } from "../../common/reducer/place";
+import { actions, types } from "../../common/reducer/place";
 
-function PlaceContainer(props) {
-  const { placeList, listType, isLoading } = props;
-  const { setPlaceListType, categoryCode, setPlaceListCategoryCode } = props;
+// reselector
+const getPlaceList = state => state.place.placeList;
+const getCategoryCode = state => state.place.categoryCode;
+const placeListWithCategoryCode = createSelector(
+  [getPlaceList, getCategoryCode],
+  (placeList, categoryCode) => {
+    if (!categoryCode) return placeList;
+    return placeList.filter((place) => place.contenttypeid === categoryCode);
+  }
+);
 
-  const handleSelectTab = (contentTypeId) => {
-    setPlaceListCategoryCode(contentTypeId);
-  };
+export default function PlaceContainer(props) {
 
+  const {
+    listType, isLoading, categoryCode
+  } = useSelector(state => ({
+    listType: state.place.listType,
+    categoryCode: state.place.categoryCode,
+    isLoading: state.place.isLoading,
+  }));
+  const placeList = useSelector(placeListWithCategoryCode);
+
+  const dispatch = useDispatch();
+  const handleSelectTab = React.useCallback((contentTypeId) => {
+    dispatch({ type: types.SET_PLACELIST_CATEGORY_CODE, categoryCode: contentTypeId })
+  }, [dispatch]);
+  const setPlaceListType = React.useCallback((listType) => {
+    dispatch({ type: types.SET_PLACELIST_TYPE, listType });
+  }, [dispatch]);
+  
   return (
     <PlaceList
       placeList={placeList}
       isLoading={isLoading}
-      handleSelectTab={handleSelectTab}
       categoryCode={categoryCode}
-      setPlaceListType={setPlaceListType}
       listType={listType}
+      handleSelectTab={handleSelectTab}
+      setPlaceListType={setPlaceListType}
     />
   );
-}
-
-const makeMapStateToProps = () => {
-  const getPlaceListWithCategoryCode = makePlaceListWithCategoryCode();
-  const mapStateToProps = (state, props) => {
-    return {
-      placeList: getPlaceListWithCategoryCode(state, props),
-      listType: state.place.listType,
-      categoryCode: state.place.categoryCode,
-      isLoading: state.place.isLoading,
-    };
-  };
-  return mapStateToProps;
 };
-
-export default connect(makeMapStateToProps, actions)(PlaceContainer);
