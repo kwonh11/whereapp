@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector } from 'reselect';
 import PlaceList from "../component/PlaceList";
-import { types } from '../state';
+import { actions, types } from "../../common/reducer/place";
 
 // reselector
 const getPlaceList = state => state.place.placeList;

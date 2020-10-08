@@ -4,13 +4,11 @@ import {
   Share as ShareIcon,
 } from "@material-ui/icons";
 import { IconButton } from "@material-ui/core";
-import { callApiDetailIntro } from "../../common/api";
 import Overview from "../component/Overview";
 import AdditionalComponent from "../component/Additional";
 import Map from "../component/Map";
-import { withRouter } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { types } from "../state";
+import { types } from "../../common/reducer/detail";
 
 const MapContainer = styled.div`
   padding: 50px 0;
@@ -64,5 +62,4 @@ export default function AdditionalContainer(props) {
     </React.Fragment>
   );
 }
-
 

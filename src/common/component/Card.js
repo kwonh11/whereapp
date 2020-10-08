@@ -19,7 +19,7 @@ import { getCategory } from "../categoryCode";
 import { Link } from "react-router-dom";
 import defaultImage from "../../images/defaultImage.png";
 import { connect } from "react-redux";
-import { actions, types } from "../../detail/state";
+import { actions, types } from "../reducer/detail";
 
 const StyledCard = styled(Card)`
   width: 480px;

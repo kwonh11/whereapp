@@ -1,9 +1,9 @@
+
 import { useDispatch, useSelector } from "react-redux";
 import styled from 'styled-components';
 import Slider from "../component/Slider";
-import { types } from '../state';
-import Skeleton from '@material-ui/lab/Skeleton';
-
+import { types } from "../../common/reducer/home";
+import Skeleton from "@material-ui/lab/Skeleton";
 
 const SkeletonContainer = styled.div`
   width: 100%;

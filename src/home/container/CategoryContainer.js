@@ -1,10 +1,10 @@
 import React from "react";
 import Category from "../component/Category";
-import styled from 'styled-components';
-import CATEGORY from '../../common/categoryCode';
+import styled from "styled-components";
+import CATEGORY from "../../common/categoryCode";
 import { Link } from "react-router-dom";
-import { types } from '../state';
 import { useDispatch } from "react-redux";
+import { types } from "../../common/reducer/home";
 
 const Container = styled.div`
   width: 100%;
@@ -14,9 +14,9 @@ const Container = styled.div`
   margin-left: 30px;
 `;
 const Rise = styled.div`
-  opacity: ${props => props.rise === "1"? 1 : 0};
-  margin-top: ${props => props.rise === "1"? "0px" : "30px"};
-  transition: all 0.5s ease-out ${props => props.index * 0.15}s;
+  opacity: ${(props) => (props.rise === "1" ? 1 : 0)};
+  margin-top: ${(props) => (props.rise === "1" ? "0px" : "30px")};
+  transition: all 0.5s ease-out ${(props) => props.index * 0.15}s;
 `;
 
 export default function CategoryContainer(props) {
@@ -29,34 +29,41 @@ export default function CategoryContainer(props) {
     dispatch({ type: types.REQUEST_CATEGORY_CODE, categoryCode });
   }, [dispatch]);
 
-  React.useEffect(()=> {
+  React.useEffect(() => {
     let observer;
     if (target) {
-        observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            setRise("1");
-          }
-        })
-      },{
-        rootMargin:'-100px'
-      });
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              setRise("1");
+            }
+          });
+        },
+        {
+          rootMargin: "-100px",
+        }
+      );
       observer.observe(target);
     }
-    return ()=> observer && observer.disconnect();
-  },[target]);
+    return () => observer && observer.disconnect();
+  }, [target]);
 
   return (
     <Container ref={setTarget}>
-      {
-        CATEGORY.map((item, i) => (
-          <Rise key={item.name} rise={rise} index={i+1} data-category-code={item.id} onClick={handleClickCategory}>
-            <Link to={"/place"}>
-              <Category image={item.image} name={item.name}/>
-            </Link>
-          </Rise>
-        ))
-      }
+      {CATEGORY.map((item, i) => (
+        <Rise
+          key={item.name}
+          rise={rise}
+          index={i + 1}
+          data-category-code={item.id}
+          onClick={handleClickCategory}
+        >
+          <Link to={"/place"}>
+            <Category image={item.image} name={item.name} />
+          </Link>
+        </Rise>
+      ))}
     </Container>
   )
 };

@@ -57,79 +57,104 @@ export default function Search({
   requestAreaBasedList,
   address,
   predictions,
+  handleKeyUp,
 }) {
   const classes = useStyles();
 
-  // const AutoCompleteList = () => {
-  //   console.log("AutoCompleteList");
-  //   return (
-  //     <DropContainer elevation={3}>
-  //       <List dense={true}>
-  //         {predictions.map((place) => (
-  //           <ListItem>
-  //             <ListItemIcon>
-  //               <LocationOnIcon />
-  //             </ListItemIcon>
-  //             <ListItemText
-  //               primary={place.structured_formatting.main_text}
-  //               secondary={place.structured_formatting.secondary_text}
-  //             />
-  //           </ListItem>
-  //         ))}
-  //       </List>
-  //     </DropContainer>
-  //   );
-  // };
-
   return (
-    <Container>
-      <Paper component="form" className={classes.root} elevation={3}>
-        <Link to="/place">
-          <IconButton
-            className={classes.iconButton}
-            onClick={requestAreaBasedList}
+    <Autocomplete
+      freeSolo
+      options={predictions.map(
+        (option) => option.structured_formatting.main_text
+      )}
+      renderInput={(params) => (
+        <Container>
+          <Paper
+            ref={params.InputProps.ref}
+            component="form"
+            className={classes.root}
+            elevation={3}
           >
-            <LocationOnIcon />
-          </IconButton>
-        </Link>
-        <Divider className={classes.divider} orientation="vertical" />
-        <InputBase
-        className={classes.input}
-        placeholder="Search"
-        onSubmit={(e) => e.preventDefault()}
-        value={address}
-       />
+            <Link to="/place">
+              <IconButton
+                className={classes.iconButton}
+                onClick={requestAreaBasedList}
+              >
+                <LocationOnIcon />
+              </IconButton>
+            </Link>
+            <Divider className={classes.divider} orientation="vertical" />
 
-        {/* <InputBase
-          className={classes.input}
-          placeholder="Search"
-          // onSubmit={(e) => e.preventDefault()}
-          value={address}
-          // onKeyUp={handleKeyUp}
-          onChange={handleKeyUp}
-        /> */}
-
-        {/* <Autocomplete
-          className={classes.input}
-          freeSolo
-          options={predictions.map(
-            (option) => option.structured_formatting.main_text
-          )}
-          renderInput={(params) => (
             <InputBase
-              {...params}
+              className={classes.input}
+              // ref={params.InputProps.ref}
+              // inputProps={params.inputProps}
+              {...params.inputProps}
+              autoFocus
               onChange={handleKeyUp}
               placeholder="Search"
-              margin="normal"
+              value={address}
             />
-          )}
-        /> */}
 
-        <IconButton type="submit" className={classes.iconButton}>
-          <SearchIcon />
-        </IconButton>
-      </Paper>
-      {/* {predictions && AutoCompleteList()} */}
-    </Container>
+            <IconButton type="submit" className={classes.iconButton}>
+              <SearchIcon />
+            </IconButton>
+          </Paper>
+        </Container>
+      )}
+    />
   );
+
+  // return (
+  //   <Container>
+  //     <Paper component="form" className={classes.root} elevation={3}>
+  //       <Link to="/place">
+  //         <IconButton
+  //           className={classes.iconButton}
+  //           onClick={requestAreaBasedList}
+  //         >
+  //           <LocationOnIcon />
+  //         </IconButton>
+  //       </Link>
+  //       <Divider className={classes.divider} orientation="vertical" />
+  //       {/* <InputBase
+  //       className={classes.input}
+  //       placeholder="Search"
+  //       onSubmit={(e) => e.preventDefault()}
+  //       value={address}
+  //      />
+
+  //       <InputBase
+  //         className={classes.input}
+  //         placeholder="Search"
+  //         // onSubmit={(e) => e.preventDefault()}
+  //         value={address}
+  //         // onKeyUp={handleKeyUp}
+  //         onChange={handleKeyUp}
+  //       /> */}
+
+  //       <Autocomplete
+  //         className={classes.input}
+  //         freeSolo
+  //         options={predictions.map(
+  //           (option) => option.structured_formatting.main_text
+  //         )}
+  //         renderInput={(params) => (
+  //           <InputBase
+  //             ref={params.InputProps.ref}
+  //             inputProps={params.inputProps}
+  //             autoFocus
+  //             onChange={handleKeyUp}
+  //             placeholder="Search"
+  //             margin="normal"
+  //           />
+  //         )}
+  //       />
+
+  //       <IconButton type="submit" className={classes.iconButton}>
+  //         <SearchIcon />
+  //       </IconButton>
+  //     </Paper>
+  //   </Container>
+  // );
 }
