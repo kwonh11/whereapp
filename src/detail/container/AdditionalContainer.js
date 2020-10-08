@@ -32,10 +32,12 @@ export default function AdditionalContainer(props) {
   const { origin } = useSelector(state => state.location);
   const { contentTypeId, contentId } = useSelector(state => state.detail.ids);
   const { additional } = useSelector(state => state.detail);
+  const isOnline = useSelector(state => state.detail.place.addr1.includes("온라인"));
 
   const dispatch = useDispatch();
   const setDetails = React.useCallback(
-    (contentTypeId, contentId) => dispatch({ type: types.SET_DETAILS, contentTypeId, contentId }), [dispatch]);
+    (contentTypeId, contentId) => dispatch({ type: types.SET_DETAILS, contentTypeId, contentId })
+  , [dispatch]);
 
   React.useEffect(() => {
     setDetails(contentTypeId, contentId);
@@ -46,7 +48,7 @@ export default function AdditionalContainer(props) {
       <Overview description={additional.overview} />
       <AdditionalComponent additional={additional.additional} />
       <MapContainer>
-        <Map origin={origin} destination={additional.destination} />
+        <Map origin={origin} destination={additional.destination} isOnline={isOnline}/>
       </MapContainer>
       <ActionsWrap>
         <IconButton

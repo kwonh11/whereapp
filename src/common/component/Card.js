@@ -18,7 +18,7 @@ import { blue, green, red } from "@material-ui/core/colors";
 import { getCategory } from "../categoryCode";
 import { Link } from "react-router-dom";
 import defaultImage from "../../images/defaultImage.png";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { actions, types } from "../reducer/detail";
 
 const StyledCard = styled(Card)`
@@ -105,9 +105,9 @@ const Badge = styled.span`
 `;
 
 // image, title, description, category 를 입력받아 Card를 리턴하는 컴포넌트 함수
-function PlaceCard(props) {
+export default function PlaceCard(props) {
   const classes = useStyles();
-  const { place, setIds, setPlace, simple } = props;
+  const { simple, place } = props;
   const {
     contentid,
     contenttypeid,
@@ -124,9 +124,27 @@ function PlaceCard(props) {
     isPopular,
     isLoading,
   } = place;
-  const handleClickCard = () => {
-    setIds();
-    setPlace();
+
+  const dispatch = useDispatch();
+  const setIds = React.useCallback((contentTypeId, contentId) => {
+    dispatch({
+      type: types.SET_IDS,
+      ids: {
+        contentTypeId,
+        contentId,
+    }});
+  }, [dispatch]);
+  const setPlace = React.useCallback((place) => {
+    dispatch({
+      type: types.SET_PLACE, place: {
+        ...place,
+        isClose: place.dist <= 1000
+    } });
+  }, [dispatch]);
+
+  const handleClickCard = (contentTypeId, contentId, place) => {
+    setIds(contentTypeId, contentId);
+    setPlace(place);
   };
   return (
     <StyledCard>
@@ -135,7 +153,7 @@ function PlaceCard(props) {
           className={classes.media}
           image={firstimage || defaultImage}
           title={title}
-          onClick={handleClickCard}
+          onClick={() => handleClickCard(contenttypeid, contentid, place)}
         />
       </Link>
       <CardHeader
@@ -188,24 +206,24 @@ function PlaceCard(props) {
   );
 }
 
-const mapDispatchToProps = (dispatch, props) => {
-  return {
-    setIds: () =>
-      dispatch({
-        type: types.SET_IDS,
-        ids: {
-          contentId: props.place.contentid,
-          contentTypeId: props.place.contenttypeid,
-        },
-      }),
-    setPlace: () =>
-      dispatch({
-        type: types.SET_PLACE,
-        place: {
-          isClose: props.place.dist <= 1000,
-          ...props.place,
-        },
-      }),
-  };
-};
-export default connect(null, mapDispatchToProps)(PlaceCard);
+// const mapDispatchToProps = (dispatch, props) => {
+//   return {
+//     setIds: () =>
+//       dispatch({
+//         type: types.SET_IDS,
+//         ids: {
+//           contentId: props.place.contentid,
+//           contentTypeId: props.place.contenttypeid,
+//         },
+//       }),
+//     setPlace: () =>
+//       dispatch({
+//         type: types.SET_PLACE,
+//         place: {
+//           isClose: props.place.dist <= 1000,
+//           ...props.place,
+//         },
+//       }),
+//   };
+// };
+// export default connect(null, mapDispatchToProps)(PlaceCard);
