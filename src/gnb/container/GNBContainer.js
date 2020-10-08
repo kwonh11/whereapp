@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { Button } from "@material-ui/core";
 import LogoImage from "../../images/logo.png";
-import LoginBtn from "../component/LoginBtn";
+import LoginContainer from "./LoginContainer";
 import SearchContainer from "./SearchContainer";
 
 const Container = styled.nav`
@@ -52,7 +52,7 @@ export default function GNBContainer() {
         </Link>
         <RightItem>
           <SearchContainer />
-          <LoginBtn />
+          <LoginContainer />
         </RightItem>
       </Inner>
     </Container>

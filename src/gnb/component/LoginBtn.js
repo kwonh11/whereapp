@@ -1,13 +1,9 @@
-import { useState, useEffect } from "react";
 import { Button, Typography, Divider, IconButton } from "@material-ui/core";
 import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
 import Modal from "../../common/component/Modal";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
 import SignIn from "./Signin";
-import axios from "axios";
-import { useSelector, useDispatch } from "react-redux";
-import { actions } from "../../common/reducer/user";
 
 const UserContainer = styled.div`
   display: flex;
@@ -78,40 +74,19 @@ const Avatar = styled(IconButton)`
     `}
 `;
 
-export default function Login() {
-  const [loginModal, setLoginModal] = useState(false);
-  const [infoModal, setInfoModal] = useState(false);
-  const [userInfo, setUserInfo] = useState(null); //ㄴㄴ
-
-  const dispatch = useDispatch();
-  const { isLoggedIn, info } = useSelector((state) => state.user);
-
-  useEffect(() => {
-    console.log("------BTN useEffect");
-    console.log(info);
-
-    if (isLoggedIn) return;
-    dispatch(actions.loginInRequest());
-  }, [dispatch, isLoggedIn]);
-
-  const handleClickLoginModal = () => {
-    setLoginModal(!loginModal);
-  };
-
-  const handleClickInfoModal = () => {
-    setInfoModal(!infoModal);
-  };
-
-  const handleAddFile = (e) => {
-    const formData = new FormData();
-    formData.append("img", e.target.files[0]);
-    dispatch(actions.uploadImageRequest(formData));
-  };
-
+export default function Login({
+  handleAddFile,
+  handleClickInfoModal,
+  handleClickLoginModal,
+  loginModal,
+  infoModal,
+  user,
+  isLoggedIn,
+}) {
   return (
     <>
       {isLoggedIn ? (
-        <Avatar onClick={handleClickInfoModal} image={info.image} />
+        <Avatar onClick={handleClickInfoModal} image={user && user.image} />
       ) : (
         <Button
           variant="outlined"
@@ -132,7 +107,7 @@ export default function Login() {
         <Modal on={infoModal} onClickClose={handleClickInfoModal}>
           <UserContainer>
             <UserInner>
-              <img src={info.image} />
+              <img src={user && user.image} />
               <input
                 accept="image/*"
                 style={{ display: "none" }}
@@ -151,7 +126,7 @@ export default function Login() {
                 </IconButton>
               </label>
             </UserInner>
-            <Typography variant="subtitle1">{info.nick}</Typography>
+            <Typography variant="subtitle1">{user && user.nick}</Typography>
           </UserContainer>
           <Divider />
           <Menu color="primary">

@@ -33,7 +33,6 @@ router.post("/comment", async (req, res) => {
     //     createAt,
     //     content,
     //     like,
-
     // }
     await axios.post()
 })
