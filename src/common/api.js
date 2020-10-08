@@ -10,11 +10,11 @@ export function callApiGetAddress(location) {
       location: location,
     },
   });
-};
+}
 
 export function callApiBestList() {
   return axios.get("/location/best");
-};
+}
 
 export function callApiDetailIntro(contentTypeId, contentId) {
   return axios.get("/place", {
@@ -22,10 +22,10 @@ export function callApiDetailIntro(contentTypeId, contentId) {
       contentId,
       contentTypeId,
       mapinfoYN: "Y",
-      overviewYN: "Y"
-    }
+      overviewYN: "Y",
+    },
   });
-};
+}
 
 // 유저 위치 확인
 export function getUsersLocation() {
@@ -40,12 +40,23 @@ export function getUsersLocation() {
   };
 
   return getLocation();
-};
+}
 
 export function callApiLocationBasedList(location) {
-  return axios.get("/location/search",{
+  return axios.get("/location/search", {
     params: {
-      location: location
+      location: location,
     },
   });
-};
+}
+
+export function getUser() {
+  return axios.get("/auth/checkUser");
+}
+
+export function uploadImgAPI(formData) {
+  console.log("----------uploadImgAPI");
+
+  console.log(formData);
+  return axios.patch("/auth/img", formData);
+}

@@ -1,7 +1,6 @@
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 import PlaceList from "../component/PlaceList";
-import { actions } from '../state';
-import { makePlaceListWithCategoryCode } from '../state/selector';
+import { actions } from "../../common/reducer/place";
 
 function PlaceContainer(props) {
   const { placeList, listType, isLoading } = props;
@@ -31,12 +30,9 @@ const makeMapStateToProps = () => {
       listType: state.place.listType,
       categoryCode: state.place.categoryCode,
       isLoading: state.place.isLoading,
-    }
-  }
+    };
+  };
   return mapStateToProps;
 };
 
-export default connect(
-  makeMapStateToProps,
-  actions
-)(PlaceContainer);
+export default connect(makeMapStateToProps, actions)(PlaceContainer);
