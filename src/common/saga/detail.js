@@ -3,7 +3,8 @@ import {
   callApiDetailIntro,
   callApiAddComment,
   callApiUpdateComment,
-  callApiDeleteComment
+  callApiDeleteComment,
+  callApiAddReply
 } from "../api";
 import { actions, types } from "../reducer/detail";
 import { fork, all, put, call, take } from "redux-saga/effects";
@@ -80,25 +81,45 @@ export function* addComments(action) {
 
 export function* deleteComment(action) {
   while (true) {
-    const { _id, commenter } = yield take(types.REQUEST_DELETE_COMMENT);
-    // yield put(actions.setLoadingComments(true));
-    // yield put(actions.setError(""));
+    const { _id, commenter, contentId } = yield take(types.REQUEST_DELETE_COMMENT);
+    yield put(actions.setLoadingComments(true));
+    yield put(actions.setError(""));
     try {
       yield call(callApiDeleteComment, _id, commenter);
-      // 성공시
       // 댓글목록 다시 불러오기
       yield put(actions.setLoadingComments(true));
       const comments = yield call(callApiCommentList, contentId);
       yield put(actions.setComments(comments.data));
     } catch (err) {
-      // 실패시
       yield put(actions.setError(err));
     }
     yield put(actions.setLoadingComments(false));
   }
 }
 
+export function* addReply(action) {
+  while(true) {
+    const {contentId, commentId, reply} = yield take(types.REQUEST_ADD_REPLY);
+    yield put(actions.setError(""));
+    try {
+      yield call(callApiAddReply, commentId, reply);
+      // 댓글목록 다시 불러오기
+      const comments = yield call(callApiCommentList, contentId);
+      yield put(actions.setComments(comments.data));
+    } catch(err) {
+      yield put(actions.setError(err));
+    }
+  }
+}
+
+
 
 export default function* watcher() {
-  yield all([fork(fetchAdditional), fork(fetchComments), fork(addComments), fork(deleteComment)]);
+  yield all([
+    fork(fetchAdditional),
+    fork(fetchComments),
+    fork(addComments),
+    fork(deleteComment),
+    fork(addReply),
+  ]);
 };

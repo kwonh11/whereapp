@@ -63,11 +63,16 @@ export function callApiCommentList(contentId) {
 export function callApiAddComment(comment) {
   return axios.post("/comment", comment );
 };
-
 export function callApiUpdateComment(comment) {
   return axios.patch("/comment", comment);
 };
-
 export function callApiDeleteComment(_id, commenter) {
-  return axios.delete(`/comment/${_id}/${commenter}`);
+  return axios.delete(`/comment/delete/${_id}/${commenter}`);
 };
+
+export function callApiAddReply(commentId, reply) {
+  return axios.post("/comment/reply", {
+    commentId,
+    reply
+  });
+}

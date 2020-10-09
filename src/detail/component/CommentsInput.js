@@ -39,8 +39,8 @@ const Characters = styled.div`
 `;
 
 
-export default function Comments(props) {
-    const { addComment, contentId, commenter, nick, nextId } = props;
+export default function CommentsInput(props) {
+    const { addComment, contentId, commenter, isReply, commentId, addReply} = props;
     const [inputValue, setInputValue] = React.useState("");
     const [sendable, setSendable] = React.useState(true);
     const [snack, setSnack] = React.useState(false);
@@ -51,16 +51,24 @@ export default function Comments(props) {
     }, [inputValue]);
     
     const handleSubmit = () => {
-        if (sendable) {
-            if (!commenter || !inputValue) {
-                setSnack(true);
-                return;
+        if (!commenter || !inputValue || !sendable) {
+            setSnack(true);
+            return;
+        }
+        if (isReply) {
+            // contentId, commentId, reply
+            const replyComment = {
+                commenter,
+                content: inputValue,
+                createAt: new Date()
             }
-            const comment = { contentId, commenter, content: inputValue, nick, id: nextId };
+            addReply(contentId, commentId, replyComment);
+            setInputValue("");
+        }
+        if (!isReply) {
+            const comment = { contentId, commenter, content: inputValue };
             addComment({ ...comment , reply:[], createAt: new Date(), like: 0});
             setInputValue("");
-        } else {
-            setSnack(true);
         }
     };
     const handleChange = (event) => {
@@ -73,7 +81,7 @@ export default function Comments(props) {
         <CommentsWrap>
             <Snackbar open={snack} onClose={handleCloseSnackbar} anchorOrigin={{vertical:'bottom', horizontal:'center'}}>
                 <Alert onClose={handleCloseSnackbar} severity="error" variant="filled" style={{fontWeight:"bold"}}>
-                    {commenter? "300글자 이하로 작성해주세요." : "로그인 후 이용해주세요."}
+                    {!commenter? "로그인 후 이용해주세요." : "300글자 이하로 작성해주세요."}
                 </Alert>
             </Snackbar>
             <StyledTextField

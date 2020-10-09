@@ -1,9 +1,8 @@
 import styled from 'styled-components';
 import { Button, Avatar, Menu, MenuItem } from '@material-ui/core';
-import Loading from '../../common/component/Loading';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import CommentsInput from './CommentsInput';
-import { MoreVert } from '@material-ui/icons';
+import { MoreVert, DeleteForever } from '@material-ui/icons';
 import { IconButton } from '@material-ui/core';
 import Fade from '@material-ui/core/Fade';
 
@@ -94,22 +93,34 @@ function getDateString(createAt) {
     const year = date.getFullYear();
     const Month = date.getMonth()+1;
     const month = Month < 10? "0" + Month : Month;
-    const day = date.getDate();
+    const Day = date.getDate();
+    const day = Day < 10? "0" + Day : Day;
     const hours = date.getHours();
     const minutes = date.getMinutes();
     return `${year}-${month}-${day} ${hours}:${minutes}`;
 }
 
-function Reply({reply}) {
+function Reply(props) {
+    const {commenter : loginUser , reply} = props;
     return (
     <React.Fragment>
     {
         reply.map((rep, i) => {
-            const {commenter, content, createAt} = rep;
+            const {commenter, nick, content, createAt} = rep;
             return (
             <ReplyContainer key={i}>
                 <CommenterWrap>
-                    <Avatar style={{marginRight:"10px"}}/> {commenter}
+                    <ProfileWrap>
+                        <Avatar />
+                        <span style={{ marginLeft: "10px" }}>{nick}</span>
+                    </ProfileWrap>
+                    {
+                        loginUser === commenter
+                        && 
+                        <IconButton>
+                            <DeleteForever/>
+                        </IconButton>
+                    }
                 </CommenterWrap>
                 <ContentWrap>
                     {content}
@@ -127,11 +138,10 @@ function Reply({reply}) {
 }
 
 export default function Comments(props) {
-    const { comments, loading, deleteComment } = props;
+    const { comments, deleteComment, contentId, addReply, commenter } = props;
     const [ sort, setSort ] = React.useState("recent");
     const [commentOn, setCommentOn] = React.useState("");
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [menuIndex, setMenuIndex] = React.useState(null);
     const open = Boolean(anchorEl);
 
     const handleClickMenu = (event) => {
@@ -145,13 +155,11 @@ export default function Comments(props) {
         setSort(key);
     };
     const handleClickComment = (e) => {
-        console.log(e.currentTarget.dataset.id);
         setCommentOn(e.currentTarget.dataset.id);
     };
     const handleClickDelete = (e) => {
         const _id = anchorEl.dataset.id;
-        const commenter = anchorEl.dataset.commenter;
-        deleteComment(_id, commenter);
+        deleteComment(_id, commenter, contentId);
     }
     const handleClickModify = (e) => {
         console.log(anchorEl.dataset.id);
@@ -175,7 +183,11 @@ export default function Comments(props) {
                         <Avatar />
                         <span style={{ marginLeft: "10px" }}>{nick}</span>
                     </ProfileWrap>
-                        <IconButton aria-controls="fade-menu" data-id={_id} data-commenter={commenter} aria-haspopup="true" onClick={handleClickMenu} >
+                        <IconButton 
+                        aria-controls="fade-menu" 
+                        aria-haspopup="true" 
+                        data-id={_id} 
+                        onClick={handleClickMenu} >
                         <MoreVert/>
                     </IconButton>
                     <Menu
@@ -208,12 +220,17 @@ export default function Comments(props) {
                         </Button>
                     </ButtonWrap>
                 </InfoWrap>
-                {on && <CommentsInput />}
-                <Reply reply={reply} />
+                {on && <CommentsInput 
+                        isReply={true} 
+                        commentId={_id} 
+                        addReply={addReply}
+                        contentId={contentId}
+                        commenter={commenter}
+                        />}
+                <Reply reply={reply} commenter={commenter}/>
             </Container>
         )})
-        } 
-        {loading && <Loading />}
+        }
     </CommentContainer>
     )
 }

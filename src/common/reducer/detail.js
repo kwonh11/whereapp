@@ -22,8 +22,12 @@ export const types = {
 
   ADD_LIKE: "detail/ADD_LIKE", // 댓글 좋아요
   CANCLE_LIKE: "detail/CANCLE_LIKE", // 좋아요 취소
+
+  REQUEST_ADD_REPLY: "detail/REQUEST_ADD_REPLY",
   ADD_REPLY: "detail/ADD_REPLY", // 대댓글 작성
-  REMOVE_REPLY: "detail/REMOVE_REPLY", // 대댓글 삭제
+
+  REQUEST_DELETE_REPLY: "detail/REQUEST_DELETE_REPLY",
+  DELETE_REPLY: "detail/REMOVE_REPLY", // 대댓글 삭제
 
   // 에러
   SET_ERROR: "detail/SET_ERROR",
@@ -44,25 +48,15 @@ export const actions = {
   setComments: (comments) => ({ type: types.SET_COMMENTS, comments }),
   requestAddComment: (comment) => ({type: types.REQUEST_ADD_COMMENT, comment}),
   addComment: (comment) => ({ type: types.ADD_COMMENT, comment }),
-  requestDeleteComment: (_id, commenter) => ({type: types.REQUEST_DELETE_COMMENT, _id, commenter}),
-  deleteComment: (_id, commenter) => ({
-    type: types.DELETE_COMMENT,
-    _id, commenter
-  }),
+  requestDeleteComment: (_id, commenter, contentId) => ({type: types.REQUEST_DELETE_COMMENT, _id, commenter, contentId}),
+  deleteComment: (_id, commenter) => ({type: types.DELETE_COMMENT, _id, commenter}),
   addLike: (contentId, id) => ({ type: types.ADD_LIKE, contentId, id }),
   cancleLike: (contentId, id) => ({ type: types.CANCLE_LIKE, contentId, id }),
-  addReply: (contentId, id, reply) => ({
-    type: types.ADD_REPLY,
-    contentId,
-    id,
-    reply,
-  }),
-  removeReply: (contentId, id, index) => ({
-    type: types.REMOVE_REPLY,
-    contentId,
-    id,
-    index,
-  }),
+
+  requestAddReply: (contentId, commentId, reply) => ({type: types.REQUEST_ADD_REPLY, contentId, commentId, reply}),
+  addReply: (commentId, reply) => ({type: types.ADD_REPLY, commentId, reply}),
+  requestDeleteReply: (contentId, commentId, _id) => ({type: types.REQUEST_DELETE_REPLY, contentId, commentId, _id}),
+  deleteReply: (_id) => ({ type: types.REMOVE_REPLY, id }),
   setError: (error) => ({ type: types.SET_ERROR, error }),
 };
 
@@ -118,26 +112,29 @@ const reducer = createReducer(INITIAL_STATE, {
   [types.ADD_COMMENT]: (state, action) => {
     state.comments.push(action.comment);
   },
-  [types.REMOVE_COMMENT]: (state, action) => {
-    const index = state.comments.findIndex((item) => item.id === action.id);
+  [types.DELETE_COMMENT]: (state, action) => {
+    const index = state.comments.findIndex((item) => item._id === action._id);
     state.comments.splice(index, 1);
   },
   [types.ADD_LIKE]: (state, action) => {
-    const comment = state.comments.find((item) => item.id === action.id);
+    const comment = state.comments.find((item) => item._id === action._id);
     if (comment) state.comments[index].like += 1;
   },
   [types.CANCLE_LIKE]: (state, action) => {
-    const comment = state.comments.find((item) => item.id === action.id);
+    const comment = state.comments.find((item) => item._id === action._id);
     if (comment) state.comments[index].like -= 1;
   },
   [types.ADD_REPLY]: (state, action) => {
-    const comment = state.comments.find((item) => item.id === action.id);
+    const comment = state.comments.find((item) => item._id === action.commentId);
     if (comment) comment.reply.push(action.reply);
   },
   [types.REMOVE_REPLY]: (state, action) => {
-    const comment = state.comments.find((item) => item.id === action.id);
+    const comment = state.comments.find((item) => item._id === action.commentId);
     if (comment) {
-      comment.splice(action.index, 1);
+      const idx = comment.reply.findIndex(rep => rep._id === action._id);
+      if (idx >= 0) {
+        reply.splice(idx, 1);
+      }
     }
   },
   [types.SET_ERROR]: (state, action) => {

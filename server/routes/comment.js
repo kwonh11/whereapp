@@ -13,59 +13,46 @@ router.get("/:contentId", async (req, res) => {
     const contentId = req.params.contentId;
     const totalComments = await Comment.countDocuments({});
     const list = await Comment.find({ contentId: contentId }).sort({createAt: -1}).limit(totalComments);
-    console.log(list);
-    res.json(list);
+    res.status(200).json(list);
   } catch (err) {
-    // 에러처리코드에 맞게 구현
-    console.log(err);
+    res.status(403).send(err);
   }
 });
 
 // 댓글 등록
-router.post("/", async (req, res) => {
-  const { contentId, commenter, content, nick } = req.body;
-  console.log(`등록 : ${contentId} ${commenter} ${nick} ${content}`);
+router.post("/", isLoggedIn, async (req, res) => {
+  const { contentId, commenter, content } = req.body;
   try {
     const newComment = await new Comment({
-      nick,
+      nick: req.user.nick,
       contentId,
       commenter,
       content
     })
     await newComment.save();
-    res.status(200);
+    res.status(200).end();
   } catch (err) {
-    console.log(err);
+    res.status(403).send(err);
   }
-  res.end();
 });
 
 // 댓글 수정
 router.patch("/", isLoggedIn, async (req, res) => {
   try {
-    const { contentId, commenter, content } = req.body;
-    await Comment.findOneAndUpdate({
-      contentId,
-      commenter
-    }, {
-      content: content
-    })
+
     res.status(200).end();
   } catch (err) {
-    console.log(err);
+    res.status(403).end();
   }
 });
 
 // 댓글 삭제
-router.delete("/:_id/:commenter", isLoggedIn, async (req, res) => {
+router.delete("/delete/:_id/:commenter", isLoggedIn, async (req, res) => {
   try {
     const { _id, commenter } = req.params;
     if (req.user._id == commenter) {
       // 사용자 일치, 삭제가능
-      const result = await Comment.findOneAndDelete({
-        _id,
-      });
-      console.log(result);
+      await Comment.findOneAndDelete({_id});
       res.status(200).end();
     } else {
       throw new Error();
@@ -75,6 +62,20 @@ router.delete("/:_id/:commenter", isLoggedIn, async (req, res) => {
   } 
 });
 
+// 대댓글 등록
+router.post("/reply", isLoggedIn, async (req, res) => {
+  const { commentId, reply } = req.body;
+  console.log(reply);
+  const { nick } = req.user;
+  const currentReply = {...reply, nick};
+  try {
+    const comment = await Comment.findOne({_id: commentId}).exec();
+    await Comment.updateOne({_id: commentId}, {reply: [...comment.reply, currentReply]}).exec();
+  } catch(err) {
+    res.status(403).send(err);
+  }
+  res.status(200).end();
+});
 
 
 module.exports = router;

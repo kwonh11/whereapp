@@ -6,10 +6,6 @@ const {
 } = Schema;
 
 const ReplySchema = new Schema({
-  id: {
-    type: Number,
-    required: true
-  },
   nick: {
     type: String,
     require: true,
