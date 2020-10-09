@@ -40,6 +40,7 @@ const Characters = styled.div`
 
 
 export default function Comments(props) {
+    const { addComment, contentId, commenter, nick, nextId } = props;
     const [inputValue, setInputValue] = React.useState("");
     const [sendable, setSendable] = React.useState(true);
     const [snack, setSnack] = React.useState(false);
@@ -47,10 +48,16 @@ export default function Comments(props) {
     React.useEffect(()=>{
         if (inputValue.length > 300) setSendable(false);
         if (inputValue.length <= 300) setSendable(true);
-    },[inputValue]);
+    }, [inputValue]);
+    
     const handleSubmit = () => {
-        if(sendable) {
-            console.log(inputValue);
+        if (sendable) {
+            if (!commenter || !inputValue) {
+                setSnack(true);
+                return;
+            }
+            const comment = { contentId, commenter, content: inputValue, nick, id: nextId };
+            addComment({ ...comment , reply:[], createAt: new Date(), like: 0});
             setInputValue("");
         } else {
             setSnack(true);
@@ -66,7 +73,7 @@ export default function Comments(props) {
         <CommentsWrap>
             <Snackbar open={snack} onClose={handleCloseSnackbar} anchorOrigin={{vertical:'bottom', horizontal:'center'}}>
                 <Alert onClose={handleCloseSnackbar} severity="error" variant="filled" style={{fontWeight:"bold"}}>
-                    300글자 이하로 작성해주세요
+                    {commenter? "300글자 이하로 작성해주세요." : "로그인 후 이용해주세요."}
                 </Alert>
             </Snackbar>
             <StyledTextField

@@ -1,8 +1,11 @@
 import styled from 'styled-components';
-import { Divider,Button, Avatar } from '@material-ui/core';
+import { Button, Avatar, Menu, MenuItem } from '@material-ui/core';
 import Loading from '../../common/component/Loading';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import CommentsInput from './CommentsInput';
+import { MoreVert } from '@material-ui/icons';
+import { IconButton } from '@material-ui/core';
+import Fade from '@material-ui/core/Fade';
 
 const CommentContainer = styled.div`
     display: flex;
@@ -21,15 +24,21 @@ const Container = styled.div`
     justify-content: center;
     transition: all 0.3s ease-out;
 `;
+const ProfileWrap = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+`;
 const CommenterWrap = styled.div`
     width: 100%;
     height: 30px;
     margin: 30px 0;
     display: flex;
     align-items: flex-end;
-    justify-content: flex-start;
-    font-size: 1.2rem;
-    font-weight: bold;
+    justify-content: space-between;
 `;
 const ContentWrap = styled.div`
     width: 100%;
@@ -90,6 +99,7 @@ function getDateString(createAt) {
     const minutes = date.getMinutes();
     return `${year}-${month}-${day} ${hours}:${minutes}`;
 }
+
 function Reply({reply}) {
     return (
     <React.Fragment>
@@ -115,10 +125,21 @@ function Reply({reply}) {
     </React.Fragment>
     )
 }
+
 export default function Comments(props) {
-    const { comments, loading } = props;
+    const { comments, loading, deleteComment } = props;
     const [ sort, setSort ] = React.useState("recent");
     const [commentOn, setCommentOn] = React.useState("");
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [menuIndex, setMenuIndex] = React.useState(null);
+    const open = Boolean(anchorEl);
+
+    const handleClickMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleCloseMenu = () => {
+        setAnchorEl(null);
+    };
     const handleClickSort = (key) => {
         // 여기에 정렬 조건을 실행하는 reselect 코드 작성
         setSort(key);
@@ -126,6 +147,14 @@ export default function Comments(props) {
     const handleClickComment = (e) => {
         console.log(e.currentTarget.dataset.id);
         setCommentOn(e.currentTarget.dataset.id);
+    };
+    const handleClickDelete = (e) => {
+        const _id = anchorEl.dataset.id;
+        const commenter = anchorEl.dataset.commenter;
+        deleteComment(_id, commenter);
+    }
+    const handleClickModify = (e) => {
+        console.log(anchorEl.dataset.id);
     }
     return (
     <CommentContainer>
@@ -136,13 +165,31 @@ export default function Comments(props) {
         </FilterWrap>
         {
         comments.map((comment,i) => {
-            const { commenter, content, createAt, like, likeCount, reply } = comment;
-            const on = Number(commentOn) === Number(comment.id);
+            const { commenter, content, createAt, like, likeCount, reply, nick, _id } = comment;
+            const on = commentOn === _id;
 
             return (
             <Container key={i} height={on? `${400 + reply.length*200}px`:`${200 + reply.length*200}px`}>
                 <CommenterWrap>
-                    <Avatar style={{marginRight:"10px"}}/> {commenter}
+                    <ProfileWrap>
+                        <Avatar />
+                        <span style={{ marginLeft: "10px" }}>{nick}</span>
+                    </ProfileWrap>
+                        <IconButton aria-controls="fade-menu" data-id={_id} data-commenter={commenter} aria-haspopup="true" onClick={handleClickMenu} >
+                        <MoreVert/>
+                    </IconButton>
+                    <Menu
+                    id="fade-menu"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={open}
+                    onClose={handleCloseMenu}
+                    TransitionComponent={Fade}
+                    elevation={1}
+                    >
+                        <MenuItem onClick={handleClickDelete}> 삭제하기 </MenuItem>
+                        <MenuItem onClick={handleClickModify}> 수정하기 </MenuItem>
+                    </Menu>
                 </CommenterWrap>
                 <ContentWrap>
                     {content}
@@ -153,10 +200,10 @@ export default function Comments(props) {
                     </DateWrap>
                     <ButtonWrap>
                         <Button variant="outlined" color={like? "primary":"default"}>
-                            {likeCount} &nbsp;
+                            {like} &nbsp;
                             <ThumbUpIcon color={like? "action":"primary"} />
                         </Button>
-                        <Button variant="outlined" color="default" data-id={comment.id} onClick={handleClickComment}>
+                        <Button variant="outlined" color="default" data-id={_id} onClick={handleClickComment}>
                             댓글달기
                         </Button>
                     </ButtonWrap>

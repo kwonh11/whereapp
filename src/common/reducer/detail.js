@@ -1,17 +1,25 @@
+import comment from "../../../server/schemas/comment";
 import createReducer from "../createReducer";
 
 export const types = {
   // CARD 클릭 시
   SET_LOADING: "detial/SET_LOADING", // LOADING
-  SET_DETAILS: "detail/SET_DETAILS", // saga 트리거
+  REQUEST_DETAILS: "detail/REQUEST_DETAILS", // saga 트리거
   SET_IDS: "detail/SET_IDS", // 카드 클릭시 params의 contentid, contentidtype 설정
   SET_PLACE: "detail/SET_PLACE", // DETAIL 화면
   SET_ADDITIONAL: "detail/SET_ADDITIONAL", // 소개 API를 이용한 추가데이터
 
   // 댓글 관련
-  SET_COMMENTS: "detail/SET_COMMENTS", // API로 댓글 불러오기
-  ADD_COMMENT: "detail/ADD_COMMENT", // 댓글 작성    -  디바운스기능 추가 필요
-  REMOVE_COMMENT: "detail/REMOVE_COMMENT", // 선택한 댓글 삭제
+  SET_LOADING_COMMENTS: "detail/SET_LOADING_COMMENTS",  // 댓글 로딩
+  REQUEST_COMMENTS: "detail/REQUEST_COMMENTS",  // 댓글 목록 요청
+  SET_COMMENTS: "detail/SET_COMMENTS", // 댓글목록 REDUX저장
+
+  REQUEST_ADD_COMMENT: "detail/REQUEST_ADD_COMMENT",
+  ADD_COMMENT: "detail/ADD_COMMENT", // 댓글 작성
+
+  REQUEST_DELETE_COMMENT: "detail/REQUEST_DELETE_COMMENT",
+  DELETE_COMMENT: "detail/DELETE_COMMENT", // 선택한 댓글 삭제
+
   ADD_LIKE: "detail/ADD_LIKE", // 댓글 좋아요
   CANCLE_LIKE: "detail/CANCLE_LIKE", // 좋아요 취소
   ADD_REPLY: "detail/ADD_REPLY", // 대댓글 작성
@@ -23,7 +31,7 @@ export const types = {
 
 export const actions = {
   setLoading: (isLoading) => ({ type: types.SET_LOADING, isLoading }),
-  setDetails: (contentTypeId, contentId) => ({
+  requestDetails: (contentTypeId, contentId) => ({
     type: types.SET_DETAILS,
     contentTypeId,
     contentId,
@@ -31,12 +39,15 @@ export const actions = {
   setIds: (ids) => ({ type: types.SET_IDS, ids }),
   setPlace: (place) => ({ type: types.SET_PLACE, place }),
   setAdditional: (additional) => ({ type: types.SET_ADDITIONAL, additional }),
+  setLoadingComments: (isLoadingComments) => ({ type: types.SET_LOADING_COMMENTS, isLoadingComments}),
+  requestComments: (contentId) => ({ type: types.REQUEST_COMMENTS, contentId }),
   setComments: (comments) => ({ type: types.SET_COMMENTS, comments }),
+  requestAddComment: (comment) => ({type: types.REQUEST_ADD_COMMENT, comment}),
   addComment: (comment) => ({ type: types.ADD_COMMENT, comment }),
-  removeComment: (contentId, id) => ({
-    type: types.REMOVE_COMMENT,
-    contentId,
-    id,
+  requestDeleteComment: (_id, commenter) => ({type: types.REQUEST_DELETE_COMMENT, _id, commenter}),
+  deleteComment: (_id, commenter) => ({
+    type: types.DELETE_COMMENT,
+    _id, commenter
   }),
   addLike: (contentId, id) => ({ type: types.ADD_LIKE, contentId, id }),
   cancleLike: (contentId, id) => ({ type: types.CANCLE_LIKE, contentId, id }),
@@ -56,7 +67,8 @@ export const actions = {
 };
 
 const INITIAL_STATE = {
-  isLoading: false,
+  isLoading: true,
+  isLoadingComments: true,
   ids: {
     contentId: "",
     contentTypeId: "",
@@ -81,13 +93,7 @@ const INITIAL_STATE = {
   },
   comments: [
     {
-      contentId: "",
-      id: "",
-      commenter: "",
-      content: "",
-      createAt: "",
-      reply: "",
-      like: "",
+      reply: [],
     },
   ],
   error: "",

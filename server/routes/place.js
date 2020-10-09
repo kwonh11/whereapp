@@ -6,7 +6,7 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-    const {contentId ,contentTypeId, mapinfoYN, overviewYN} = req.query;
+    const {contentId ,contentTypeId } = req.query;
     let additional = {};
 
     const commonIntroURL = `http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?ServiceKey=${process.env.TOUR_KEY}&contentId=${contentId}&contentTypeId=${contentTypeId}&mapinfoYN=Y&overviewYN=Y&MobileOS=ETC&MobileApp=Where&_type=json`;
@@ -25,8 +25,5 @@ router.get("/", async (req, res) => {
             console.log(err);
         });
 });
-
-
-
 
 module.exports = router;
