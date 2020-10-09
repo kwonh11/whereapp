@@ -35,12 +35,12 @@ export default function AdditionalContainer(props) {
   const isOnline = useSelector(state => state.detail.place.addr1.includes("온라인"));
 
   const dispatch = useDispatch();
-  const setDetails = React.useCallback(
-    (contentTypeId, contentId) => dispatch({ type: types.SET_DETAILS, contentTypeId, contentId })
+  const requestDetails = React.useCallback(
+    (contentTypeId, contentId) => dispatch({ type: types.REQUEST_DETAILS, contentTypeId, contentId })
   , [dispatch]);
 
   React.useEffect(() => {
-    setDetails(contentTypeId, contentId);
+    requestDetails(contentTypeId, contentId);
   }, []);
 
   return (

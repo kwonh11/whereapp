@@ -8,12 +8,16 @@ const {
 const ReplySchema = new Schema({
   id: {
     type: Number,
-    unique: true,
     required: true
+  },
+  nick: {
+    type: String,
+    require: true,
   },
   commenter: {
     type: ObjectId,
     ref: "User",
+    require: true,
   },
   content: {
     type: String,
@@ -32,10 +36,12 @@ const CommentSchema = new Schema({
   },
   nick: {
     type: String,
+    require: true,
   },
   commenter: {
     type: ObjectId,
     ref: "User",
+    require: true,
   },
   createAt: {
     type: Date,

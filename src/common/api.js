@@ -6,11 +6,11 @@ export function callApiGetAddress(location) {
       location: location,
     },
   });
-}
+};
 
 export function callApiBestList() {
   return axios.get("/location/best");
-}
+};
 
 export function callApiDetailIntro(contentTypeId, contentId) {
   return axios.get("/place", {
@@ -21,7 +21,7 @@ export function callApiDetailIntro(contentTypeId, contentId) {
       overviewYN: "Y",
     },
   });
-}
+};
 
 // 유저 위치 확인
 export function getUsersLocation() {
@@ -34,9 +34,8 @@ export function getUsersLocation() {
       });
     });
   };
-
   return getLocation();
-}
+};
 
 export function callApiLocationBasedList(location) {
   return axios.get("/location/search", {
@@ -44,31 +43,31 @@ export function callApiLocationBasedList(location) {
       location: location,
     },
   });
-}
+};
 
 export function getUser() {
   return axios.get("/auth/checkUser");
-}
+};
 
 export function uploadImgAPI(formData) {
   console.log("----------uploadImgAPI");
 
   console.log(formData);
   return axios.patch("/auth/img", formData);
-}
+};
 
 export function callApiCommentList(contentId) {
   return axios.get(`/comment/${contentId}`);
 };
 
-export function callApiPostComment(comment) {
-  return axios.post("/comment", { ...comment });
+export function callApiAddComment(comment) {
+  return axios.post("/comment", comment );
 };
 
 export function callApiUpdateComment(comment) {
-  return axios.patch("/comment", { ...comment });
+  return axios.patch("/comment", comment);
 };
 
-export function callApiDeleteComment(comment) {
-  return axios.delete("/comment", { ...comment });
+export function callApiDeleteComment(_id, commenter) {
+  return axios.delete(`/comment/${_id}/${commenter}`);
 };

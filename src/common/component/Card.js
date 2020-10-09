@@ -40,6 +40,9 @@ const StyledCard = styled(Card)`
     width: 100%;
     align-items: center;
   }
+  & .MuiCardHeader-content .MuiCardHeader-title {
+    max-width: 330px;
+  }
 `;
 
 const BottomIconsWrap = styled.div`

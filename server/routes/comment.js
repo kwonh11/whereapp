@@ -23,22 +23,21 @@ router.get("/:contentId", async (req, res) => {
 
 // 댓글 등록
 router.post("/", async (req, res) => {
-  const { contentId, commenter, content } = req.body;
-  console.log(`등록 : ${contentId, commenter, content}`);
+  const { contentId, commenter, content, nick } = req.body;
+  console.log(`등록 : ${contentId} ${commenter} ${nick} ${content}`);
   try {
     const newComment = await new Comment({
-      name,
+      nick,
       contentId,
       commenter,
       content
     })
     await newComment.save();
-
-    res.status(200).end();
+    res.status(200);
   } catch (err) {
     console.log(err);
   }
-
+  res.end();
 });
 
 // 댓글 수정
@@ -58,16 +57,21 @@ router.patch("/", isLoggedIn, async (req, res) => {
 });
 
 // 댓글 삭제
-router.delete("/", isLoggedIn, async (req, res) => {
+router.delete("/:_id/:commenter", isLoggedIn, async (req, res) => {
   try {
-    const { contentId, commenter } = req.body;
-    await Comment.findOneAndDelete({
-      contentId,
-      commenter
-    });
-    res.status(200).end();
+    const { _id, commenter } = req.params;
+    if (req.user._id == commenter) {
+      // 사용자 일치, 삭제가능
+      const result = await Comment.findOneAndDelete({
+        _id,
+      });
+      console.log(result);
+      res.status(200).end();
+    } else {
+      throw new Error();
+    }
   } catch (err) {
-    console.log(err);
+    res.status(403).send(err);
   } 
 });
 
