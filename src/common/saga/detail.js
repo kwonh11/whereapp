@@ -4,7 +4,8 @@ import {
   callApiAddComment,
   callApiUpdateComment,
   callApiDeleteComment,
-  callApiAddReply
+  callApiAddReply,
+  callApiDeleteReply
 } from "../api";
 import { actions, types } from "../reducer/detail";
 import { fork, all, put, call, take } from "redux-saga/effects";
@@ -110,6 +111,20 @@ export function* addReply(action) {
       yield put(actions.setError(err));
     }
   }
+};
+
+export function* deleteReply(action) {
+  while(true) {
+    const {contentId, commentId, _id, commenter} = yield take(types.REQUEST_DELETE_REPLY);
+    yield put(actions.setError(""));
+    try {
+      yield call(callApiDeleteReply, commentId, _id, commenter);
+      const comments = yield call(callApiCommentList, contentId);
+      yield put(actions.setComments(comments.data));
+    } catch (err) {
+      yield put(actions.setError(err));
+    }
+  }
 }
 
 
@@ -121,5 +136,6 @@ export default function* watcher() {
     fork(addComments),
     fork(deleteComment),
     fork(addReply),
+    fork(deleteReply),
   ]);
 };

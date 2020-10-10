@@ -65,7 +65,6 @@ router.delete("/delete/:_id/:commenter", isLoggedIn, async (req, res) => {
 // 대댓글 등록
 router.post("/reply", isLoggedIn, async (req, res) => {
   const { commentId, reply } = req.body;
-  console.log(reply);
   const { nick } = req.user;
   const currentReply = {...reply, nick};
   try {
@@ -75,6 +74,25 @@ router.post("/reply", isLoggedIn, async (req, res) => {
     res.status(403).send(err);
   }
   res.status(200).end();
+});
+
+// 대댓글 삭제
+router.delete("/reply/delete/:commentId/:replyId/:commenter", isLoggedIn, async (req, res) => {
+  try {
+    const { replyId, commenter, commentId } = req.params;
+    if (req.user._id == commenter) {
+      // 사용자 일치, 삭제가능
+      const comment = await Comment.findOne({_id: commentId}).exec();
+      await comment.reply.pull({_id: replyId});
+      comment.save();
+      console.log(comment.reply)
+      res.status(200).end();
+    } else {
+      throw new Error();
+    }
+  } catch (err) {
+    res.status(403).send(err);
+  } 
 });
 
 

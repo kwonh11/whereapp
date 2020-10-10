@@ -18,6 +18,9 @@ import { types, actions } from '../../common/reducer/detail';
     const addReply = React.useCallback((contentId, commentId, reply) => {
       dispatch({ type: types.REQUEST_ADD_REPLY, contentId, commentId, reply });
     }, [dispatch]);
+    const deleteReply = React.useCallback((contentId, commentId, replyId, commenter) => {
+      dispatch({ type: types.REQUEST_DELETE_REPLY, contentId, commentId, _id: replyId, commenter });
+    }, [dispatch]);
     return (
     <React.Fragment>
         <CommentsInput 
@@ -28,6 +31,7 @@ import { types, actions } from '../../common/reducer/detail';
         <Comments 
         deleteComment={deleteComment}
         addReply={addReply}
+        deleteReply={deleteReply}
         comments={comments} 
         contentId={contentId}
         commenter={commenter} 

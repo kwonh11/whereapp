@@ -49,14 +49,14 @@ export const actions = {
   requestAddComment: (comment) => ({type: types.REQUEST_ADD_COMMENT, comment}),
   addComment: (comment) => ({ type: types.ADD_COMMENT, comment }),
   requestDeleteComment: (_id, commenter, contentId) => ({type: types.REQUEST_DELETE_COMMENT, _id, commenter, contentId}),
-  deleteComment: (_id, commenter) => ({type: types.DELETE_COMMENT, _id, commenter}),
+  // deleteComment: (_id, commenter) => ({type: types.DELETE_COMMENT, _id, commenter}),
   addLike: (contentId, id) => ({ type: types.ADD_LIKE, contentId, id }),
   cancleLike: (contentId, id) => ({ type: types.CANCLE_LIKE, contentId, id }),
 
   requestAddReply: (contentId, commentId, reply) => ({type: types.REQUEST_ADD_REPLY, contentId, commentId, reply}),
-  addReply: (commentId, reply) => ({type: types.ADD_REPLY, commentId, reply}),
-  requestDeleteReply: (contentId, commentId, _id) => ({type: types.REQUEST_DELETE_REPLY, contentId, commentId, _id}),
-  deleteReply: (_id) => ({ type: types.REMOVE_REPLY, id }),
+  // addReply: (commentId, reply) => ({type: types.ADD_REPLY, commentId, reply}),
+  requestDeleteReply: (contentId, commentId, _id, commenter) => ({type: types.REQUEST_DELETE_REPLY, contentId, commentId, _id, commenter}),
+  // deleteReply: (_id) => ({ type: types.REMOVE_REPLY, id }),
   setError: (error) => ({ type: types.SET_ERROR, error }),
 };
 

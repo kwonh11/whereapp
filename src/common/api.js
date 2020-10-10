@@ -75,4 +75,7 @@ export function callApiAddReply(commentId, reply) {
     commentId,
     reply
   });
+};
+export function callApiDeleteReply(commentId, replyId, commenter) {
+  return axios.delete(`/comment/reply/delete/${commentId}/${replyId}/${commenter}`);
 }
