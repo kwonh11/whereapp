@@ -32,11 +32,14 @@ export default function AdditionalContainer(props) {
   const { origin } = useSelector(state => state.location);
   const { contentTypeId, contentId } = useSelector(state => state.detail.ids);
   const { additional, isLoading } = useSelector(state => state.detail);
-  const isOnline = useSelector(state => state.detail.place.addr1.includes("온라인"));
+  // const isOnline = useSelector(state => state.detail.place.addr1.includes("온라인"));
 
   const dispatch = useDispatch();
   const requestDetails = React.useCallback(
     (contentTypeId, contentId) => dispatch({ type: types.REQUEST_DETAILS, contentTypeId, contentId })
+  , [dispatch]);
+  const setAdditional = React.useCallback(
+    (additional) => dispatch({ type: types.SET_ADDITIONAL, additional })
   , [dispatch]);
 
   React.useEffect(() => {
@@ -48,11 +51,11 @@ export default function AdditionalContainer(props) {
       {isLoading ?
         <> Loading ... </>
         :
-        <>
+      <>
       <Overview description={additional.overview} />
       <AdditionalComponent additional={additional.additional} />
       <MapContainer>
-        <Map origin={origin} destination={additional.destination} isOnline={isOnline}/>
+            <Map origin={origin} destination={additional.destination} setAdditional={setAdditional}/>
       </MapContainer>
       <ActionsWrap>
         <IconButton
@@ -64,8 +67,8 @@ export default function AdditionalContainer(props) {
         <IconButton aria-label="share" onClick={() => console.log("share")}>
           <ShareIcon />
         </IconButton>
-          </ActionsWrap>
-          </>
+      </ActionsWrap>
+      </>
       }
     </React.Fragment>
   );

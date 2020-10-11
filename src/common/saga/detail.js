@@ -83,7 +83,6 @@ export function* addComments(action) {
 export function* updateComment(action) {
   while (true) {
     const { _id, content, commenter, contentId } = yield take(types.REQUEST_UPDATE_COMMENT);
-    console.log("saga commenter " + commenter);
     yield put(actions.setLoadingComments(true));
     yield put(actions.setError(""));
     try {

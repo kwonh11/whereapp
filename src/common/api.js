@@ -56,10 +56,12 @@ export function uploadImgAPI(formData) {
   return axios.patch("/auth/img", formData);
 };
 
+// 댓글 목록
 export function callApiCommentList(contentId) {
   return axios.get(`/comment/${contentId}`);
 };
 
+// 댓글 관련
 export function callApiAddComment(comment) {
   return axios.post("/comment", comment );
 };
@@ -70,12 +72,15 @@ export function callApiDeleteComment(_id, commenter) {
   return axios.delete(`/comment/delete/${_id}/${commenter}`);
 };
 
+// 대댓글 관련
 export function callApiAddReply(commentId, reply) {
-  return axios.post("/comment/reply", {
-    commentId,
-    reply
-  });
+  return axios.post("/comment/reply", { commentId, reply });
 };
 export function callApiDeleteReply(commentId, replyId, commenter) {
   return axios.delete(`/comment/reply/delete/${commentId}/${replyId}/${commenter}`);
+};
+
+// 좋아요 관련
+export function callApiAddLike(userId, commentId, contentId) {
+  
 }
