@@ -12,11 +12,8 @@ const options = {
 };
 function Directions (props) {
     const [directions, setDirections] = React.useState();
-    const {origin, destination} = props;
+    const {origin, destination } = props;
     const count = React.useRef(0);
-    
-    console.log(origin);
-    console.log(destination);
 
     React.useEffect(()=>{
         count.current = 0;
@@ -24,7 +21,6 @@ function Directions (props) {
     },[origin.lat, origin.lng, destination.lat, destination.lng]);
 
     const directionsCallback = (result, status) => {
-        // console.log(result, status);
         if (status === "OK" && count.current === 0) {
             count.current += 1;
             setDirections(result);
@@ -53,7 +49,7 @@ function toFloatLatLng(obj) {
 }
 
 export default function Map(props) {
-    const {origin, destination} = props;
+    const {origin, destination, isOnline} = props;
     
     if( origin.lat && origin.lng && destination.lat && destination.lng ) {
         return (

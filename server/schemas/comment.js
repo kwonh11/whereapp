@@ -6,14 +6,14 @@ const {
 } = Schema;
 
 const ReplySchema = new Schema({
-  id: {
-    type: Number,
-    unique: true,
-    required: true
+  nick: {
+    type: String,
+    require: true,
   },
   commenter: {
-    type: String,
-    required: true
+    type: ObjectId,
+    ref: "User",
+    require: true,
   },
   content: {
     type: String,
@@ -30,14 +30,14 @@ const CommentSchema = new Schema({
     type: String,
     require: true,
   },
-  id: {
-    type: Number,
-    unique: true,
-    required: true
+  nick: {
+    type: String,
+    require: true,
   },
   commenter: {
     type: ObjectId,
     ref: "User",
+    require: true,
   },
   createAt: {
     type: Date,
@@ -49,13 +49,12 @@ const CommentSchema = new Schema({
   },
   like: {
     type: Number,
-    require: true,
     default: 0
   },
   reply: {
-    type: [ReplySchema]
+    type: [ReplySchema],
+    default: []
   }
 });
 
-commentSchema.index({id: 1});
 module.exports = mongoose.model("Comment", CommentSchema);

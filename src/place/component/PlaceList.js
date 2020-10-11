@@ -70,7 +70,8 @@ export default function PlaceList({
   const handleClickTab = (tab, categoryId) => {
     setTab(tab);
     handleSelectTab(categoryId);
-  } 
+  };
+  
   return (
     <>
       <AppBar position="static">
