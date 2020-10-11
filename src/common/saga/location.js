@@ -2,60 +2,100 @@ import {
   getUsersLocation,
   callApiGetAddress,
   callApiLocationBasedList,
+  callAutoComplete,
+  callApiGeocode,
 } from "../api";
 import { actions, types } from "../reducer/location";
 import { actions as placeActions } from "../reducer/place";
-import { fork, all, put, call, take, delay } from "redux-saga/effects";
+import { put, call, delay, takeLatest } from "redux-saga/effects";
 
 // 최초 접속시 user의 location을 얻고 reverse geocode하고 저장한다.
-export function* fetchLocation(action) {
-  while (true) {
-    yield take(types.REQUEST_LOCATION);
-    yield put(actions.setError(""));
-    try {
-      // get location
-      const usersLocation = yield call(getUsersLocation);
-      yield put(actions.setOrigin(usersLocation)); // store에 user location 저장
+export function* fetchLocation() {
+  yield put(actions.setError(""));
+  try {
+    // get location
+    const usersLocation = yield call(getUsersLocation);
+    yield put(actions.setOrigin(usersLocation)); // store에 user location 저장
 
-      // reverse geocode
-      const address = yield call(callApiGetAddress, usersLocation);
-      yield put(actions.setAddress(address.data));
-    } catch (err) {
-      yield put(actions.setError(err));
-      yield put(actions.setOrigin({}));
-      yield put(actions.setAddress(""));
-    }
+    // reverse geocode
+    const address = yield call(callApiGetAddress, usersLocation);
+    yield put(actions.setAddress(address.data));
+  } catch (err) {
+    yield put(actions.setError(err));
+    yield put(actions.setOrigin({}));
+    yield put(actions.setAddress(""));
   }
 }
 
 // 최초 접속시 user의 location을 얻고 reverse geocode하고 저장한다.
 // 위치기반 사용자 주변의 place list를 요청하고 store에 저장한다.
-export function* fetchAreaBasedList(action) {
-  while (true) {
-    yield take(types.REQUEST_AREA_BASED_LIST);
-    yield put(actions.setError(""));
-    try {
-      // getlocation
-      const usersLocation = yield call(getUsersLocation);
-      yield put(actions.setOrigin(usersLocation)); // store에 user location 저장
+export function* fetchAreaBasedList() {
+  yield put(actions.setError(""));
+  try {
+    // getlocation 현재좌표
+    const usersLocation = yield call(getUsersLocation);
+    yield put(actions.setOrigin(usersLocation)); // store에 user location 저장
 
-      // reverse geocode
-      const address = yield call(callApiGetAddress, usersLocation);
-      yield put(actions.setAddress(address.data));
+    // reverse geocode 좌표로 주소 변환
+    const address = yield call(callApiGetAddress, usersLocation);
+    yield put(actions.setAddress(address.data));
 
-      yield put(placeActions.setPlaceListLoading(true));
-      const placeList = yield call(callApiLocationBasedList, usersLocation);
-      yield put(placeActions.setPlaceList(placeList.data.item));
-    } catch (err) {
-      yield put(actions.setError(err));
-      yield put(actions.setOrigin({}));
-      yield put(actions.setAddress(""));
-    }
+    yield put(placeActions.setPlaceListLoading(true));
+    const placeList = yield call(callApiLocationBasedList, usersLocation);
+    yield put(placeActions.setPlaceList(placeList.data.item));
+  } catch (err) {
+    yield put(actions.setError(err));
+    yield put(actions.setOrigin({}));
+    yield put(actions.setAddress(""));
+  }
+  yield delay(500);
+  yield put(placeActions.setPlaceListLoading(false));
+}
+
+export function* fetchAutoComplete(action) {
+  console.log("----------------------------------fetchAutocomplete");
+
+  try {
+    const address = action.payload;
+    console.log(address);
     yield delay(500);
-    yield put(placeActions.setPlaceListLoading(false));
+    const res = yield call(callAutoComplete, address);
+    console.log(res);
+
+    yield put(actions.predictionsSuccess(res.data));
+  } catch (error) {
+    yield put(actions.predictionsError(error));
   }
 }
 
+export function* fetchSearchAddress(action) {
+  console.log("---------fetchSearchAddress");
+
+  try {
+    const address = action.payload;
+    console.log(address);
+    const locaiton = yield call(callApiGeocode, address);
+
+    //좌표 변경
+    yield put(actions.setOrigin(locaiton.data));
+
+    //로딩 상태
+    yield put(placeActions.setPlaceListLoading(true));
+
+    //place 설정
+    const placeList = yield call(callApiLocationBasedList, locaiton.data);
+    console.log(placeList);
+    yield put(placeActions.setPlaceList(placeList.data.item));
+  } catch (error) {
+    yield put(actions.searchAddressError(error));
+  }
+  yield delay(500);
+  yield put(placeActions.setPlaceListLoading(false));
+}
+
 export default function* watcher() {
-  yield all([fork(fetchAreaBasedList), fork(fetchLocation)]);
+  yield takeLatest(types.REQUEST_AREA_BASED_LIST, fetchAreaBasedList);
+  yield takeLatest(types.REQUEST_LOCATION, fetchLocation);
+  yield takeLatest(types.PREDICTIONS_REQUEST, fetchAutoComplete);
+  yield takeLatest(types.SEARCH_ADDRESS_REQUEST, fetchSearchAddress);
 }

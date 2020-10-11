@@ -55,8 +55,21 @@ export function getUser() {
 }
 
 export function uploadImgAPI(formData) {
-  console.log("----------uploadImgAPI");
-
-  console.log(formData);
   return axios.patch("/auth/img", formData);
+}
+
+export function callAutoComplete(address) {
+  return axios.get("/location/autocomplete", {
+    params: {
+      input: address,
+    },
+  });
+}
+
+export function callApiGeocode(location) {
+  return axios.get("/location/geocode", {
+    params: {
+      location: location,
+    },
+  });
 }

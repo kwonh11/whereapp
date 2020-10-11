@@ -13,9 +13,6 @@ export default function LoginContainer() {
   const { isLoggedIn, info } = useSelector((state) => state.user);
 
   useEffect(() => {
-    console.log(isLoggedIn);
-    console.log(info);
-
     if (isLoggedIn) return;
     dispatch(actions.loginInRequest());
   }, [dispatch, isLoggedIn]);
