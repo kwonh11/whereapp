@@ -38,11 +38,17 @@ router.post("/", isLoggedIn, async (req, res) => {
 
 // 댓글 수정
 router.patch("/", isLoggedIn, async (req, res) => {
+  const { _id, content, commenter } = req.body;
+  console.log(_id, content, commenter);
   try {
-
+    if (req.user._id == commenter) {
+      await Comment.findOneAndUpdate({ _id }, { content: content }).exec();
+    } else {
+      throw new Error();
+    }
     res.status(200).end();
   } catch (err) {
-    res.status(403).end();
+    res.status(403).send(err);
   }
 });
 

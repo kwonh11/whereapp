@@ -12,6 +12,9 @@ import { types, actions } from '../../common/reducer/detail';
     const addComment = React.useCallback((comment) => {
         dispatch({ type: types.REQUEST_ADD_COMMENT, comment });
     }, [dispatch]);
+    const updateComment = React.useCallback((_id, content, commenter, contentId) => {
+      dispatch({ type: types.REQUEST_UPDATE_COMMENT, _id, content, commenter, contentId });
+    }, [dispatch]);
     const deleteComment = React.useCallback((_id, commenter, contentId) => {
       dispatch({ type: types.REQUEST_DELETE_COMMENT, _id, commenter, contentId });
     }, [dispatch]);
@@ -29,8 +32,9 @@ import { types, actions } from '../../common/reducer/detail';
         commenter={commenter}
         />
         <Comments 
-        deleteComment={deleteComment}
         addReply={addReply}
+        updateComment={updateComment}  
+        deleteComment={deleteComment}
         deleteReply={deleteReply}
         comments={comments} 
         contentId={contentId}

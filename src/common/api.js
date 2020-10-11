@@ -63,8 +63,8 @@ export function callApiCommentList(contentId) {
 export function callApiAddComment(comment) {
   return axios.post("/comment", comment );
 };
-export function callApiUpdateComment(comment) {
-  return axios.patch("/comment", comment);
+export function callApiUpdateComment(_id, content, commenter) {
+  return axios.patch("/comment", {_id, content, commenter});
 };
 export function callApiDeleteComment(_id, commenter) {
   return axios.delete(`/comment/delete/${_id}/${commenter}`);

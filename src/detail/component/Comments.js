@@ -16,22 +16,12 @@ const CommentContainer = styled.div`
 `;
 const Container = styled.div`
     width: 100%;
-    ${props => 
-    props.commentOn? css`
-    box-shadow:
-    0 8px 9px -49px rgba(0, 0, 0, 0.081),
-    0 14.7px 29.6px -49px rgba(0, 0, 0, 0.1),
-    0 24.5px 60.7px -49px rgba(0, 0, 0, 0.108),
-    0 42.8px 81.6px -49px rgba(0, 0, 0, 0.111),
-    0 107px 80px -49px rgba(0, 0, 0, 0.11)
-    ;
-    `:""}
     padding: 20px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
     justify-content: center;
-    transition: box-shadow 0.3s ease-out;
+    transition: all 0.2s ease-out;
 `;
 const ProfileWrap = styled.div`
     display: flex;
@@ -161,10 +151,10 @@ function Reply(props) {
 }
 
 export default function Comments(props) {
-    const { comments, deleteComment, contentId, addReply, commenter, deleteReply } = props;
+    const { comments, deleteComment, updateComment, contentId, addReply, commenter, deleteReply } = props;
     const [ sort, setSort ] = React.useState("recent");
-    const [commentOn, setCommentOn] = React.useState(null);
     const [replyOn, setReplyOn] = React.useState(null);
+    const [modifyOn, setModifyOn] = React.useState(null);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [modifyingInput, setModifyingInput] = React.useState("");
     const open = Boolean(anchorEl);
@@ -179,29 +169,32 @@ export default function Comments(props) {
     const handleCloseMenu = () => {
         setAnchorEl(null);
     };
-    const handleClickComment = (e) => {
-        setCommentOn(e.currentTarget.dataset.id);
+    const handleClickReply = (e) => {
+        setModifyOn(null);
+        setReplyOn(e.currentTarget.dataset.id);
     };
 
     const handleClickDelete = (e) => {
         const _id = anchorEl.dataset.id;
         deleteComment(_id, commenter, contentId);
+        handleCloseMenu();
     };
     const handleClickModifyButton = (e) => {
-        setReplyOn(anchorEl.dataset.id);
+        setReplyOn(null);
+        setModifyOn(anchorEl.dataset.id);
         setModifyingInput(anchorEl.dataset.content);
+        handleCloseMenu();
     };
     const handleSubmitModify = (e) => {
-        const _id = e.currentTarget.dataset.id;
-        const content = modifyingInput;
-        console.log(_id);
-        console.log(content);
+        updateComment(e.currentTarget.dataset.id, modifyingInput, e.currentTarget.dataset.commenter, contentId);
+        setReplyOn(null);
+        setModifyOn(null);
     };
     const handleChangeModifyingInput = (e) => {
         setModifyingInput(e.target.value);
     };
     return (
-    <CommentContainer>
+        <CommentContainer>
         <FilterWrap>
             <ByRecentButton sort={sort} onClick={()=>handleClickSort("recent")}> 최신순 </ByRecentButton>
              | 
@@ -209,10 +202,10 @@ export default function Comments(props) {
         </FilterWrap>
         {
         comments.map((comment,i) => {
-            const { commenter, content, createAt, like, likeCount, reply, nick, _id } = comment;
+            const { commenter, content, createAt, like, reply, nick, _id } = comment;
             const contentWithLine = content? content.split(/\r\n|\r|\n/) : [];
             return (
-            <Container key={i} commentOn={commentOn === _id ? "on" : ""}>
+            <Container key={i} replyOn={replyOn === _id ? "on" : ""}>
                 <CommenterWrap>
                     <ProfileWrap>
                         <Avatar />
@@ -240,7 +233,7 @@ export default function Comments(props) {
                     </Menu>
                 </CommenterWrap>
                 {
-                    replyOn === _id ?
+                    modifyOn === _id ?
                     (
                     <ContentWrap>
                         <TextField
@@ -248,6 +241,7 @@ export default function Comments(props) {
                         label="수정하기"
                         fullWidth
                         multiline
+                        rowsMax={5}
                         rows={contentWithLine.length}
                         variant="outlined"
                         onChange={handleChangeModifyingInput}
@@ -256,7 +250,8 @@ export default function Comments(props) {
                         <Button 
                         variant="contained" 
                         color="primary"
-                        data-id={_id} 
+                        data-id={_id}
+                        data-commenter={commenter}                
                         onClick={handleSubmitModify} 
                         style={{margin: "10px 0 0 auto",
                         display: "flex"}}>
@@ -269,10 +264,10 @@ export default function Comments(props) {
                     <ContentWrap>
                         {
                             contentWithLine?
-                            contentWithLine.map(line => (
-                                <>
+                            contentWithLine.map((line,i) => (
+                                <React.Fragment key={i}>
                                 {line} <br/>
-                                </>
+                                </React.Fragment>
                             )):
                             content
                         }
@@ -288,12 +283,12 @@ export default function Comments(props) {
                             {like} &nbsp;
                             <ThumbUpIcon color={like? "action":"primary"} />
                         </Button>
-                        <Button variant="outlined" color="default" data-id={_id} onClick={handleClickComment}>
+                        <Button variant="outlined" color="default" data-id={_id} onClick={handleClickReply}>
                             댓글달기
                         </Button>
                     </ButtonWrap>
                 </InfoWrap>
-                {commentOn === _id && <CommentsInput 
+                {replyOn === _id && <CommentsInput 
                         isReply={true} 
                         commentId={_id} 
                         addReply={addReply}

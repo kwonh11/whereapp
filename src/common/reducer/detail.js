@@ -17,8 +17,11 @@ export const types = {
   REQUEST_ADD_COMMENT: "detail/REQUEST_ADD_COMMENT",
   ADD_COMMENT: "detail/ADD_COMMENT", // 댓글 작성
 
-  REQUEST_DELETE_COMMENT: "detail/REQUEST_DELETE_COMMENT",
-  DELETE_COMMENT: "detail/DELETE_COMMENT", // 선택한 댓글 삭제
+  REQUEST_DELETE_COMMENT: "detail/REQUEST_DELETE_COMMENT", // 선택한 댓글 삭제
+  DELETE_COMMENT: "detail/DELETE_COMMENT", 
+
+  REQUEST_UPDATE_COMMENT: "detail/REQUEST_UPDATE_COMMENT",  // 댓글 수정
+  UPDATE_COMMENT: "detail/UPDATE_COMMENT",
 
   ADD_LIKE: "detail/ADD_LIKE", // 댓글 좋아요
   CANCLE_LIKE: "detail/CANCLE_LIKE", // 좋아요 취소
@@ -28,7 +31,6 @@ export const types = {
 
   REQUEST_DELETE_REPLY: "detail/REQUEST_DELETE_REPLY",
   DELETE_REPLY: "detail/REMOVE_REPLY", // 대댓글 삭제
-
   // 에러
   SET_ERROR: "detail/SET_ERROR",
 };
@@ -43,15 +45,22 @@ export const actions = {
   setIds: (ids) => ({ type: types.SET_IDS, ids }),
   setPlace: (place) => ({ type: types.SET_PLACE, place }),
   setAdditional: (additional) => ({ type: types.SET_ADDITIONAL, additional }),
-  setLoadingComments: (isLoadingComments) => ({ type: types.SET_LOADING_COMMENTS, isLoadingComments}),
-  requestComments: (contentId) => ({ type: types.REQUEST_COMMENTS, contentId }),
-  setComments: (comments) => ({ type: types.SET_COMMENTS, comments }),
-  requestAddComment: (comment) => ({type: types.REQUEST_ADD_COMMENT, comment}),
-  addComment: (comment) => ({ type: types.ADD_COMMENT, comment }),
-  requestDeleteComment: (_id, commenter, contentId) => ({type: types.REQUEST_DELETE_COMMENT, _id, commenter, contentId}),
-  // deleteComment: (_id, commenter) => ({type: types.DELETE_COMMENT, _id, commenter}),
+  setLoadingComments: (isLoadingComments) => ({ type: types.SET_LOADING_COMMENTS, isLoadingComments }),
+  
   addLike: (contentId, id) => ({ type: types.ADD_LIKE, contentId, id }),
   cancleLike: (contentId, id) => ({ type: types.CANCLE_LIKE, contentId, id }),
+
+  requestComments: (contentId) => ({ type: types.REQUEST_COMMENTS, contentId }),
+  setComments: (comments) => ({ type: types.SET_COMMENTS, comments }),
+
+  requestAddComment: (comment) => ({type: types.REQUEST_ADD_COMMENT, comment}),
+  addComment: (comment) => ({ type: types.ADD_COMMENT, comment }),
+  
+  requestUpdateComment: (_id, content, commenter, contentId) => ({type: types.REQUEST_UPDATE_COMMENT, _id, content, commenter, contentId}),
+
+  requestDeleteComment: (_id, commenter, contentId) => ({type: types.REQUEST_DELETE_COMMENT, _id, commenter, contentId}),
+  // deleteComment: (_id, commenter) => ({type: types.DELETE_COMMENT, _id, commenter}),
+
 
   requestAddReply: (contentId, commentId, reply) => ({type: types.REQUEST_ADD_REPLY, contentId, commentId, reply}),
   // addReply: (commentId, reply) => ({type: types.ADD_REPLY, commentId, reply}),

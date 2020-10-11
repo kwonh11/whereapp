@@ -66,7 +66,7 @@ export function* addComments(action) {
     yield put(actions.setLoadingComments(true));
     yield put(actions.setError(""));
     try {
-      yield call(callApiAddComment, comment);
+      yield call(callApiUpdateComment, comment);
       // 성공시
       // 댓글목록 다시 불러오기
       yield put(actions.setLoadingComments(true));
@@ -74,6 +74,25 @@ export function* addComments(action) {
       yield put(actions.setComments(comments.data));
     } catch (err) {
       // 실패시
+      yield put(actions.setError(err));
+    }
+    yield put(actions.setLoadingComments(false));
+  }
+};
+
+export function* updateComment(action) {
+  while (true) {
+    const { _id, content, commenter, contentId } = yield take(types.REQUEST_UPDATE_COMMENT);
+    console.log("saga commenter " + commenter);
+    yield put(actions.setLoadingComments(true));
+    yield put(actions.setError(""));
+    try {
+      yield call(callApiUpdateComment, _id, content, commenter);
+      // 댓글목록 다시 불러오기
+      yield put(actions.setLoadingComments(true));
+      const comments = yield call(callApiCommentList, contentId);
+      yield put(actions.setComments(comments.data));
+    } catch (err) {
       yield put(actions.setError(err));
     }
     yield put(actions.setLoadingComments(false));
@@ -96,7 +115,7 @@ export function* deleteComment(action) {
     }
     yield put(actions.setLoadingComments(false));
   }
-}
+};
 
 export function* addReply(action) {
   while(true) {
@@ -134,6 +153,7 @@ export default function* watcher() {
     fork(fetchAdditional),
     fork(fetchComments),
     fork(addComments),
+    fork(updateComment),
     fork(deleteComment),
     fork(addReply),
     fork(deleteReply),
