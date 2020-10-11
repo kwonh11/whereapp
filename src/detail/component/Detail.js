@@ -176,7 +176,7 @@ export default function Detail( props ) {
             <DateWrap> {date} </DateWrap>
             {/* {additionalInfo.isInProgress && <Badge color="blue"> 진행중 </Badge> } */}
             {isPopular && <Badge color="red"> 인기 </Badge> }
-            {isClose && <Badge color="blue"> 가까움 </Badge> }
+            {isClose && !isOnline && <Badge color="blue"> 가까움 </Badge> }
             {isOnline && <Badge color="green"> 온라인 </Badge> }
           </BadgeWrap>
           <ShortDivider />
