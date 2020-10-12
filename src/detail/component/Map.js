@@ -64,7 +64,6 @@ export default function Map(props) {
     
     if( origin.lat && origin.lng && destination.lat && destination.lng ) {
         return (
-            // key
             <LoadScript googleMapsApiKey={"AIzaSyALHpeFI7Zg9iOcp7DjETfJNZkcPRByN58"}>
                 <GoogleMap
                     mapContainerStyle={{

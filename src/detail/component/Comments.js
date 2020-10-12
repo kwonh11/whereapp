@@ -192,7 +192,7 @@ export default function Comments(props) {
         handleCloseMenu();
     };
     const handleSubmitModify = (e) => {
-        if (!commenter || !sendable) {
+        if (!loginUser || !sendable) {
             setSnack(true);
             return;
         }

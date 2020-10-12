@@ -66,7 +66,7 @@ export function* addComments(action) {
     yield put(actions.setLoadingComments(true));
     yield put(actions.setError(""));
     try {
-      yield call(callApiUpdateComment, comment);
+      yield call(callApiAddComment, comment);
       // 성공시
       // 댓글목록 다시 불러오기
       yield put(actions.setLoadingComments(true));
