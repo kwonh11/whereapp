@@ -26,8 +26,13 @@ const ReplySchema = new Schema({
 });
 
 const CommentSchema = new Schema({
+  // contentId: {
+  //   type: String,
+  //   require: true,
+  // },
   contentId: {
-    type: String,
+    type: ObjectId,
+    ref: "Place",
     require: true,
   },
   nick: {

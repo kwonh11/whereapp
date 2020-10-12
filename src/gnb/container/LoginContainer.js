@@ -13,11 +13,11 @@ export default function LoginContainer() {
   const { isLoggedIn, info } = useSelector((state) => state.user);
 
   useEffect(() => {
-    console.log(isLoggedIn);
-    console.log(info);
-
-    if (isLoggedIn) return;
+    if (isLoggedIn) return;     
+      console.log(isLoggedIn)
     dispatch(actions.loginInRequest());
+      
+  
   }, [dispatch, isLoggedIn]);
 
   const handleClickLoginModal = () => {
@@ -27,6 +27,10 @@ export default function LoginContainer() {
   const handleClickInfoModal = () => {
     setInfoModal(!infoModal);
   };
+
+  const handleGetComments = () => {
+    dispatch(actions.getCommentsRequest())
+  }
 
   const handleAddFile = (e) => {
     const formData = new FormData();
@@ -43,6 +47,7 @@ export default function LoginContainer() {
       infoModal={infoModal}
       user={info}
       isLoggedIn={isLoggedIn}
+      handleGetComments={handleGetComments}
     />
   );
 }

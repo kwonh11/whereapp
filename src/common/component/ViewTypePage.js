@@ -139,7 +139,7 @@ function CardView({ data }) {
         ...place,
         isClose: place.dist <= 1000,
         isPopular: place.readcount >= 3000,
-        isOnline: place.addr1.includes("온라인"),
+        isOnline: place.addr1 && place.addr1.includes("온라인"),
       }}
       simple={true}
     />
