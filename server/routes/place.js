@@ -1,8 +1,11 @@
-const qs = require('qs');
 const axios = require('axios');
-require("dotenv").config();
-// news router
 const express = require("express");
+const Place = require("../schemas/place");
+const { isLoggedIn } = require("./middlewares");
+
+
+
+
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -24,5 +27,31 @@ router.get("/", async (req, res) => {
             console.log(err);
         });
 });
+
+router.post("/", isLoggedIn, async (req, res) => {
+    console.log('--------------------post')
+    const { contentid } = req.body
+
+    try {
+        const exPlace = await Place.findOne({
+            contentid,
+        });
+
+        if (exPlace) {
+            console.log('플레이스 잇')
+            console.log(exPlace._id)
+
+            res.json(exPlace._id)
+        } else {
+            console.log('플레이스 없')
+
+            const newPlace=await Place.create(req.body)
+            console.log(newPlace._id)
+            res.json(newPlace._id)
+        }
+    } catch (err) {
+      res.status(403).send(err);
+    }
+  });
 
 module.exports = router;

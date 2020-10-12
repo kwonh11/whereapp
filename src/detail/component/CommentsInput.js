@@ -33,23 +33,23 @@ const InputDatas = styled.div`
 `;
 const Characters = styled.div`
     font-size: 0.7rem;
-    color: ${props => props.color === "gray"? "#848484":"red"};
+    color: ${props => props.color === "gray" ? "#848484" : "red"};
     display: flex;
     align-self: flex-end;
 `;
 
 
 export default function CommentsInput(props) {
-    const { addComment, contentId, commenter, isReply, commentId, addReply} = props;
+    const { addComment, contentId, commenter, isReply, commentId, addReply } = props;
     const [inputValue, setInputValue] = React.useState("");
     const [sendable, setSendable] = React.useState(true);
     const [snack, setSnack] = React.useState(false);
 
-    React.useEffect(()=>{
+    React.useEffect(() => {
         if (inputValue.length > 300) setSendable(false);
         if (inputValue.length <= 300) setSendable(true);
     }, [inputValue]);
-    
+
     const handleSubmit = () => {
         if (!commenter || !inputValue || !sendable) {
             setSnack(true);
@@ -66,8 +66,8 @@ export default function CommentsInput(props) {
             setInputValue("");
         }
         if (!isReply) {
-            const comment = { contentId, commenter, content: inputValue };
-            addComment({ ...comment , reply:[], createAt: new Date(), like: 0});
+            const comment = { commenter, contentId, content: inputValue };
+            addComment({ ...comment, reply: [], createAt: new Date(), like: 0 });
             setInputValue("");
         }
     };
@@ -79,29 +79,29 @@ export default function CommentsInput(props) {
     };
     return (
         <CommentsWrap>
-            <Snackbar open={snack} onClose={handleCloseSnackbar} anchorOrigin={{vertical:'bottom', horizontal:'center'}}>
-                <Alert onClose={handleCloseSnackbar} severity="error" variant="filled" style={{fontWeight:"bold"}}>
-                    {!commenter? "로그인 후 이용해주세요." : "300글자 이하로 작성해주세요."}
+            <Snackbar open={snack} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+                <Alert onClose={handleCloseSnackbar} severity="error" variant="filled" style={{ fontWeight: "bold" }}>
+                    {!commenter ? "로그인 후 이용해주세요." : "300글자 이하로 작성해주세요."}
                 </Alert>
             </Snackbar>
             <StyledTextField
-            id="outlined-textarea"
-            onChange={handleChange}
-            rowsMax={5}
-            label={`댓글 달기`}
-            placeholder="바르고 고운 말을 사용해주세요."
-            multiline
-            variant="outlined"
-            value={inputValue}
+                id="outlined-textarea"
+                onChange={handleChange}
+                rowsMax={5}
+                label={`댓글 달기`}
+                placeholder="바르고 고운 말을 사용해주세요."
+                multiline
+                variant="outlined"
+                value={inputValue}
             />
             <InputDatas>
-                <Characters color={sendable? "gray":"red"}> 
+                <Characters color={sendable ? "gray" : "red"}>
                     {inputValue.length} / 300
                 </Characters>
-                <StyledButton 
-                variant="contained" 
-                color="primary"
-                onClick={handleSubmit}
+                <StyledButton
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSubmit}
                 >
                     입 력
                 </StyledButton>

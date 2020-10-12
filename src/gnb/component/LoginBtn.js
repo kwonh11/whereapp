@@ -84,6 +84,7 @@ export default function Login({
   infoModal,
   user,
   isLoggedIn,
+  handleGetComments
 }) {
   return (
     <>
@@ -132,7 +133,7 @@ export default function Login({
           </UserContainer>
           <Divider />
           <Menu color="primary">
-            <Link to="/user/scrap">스크랩</Link>
+            <Link to="/user/scrap" >스크랩</Link>
           </Menu>
           <Divider />
           <Menu color="primary">

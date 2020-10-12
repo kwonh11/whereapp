@@ -3,13 +3,29 @@ const passport = require("passport");
 const fs = require("fs");
 const multer = require("multer");
 const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
-const User = require("../schemas/user");
 const path = require("path");
+const User = require("../schemas/user");
+const Comment = require("../schemas/comment");
 
 const router = express.Router();
 
-router.get("/checkUser", (req, res, next) => {
-  res.json(req.user || null);
+router.get("/checkUser", async (req, res, next) => {
+  console.log('--------------------checkUser');
+
+  if (req.user) {
+    console.log('유저있음')
+    const comments = await Comment.find({ commenter: req.user.id }).populate('contentId')
+
+    console.log(comments)
+    //유저의 댓글을 가져온다
+    //그 댓글의 contentId값으로 place스키마에서 데이터를 가져온다.
+    
+    res.json({
+     info:req.user,
+    } );
+  } else {
+    res.json( null);
+  }
 });
 
 router.get("/google", passport.authenticate("google", { scope: ["profile"] }));
@@ -66,5 +82,11 @@ router.patch("/img", isLoggedIn, upload.single("img"), async (req, res) => {
 
   res.json({ url: `/img/${req.file.filename}` });
 });
+
+router.get('/comments', isLoggedIn, (req, res) => {
+  console.log('--------------------');
+  const test = Comment.find({ commenter: req.user.id })
+  console.log(test)
+})
 
 module.exports = router;

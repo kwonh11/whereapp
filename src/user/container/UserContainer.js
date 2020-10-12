@@ -6,11 +6,15 @@ import ViewTypeBtn from "../../common/component/ViewTypeBtn";
 import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
 import User from "../component/User";
+import { useDispatch, useSelector } from 'react-redux'
+import { actions } from '../../common/reducer/user'
 
 export default function UserContainer({ tab }) {
-  const classes = useStyles();
+  const dispatch = useDispatch();
+
   const [value, setValue] = useState(tab === "scrap" ? 0 : 1);
   const [order, setOrder] = useState(0);
+
 
 
 
@@ -18,5 +22,5 @@ export default function UserContainer({ tab }) {
     setValue(newValue);
   };
 
-  return <User tab={tab} />;
+  return <User tab={tab}  />;
 }

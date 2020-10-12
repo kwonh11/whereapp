@@ -28,7 +28,7 @@ const ActionsWrap = styled.div`
 `;
 
 export default function AdditionalContainer(props) {
-  
+
   const { origin } = useSelector(state => state.location);
   const { contentTypeId, contentId } = useSelector(state => state.detail.ids);
   const { additional, isLoading } = useSelector(state => state.detail);
@@ -37,7 +37,7 @@ export default function AdditionalContainer(props) {
   const dispatch = useDispatch();
   const requestDetails = React.useCallback(
     (contentTypeId, contentId) => dispatch({ type: types.REQUEST_DETAILS, contentTypeId, contentId })
-  , [dispatch]);
+    , [dispatch]);
 
   React.useEffect(() => {
     requestDetails(contentTypeId, contentId);
@@ -49,25 +49,24 @@ export default function AdditionalContainer(props) {
         <> Loading ... </>
         :
         <>
-      <Overview description={additional.overview} />
-      <AdditionalComponent additional={additional.additional} />
-      <MapContainer>
-        <Map origin={origin} destination={additional.destination} isOnline={isOnline}/>
-      </MapContainer>
-      <ActionsWrap>
-        <IconButton
-          aria-label="add to favorites"
-          onClick={() => console.log("scrap")}
-        >
-          <FavoriteIcon style={{ width: "1.5rem", height: "1.5rem" }} />
-        </IconButton>
-        <IconButton aria-label="share" onClick={() => console.log("share")}>
-          <ShareIcon />
-        </IconButton>
+          <Overview description={additional.overview} />
+          <AdditionalComponent additional={additional.additional} />
+          <MapContainer>
+            <Map origin={origin} destination={additional.destination} isOnline={isOnline} />
+          </MapContainer>
+          <ActionsWrap>
+            <IconButton
+              aria-label="add to favorites"
+              onClick={() => console.log("scrap")}
+            >
+              <FavoriteIcon style={{ width: "1.5rem", height: "1.5rem" }} />
+            </IconButton>
+            <IconButton aria-label="share" onClick={() => console.log("share")}>
+              <ShareIcon />
+            </IconButton>
           </ActionsWrap>
-          </>
+        </>
       }
     </React.Fragment>
   );
 }
-

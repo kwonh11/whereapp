@@ -45,9 +45,7 @@ export function callApiLocationBasedList(location) {
   });
 };
 
-export function getUser() {
-  return axios.get("/auth/checkUser");
-};
+
 
 export function uploadImgAPI(formData) {
   return axios.patch("/auth/img", formData);
@@ -60,6 +58,12 @@ export function callApiCommentList(contentId) {
 export function callApiAddComment(comment) {
   return axios.post("/comment", comment );
 };
+
+export function addPlace(place) {
+  console.log('-------------------addPlace')
+  return axios.post('/place', place)
+}
+
 export function callApiUpdateComment(_id, content, commenter) {
   return axios.patch("/comment", {_id, content, commenter});
 };
@@ -91,4 +95,12 @@ export function callApiGeocode(location) {
       location: location,
     },
   });
+}
+
+export function getUser() {
+  return axios.get("/auth/checkUser");
+};
+
+export function getComments() {
+  return axios.get('/auth/comments')
 }
