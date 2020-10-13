@@ -15,11 +15,11 @@ export const types = {
 
   GET_COMMENTS_REQUEST: "user/GET_COMMENTS_REQUEST",
   GET_COMMENTS_SUCCESS: "user/GET_COMMENTS_SUCCESS",
-  GET_COMMENTS_ERROR: "user/GET_COMMENTS_ERROR"
+  GET_COMMENTS_ERROR: "user/GET_COMMENTS_ERROR",
 };
 
 export const actions = {
-  loginInRequest: () => ({ type: types.LOGIN_IN_REQUEST}),
+  loginInRequest: () => ({ type: types.LOGIN_IN_REQUEST }),
   loginInSuccess: (payload) => ({ type: types.LOGIN_IN_SUCCESS, payload }),
   loginInError: (error) => ({ type: types.LOGIN_IN_ERROR, error }),
 
@@ -27,10 +27,15 @@ export const actions = {
   uploadImageSuccess: (image) => ({ type: types.UPLOAD_IMAGE_SUCCESS, image }),
   uploadImageError: (error) => ({ type: types.UPLOAD_IMAGE_ERROR, error }),
 
-  getCommentsRequest: (payload) => ({ type: types.GET_COMMENTS_REQUEST, payload }),
-  getCommentsSuccess: (payload) => ({ type: types.GET_COMMENTS_SUCCESS, payload }),
+  getCommentsRequest: (payload) => ({
+    type: types.GET_COMMENTS_REQUEST,
+    payload,
+  }),
+  getCommentsSuccess: (payload) => ({
+    type: types.GET_COMMENTS_SUCCESS,
+    payload,
+  }),
   getCommentsError: (payload) => ({ type: types.GET_COMMENTS_ERROR, payload }),
-
 };
 
 const INITIAL_STATE = {
@@ -38,14 +43,15 @@ const INITIAL_STATE = {
   info: {
     _id: "",
   },
-  scrap:[],
-  comments:[]
+  hearts: [],
+  comments: [],
 };
 
 const reducer = createReducer(INITIAL_STATE, {
   [types.LOGIN_IN_SUCCESS]: (state, action) => {
     state.isLoggedIn = true;
     state.info = action.payload.info;
+    state.comments = action.payload.comments;
   },
 
   [types.UPLOAD_IMAGE_SUCCESS]: (state, action) => {

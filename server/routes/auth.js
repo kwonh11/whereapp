@@ -10,21 +10,18 @@ const Comment = require("../schemas/comment");
 const router = express.Router();
 
 router.get("/checkUser", async (req, res, next) => {
-  console.log('--------------------checkUser');
-
   if (req.user) {
-    console.log('유저있음')
-    const comments = await Comment.find({ commenter: req.user.id }).populate('contentId')
+    const comments = await Comment.find(
+      { commenter: req.user.id },
+      "place"
+    ).populate("place");
 
-    console.log(comments)
-    //유저의 댓글을 가져온다
-    //그 댓글의 contentId값으로 place스키마에서 데이터를 가져온다.
-    
     res.json({
-     info:req.user,
-    } );
+      info: req.user,
+      comments,
+    });
   } else {
-    res.json( null);
+    res.json(null);
   }
 });
 
@@ -83,10 +80,10 @@ router.patch("/img", isLoggedIn, upload.single("img"), async (req, res) => {
   res.json({ url: `/img/${req.file.filename}` });
 });
 
-router.get('/comments', isLoggedIn, (req, res) => {
-  console.log('--------------------');
-  const test = Comment.find({ commenter: req.user.id })
-  console.log(test)
-})
+router.get("/comments", isLoggedIn, (req, res) => {
+  console.log("--------------------");
+  const test = Comment.find({ commenter: req.user.id });
+  console.log(test);
+});
 
 module.exports = router;
