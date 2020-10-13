@@ -64,15 +64,15 @@ export function* addComments(action) {
   yield put(actions.setLoadingComments(true));
   yield put(actions.setError(""));
   try {
-    const contentId = yield call(addPlace, place);
+    const objId = yield call(addPlace, place);
     // comment.contentId = contentId.data
-    comment.place = contentId.data;
+    comment.place = objId.data;
     yield call(callApiAddComment, comment);
-
+    console.log("objId.data = " + objId.data);
     // 성공시
     // 댓글목록 다시 불러오기
     yield put(actions.setLoadingComments(true));
-    const comments = yield call(callApiCommentList, contentId);
+    const comments = yield call(callApiCommentList, objId.data);
     yield put(actions.setComments(comments.data));
     } catch (err) {
       // 실패시
@@ -85,6 +85,7 @@ export function* addComments(action) {
 export function* updateComment(action) {
   while (true) {
     const { _id, content, commenter, contentId } = yield take(types.REQUEST_UPDATE_COMMENT);
+
     yield put(actions.setLoadingComments(true));
     yield put(actions.setError(""));
     try {

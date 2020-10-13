@@ -86,14 +86,6 @@ export function callApiAddLike(userId, commentId, contentId) {
   
 }
 
-export function callAutoComplete(address) {
-  return axios.get("/location/autocomplete", {
-    params: {
-      input: address,
-    },
-  });
-}
-
 export function callApiGeocode(location) {
   return axios.get("/location/geocode", {
     params: {
@@ -108,4 +100,12 @@ export function getUser() {
 
 export function getComments() {
   return axios.get('/auth/comments')
+}
+
+export function callAutoComplete(address) {
+  return axios.get("/location/autocomplete", {
+    params: {
+      input: address,
+    },
+  });
 }

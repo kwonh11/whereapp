@@ -21,7 +21,7 @@ router.get("/", async (req, res) => {
           ...commonResult.data.response.body.items.item,
           ...detailResult.data.response.body.items.item,
         };
-        res.json(additional).end();
+        res.json(additional);
       })
     )
     .catch((err) => {
@@ -31,7 +31,6 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", isLoggedIn, async (req, res) => {
-  console.log("--------------------post");
   const { contentid } = req.body;
 
   try {
@@ -40,15 +39,9 @@ router.post("/", isLoggedIn, async (req, res) => {
     });
 
     if (exPlace) {
-      console.log("플레이스 잇");
-      console.log(exPlace._id);
-
       res.json(exPlace._id);
     } else {
-      console.log("플레이스 없");
-
       const newPlace = await Place.create(req.body);
-      console.log(newPlace._id);
       res.json(newPlace._id);
     }
   } catch (err) {
