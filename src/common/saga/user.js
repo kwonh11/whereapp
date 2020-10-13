@@ -3,7 +3,6 @@ import { actions, types } from "../reducer/user";
 import { put, call, takeLatest } from "redux-saga/effects";
 
 function* logIn() {
-  console.log('-----------------------login')
   try {
     const res = yield call(getUser);
     if (res.data) {

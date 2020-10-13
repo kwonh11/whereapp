@@ -105,12 +105,11 @@ function getDateString(createAt) {
 }
 
 function Reply(props) {
-    const {commenter : loginUser , reply, commentId, deleteReply, contentId} = props;
+    const {commenter : loginUser , reply, commentId, deleteReply} = props;
 
     const handleDeleteReply = (e) => {
-        const {replyId, commenter} = e.currentTarget.dataset;
-        console.log(replyId, commenter, commentId);
-        deleteReply(contentId, commentId, replyId, commenter);
+        const {replyId} = e.currentTarget.dataset;
+        deleteReply(commentId, replyId);
     }
     return (
     <React.Fragment>
@@ -182,7 +181,7 @@ export default function Comments(props) {
 
     const handleClickDelete = (e) => {
         const _id = anchorEl.dataset.id;
-        deleteComment(_id, loginUser, contentId);
+        deleteComment(_id);
         handleCloseMenu();
     };
     const handleClickModifyButton = (e) => {
@@ -196,7 +195,7 @@ export default function Comments(props) {
             setSnack(true);
             return;
         }
-        updateComment(e.currentTarget.dataset.id, modifyingInput, e.currentTarget.dataset.commenter, contentId);
+        updateComment(e.currentTarget.dataset.id, modifyingInput);
         setReplyOn(null);
         setModifyOn(null);
     };
@@ -268,7 +267,6 @@ export default function Comments(props) {
                         variant="contained" 
                         color="primary"
                         data-id={_id}
-                        data-commenter={commenter}                
                         onClick={handleSubmitModify} 
                         style={{margin: "10px 0 0 auto",
                         display: "flex"}}>
@@ -315,7 +313,7 @@ export default function Comments(props) {
                         sendable={sendable}
                         setSendable={setSendable}
                         />}
-                <Reply reply={reply} contentId={contentId} commenter={commenter} commentId={_id} deleteReply={deleteReply}/>
+                <Reply reply={reply} commenter={commenter} commentId={_id} deleteReply={deleteReply}/>
             </Container>
         )})
         }

@@ -27,10 +27,10 @@ export default function PlaceContainer(props) {
 
   const dispatch = useDispatch();
   const handleSelectTab = React.useCallback((contentTypeId) => {
-    dispatch({ type: types.SET_PLACELIST_CATEGORY_CODE, categoryCode: contentTypeId })
+    dispatch(actions.setPlaceListCategoryCode(contentTypeId));
   }, [dispatch]);
   const setPlaceListType = React.useCallback((listType) => {
-    dispatch({ type: types.SET_PLACELIST_TYPE, listType });
+    dispatch(actions.setPlaceListType(listType));
   }, [dispatch]);
   
   return (

@@ -81,9 +81,7 @@ router.patch("/img", isLoggedIn, upload.single("img"), async (req, res) => {
 });
 
 router.get("/comments", isLoggedIn, (req, res) => {
-  console.log("--------------------");
   const test = Comment.find({ commenter: req.user.id });
-  console.log(test);
 });
 
 module.exports = router;

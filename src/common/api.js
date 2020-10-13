@@ -66,8 +66,8 @@ export function addPlace(place) {
   return axios.post('/place', place)
 }
 
-export function callApiUpdateComment(_id, content, commenter) {
-  return axios.patch("/comment", {_id, content, commenter});
+export function callApiUpdateComment(commentId, content, commenter) {
+  return axios.patch("/comment", {commentId, content, commenter});
 };
 export function callApiDeleteComment(_id, commenter) {
   return axios.delete(`/comment/delete/${_id}/${commenter}`);

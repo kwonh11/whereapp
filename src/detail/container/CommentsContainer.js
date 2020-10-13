@@ -17,17 +17,17 @@ export default function CommentsContainer(props) {
     const addComment = React.useCallback((comment) => {
         dispatch(actions.requestAddComment({comment, place}));
     }, [dispatch]);
-    const updateComment = React.useCallback((_id, content, commenter, contentId) => {
-      dispatch({ type: types.REQUEST_UPDATE_COMMENT, _id, content, commenter, contentId });
+    const updateComment = React.useCallback((_id, content) => {
+      dispatch(actions.requestUpdateComment({ commentId: _id, content, commenter: user, contentId }));
     }, [dispatch]);
-    const deleteComment = React.useCallback((_id, commenter, contentId) => {
-      dispatch({ type: types.REQUEST_DELETE_COMMENT, _id, commenter, contentId });
+    const deleteComment = React.useCallback((_id) => {
+      dispatch(actions.requestDeleteComment({ commentId: _id, commenter:user, contentId}));
     }, [dispatch]);
-    const addReply = React.useCallback((contentId, commentId, reply) => {
-      dispatch({ type: types.REQUEST_ADD_REPLY, contentId, commentId, reply });
+    const addReply = React.useCallback((commentId, reply) => {
+      dispatch(actions.requestAddReply({ contentId, commentId, reply }));
     }, [dispatch]);
-    const deleteReply = React.useCallback((contentId, commentId, replyId, commenter) => {
-      dispatch({ type: types.REQUEST_DELETE_REPLY, contentId, commentId, _id: replyId, commenter });
+    const deleteReply = React.useCallback(( commentId, replyId ) => {
+      dispatch(actions.requestDeleteReply({ contentId, commentId, replyId, commenter:user }));
     }, [dispatch]);
   
     return (
