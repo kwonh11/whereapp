@@ -1,46 +1,26 @@
-import { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Paper, FormControl, Select } from "@material-ui/core";
+import {
+  Paper,
+  FormControl,
+  Select,
+  AppBar,
+  Tabs,
+  Tab,
+} from "@material-ui/core";
 import ViewTypePage from "../../common/component/ViewTypePage";
 import ViewTypeBtn from "../../common/component/ViewTypeBtn";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 const useStyles = makeStyles({
-  root: {
-    backgroundColor: "#3f63bf",
-    borderColor: "#3f63bf",
-  },
   formControl: {
     margin: 4,
     minWidth: 120,
   },
 });
 
-const MenuContainer = styled.div`
-  display: flex;
-  height: 60px;
-`;
-
-const MenuBtn = styled.button`
-  width: 50%;
-  border: 0;
-
-  & a {
-    color: black;
-    font-size: 20px;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  ${(props) =>
-    props.value &&
-    css`
-      border-bottom: 3px solid #3f63bf;
-    `}
+const ContentsWrap = styled.div`
+  padding: 10px;
 `;
 
 const FilterWrap = styled.div`
@@ -49,11 +29,11 @@ const FilterWrap = styled.div`
   justify-content: space-between;
 `;
 
-export default function User({ tab, order, data, handleChange }) {
+export default function User({ tabValue, places, handleChangeTab }) {
   const classes = useStyles();
+
   const categoryList = ["scrap", "comment"];
   const orderList = ["push", "latest", "comments"];
-  
 
   const makeSelect = (selectList, value) => {
     return (
@@ -69,31 +49,30 @@ export default function User({ tab, order, data, handleChange }) {
     );
   };
 
-
   return (
-    <Paper elevation={3}>
-      <MenuContainer>
-        {categoryList.map((item, idx) => {
-          console.log(item);
-          console.log(tab);
-          console.log(item === tab);
-          return (
-            <MenuBtn key={idx} value={item === tab ? 1 : 0}>
-              <Link to={`/user/${item}`}>{item}</Link>
-            </MenuBtn>
-          );
-        })}
-      </MenuContainer>
-      <div>
+    <Paper>
+      <AppBar position="static" color="default">
+        <Tabs
+          value={tabValue}
+          onChange={handleChangeTab}
+          indicatorColor="primary"
+          textColor="primary"
+          variant="fullWidth"
+        >
+          <Tab label="좋아요" component={Link} to="/user/heart" />
+          <Tab label="내 댓글" component={Link} to="/user/comment" />
+        </Tabs>
+      </AppBar>
+      <ContentsWrap>
         <FilterWrap>
           <ViewTypeBtn />
           <div>
-            {makeSelect(["조선", "중앙"], order)}
-            {makeSelect(orderList, order)}
+            {/* {makeSelect(["조선", "중앙"], order)}
+            {makeSelect(orderList, order)} */}
           </div>
         </FilterWrap>
-        <ViewTypePage data={data} />
-      </div>
+        <ViewTypePage data={places} />
+      </ContentsWrap>
     </Paper>
   );
 }

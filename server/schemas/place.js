@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 
-
 const placeSchema = new Schema({
   contentid: {
     type: Number,
@@ -13,17 +12,13 @@ const placeSchema = new Schema({
     type: Number,
     require: true,
   },
-  firstimage:String,
-  title:String,
-
+  firstimage: String,
+  title: String,
   addr1: String,
-  
   addr2: String,
-  readcount:Number,
-  tel:String,
-
+  readcount: Number,
+  tel: String,
   dist: Number,
-
 });
 
 module.exports = mongoose.model("Place", placeSchema);

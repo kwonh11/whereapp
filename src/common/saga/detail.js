@@ -6,7 +6,7 @@ import {
   callApiDeleteComment,
   callApiAddReply,
   callApiDeleteReply,
-  addPlace
+  addPlace,
 } from "../api";
 import { actions, types } from "../reducer/detail";
 import { fork, all, put, call, take, takeLatest } from "redux-saga/effects";
@@ -20,6 +20,7 @@ export function* fetchAdditional(action) {
     try {
       const response = yield call(callApiDetailIntro, contentTypeId, contentId);
       const comments = yield call(callApiCommentList, contentId);
+
       yield put(
         actions.setAdditional({
           destination: {
@@ -34,17 +35,14 @@ export function* fetchAdditional(action) {
           additional: Object.entries(response.data),
         })
       );
-      yield put(
-        actions.setComments(comments.data)
-      );
+      yield put(actions.setComments(comments.data));
       yield put(actions.setLoading(false));
       yield put(actions.setLoadingComments(false));
     } catch (err) {
       yield put(actions.setError(err));
     }
-
   }
-};
+}
 
 export function* fetchComments() {
   while (true) {
@@ -59,22 +57,16 @@ export function* fetchComments() {
     }
     yield put(actions.setLoadingComments(false));
   }
-};
+}
 
 export function* addComments(action) {
-  console.log('----------------댓댓')
-  console.log(action.payload)
-  let { comment, place } = action.payload
+  let { comment, place } = action.payload;
   yield put(actions.setLoadingComments(true));
   yield put(actions.setError(""));
   try {
-    console.log('----------------댓댓222222222')
-
     const contentId = yield call(addPlace, place);
-    console.log(contentId.data)
-    comment.contentId = contentId.data
-    console.log('comment')
-    console.log(comment)
+    // comment.contentId = contentId.data
+    comment.place = contentId.data;
     yield call(callApiAddComment, comment);
 
     // 성공시
@@ -87,12 +79,13 @@ export function* addComments(action) {
     yield put(actions.setError(err));
   }
   yield put(actions.setLoadingComments(false));
-
-};
+}
 
 export function* updateComment(action) {
   while (true) {
-    const { _id, content, commenter, contentId } = yield take(types.REQUEST_UPDATE_COMMENT);
+    const { _id, content, commenter, contentId } = yield take(
+      types.REQUEST_UPDATE_COMMENT
+    );
     console.log("saga commenter " + commenter);
     yield put(actions.setLoadingComments(true));
     yield put(actions.setError(""));
@@ -107,11 +100,13 @@ export function* updateComment(action) {
     }
     yield put(actions.setLoadingComments(false));
   }
-};
+}
 
 export function* deleteComment(action) {
   while (true) {
-    const { _id, commenter, contentId } = yield take(types.REQUEST_DELETE_COMMENT);
+    const { _id, commenter, contentId } = yield take(
+      types.REQUEST_DELETE_COMMENT
+    );
     yield put(actions.setLoadingComments(true));
     yield put(actions.setError(""));
     try {
@@ -125,7 +120,7 @@ export function* deleteComment(action) {
     }
     yield put(actions.setLoadingComments(false));
   }
-};
+}
 
 export function* addReply(action) {
   while (true) {
@@ -140,11 +135,13 @@ export function* addReply(action) {
       yield put(actions.setError(err));
     }
   }
-};
+}
 
 export function* deleteReply(action) {
   while (true) {
-    const { contentId, commentId, _id, commenter } = yield take(types.REQUEST_DELETE_REPLY);
+    const { contentId, commentId, _id, commenter } = yield take(
+      types.REQUEST_DELETE_REPLY
+    );
     yield put(actions.setError(""));
     try {
       yield call(callApiDeleteReply, commentId, _id, commenter);
@@ -156,8 +153,6 @@ export function* deleteReply(action) {
   }
 }
 
-
-
 export default function* watcher() {
   yield takeLatest(types.REQUEST_ADD_COMMENT, addComments);
   yield all([
@@ -168,4 +163,4 @@ export default function* watcher() {
     fork(addReply),
     fork(deleteReply),
   ]);
-};
+}

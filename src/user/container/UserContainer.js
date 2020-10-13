@@ -1,26 +1,37 @@
-import { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { Paper, FormControl, Select } from "@material-ui/core";
-import ViewTypePage from "../../common/component/ViewTypePage";
-import ViewTypeBtn from "../../common/component/ViewTypeBtn";
-import styled, { css } from "styled-components";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import User from "../component/User";
-import { useDispatch, useSelector } from 'react-redux'
-import { actions } from '../../common/reducer/user'
+import { useSelector } from "react-redux";
 
 export default function UserContainer({ tab }) {
-  const dispatch = useDispatch();
+  console.log("-----------UserContainer");
+  console.log(`tab : ${tab}`);
 
-  const [value, setValue] = useState(tab === "scrap" ? 0 : 1);
+  const { comments, hearts } = useSelector((state) => state.user);
+  const commentsPlaces = comments.map((item) => item.place);
+  const heartsPlaces = hearts.map((item) => item.place);
+
+  console.log(`comments : ${comments}`);
+  console.log(`hearts : ${hearts}`);
+
+  const [tabValue, setTabValue] = useState(tab === "heart" ? 0 : 1);
+  const [places, setPlaces] = useState([]);
   const [order, setOrder] = useState(0);
 
+  useEffect(() => {
+    tab === "comment" ? setPlaces(commentsPlaces) : setPlaces(heartsPlaces);
+    console.log(`places : ${places}`);
+  }, [tabValue]);
 
-
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  const handleChangeTab = (event, newValue) => {
+    newValue ? setPlaces(commentsPlaces) : setPlaces(heartsPlaces);
+    setTabValue(newValue);
   };
 
-  return <User tab={tab}  />;
+  return (
+    <User
+      tabValue={tabValue}
+      places={places}
+      handleChangeTab={handleChangeTab}
+    />
+  );
 }
