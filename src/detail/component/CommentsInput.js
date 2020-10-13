@@ -61,7 +61,7 @@ export default function CommentsInput(props) {
                 content: inputValue,
                 createAt: new Date()
             }
-            addReply(contentId, commentId, replyComment);
+            addReply(commentId, replyComment);
             setInputValue("");
         }
         if (!isReply) {

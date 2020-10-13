@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import PlaceContainer from "../container/PlaceContainer";
-import qs from "qs";
 
 const Container = styled.section`
   display: flex;

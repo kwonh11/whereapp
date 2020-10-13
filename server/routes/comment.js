@@ -5,15 +5,16 @@ require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const Comment = require("../schemas/comment");
+const Place = require("../schemas/place");
 const { isLoggedIn } = require("./middlewares");
 
 // 댓글 목록
 router.get("/:contentId", async (req, res) => {
   try {
-    const contentId = req.params.contentId;
-    console.log(contentId);
+    const contentId = Number(req.params.contentId);
+    const place = await Place.findOne({ contentid: contentId });
     // const totalComments = await Comment.countDocuments({});
-    const list = await Comment.find({ contentId: contentId })
+    const list = await Comment.find({ place: place._id })
       .sort({ createAt: 1 });
     res.status(200).json(list);
   } catch (err) {
@@ -41,11 +42,10 @@ router.post("/", isLoggedIn, async (req, res) => {
 
 // 댓글 수정
 router.patch("/", isLoggedIn, async (req, res) => {
-  const { _id, content, commenter } = req.body;
-  console.log(_id, content, commenter);
+  const { commentId, content, commenter } = req.body;
   try {
     if (req.user._id == commenter) {
-      await Comment.findOneAndUpdate({ _id }, { content: content }).exec();
+      await Comment.findOneAndUpdate({ _id: commentId }, { content: content }).exec();
     } else {
       throw new Error();
     }
