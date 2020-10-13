@@ -182,7 +182,7 @@ export default function Comments(props) {
 
     const handleClickDelete = (e) => {
         const _id = anchorEl.dataset.id;
-        deleteComment(_id, commenter, contentId);
+        deleteComment(_id, loginUser, contentId);
         handleCloseMenu();
     };
     const handleClickModifyButton = (e) => {

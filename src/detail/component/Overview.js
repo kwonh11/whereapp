@@ -30,6 +30,7 @@ const DescriptionWrap = styled.div`
     line-height: 1.6;
     word-break: keep-all;
     padding: 20px;
+    text-align: center;
 `;
 
 export default function Overview ({description}) {
