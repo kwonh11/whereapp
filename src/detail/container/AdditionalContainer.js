@@ -32,12 +32,15 @@ export default function AdditionalContainer(props) {
   const { origin } = useSelector(state => state.location);
   const { contentTypeId, contentId } = useSelector(state => state.detail.ids);
   const { additional, isLoading } = useSelector(state => state.detail);
-  const isOnline = useSelector(state => state.detail.place.addr1.includes("온라인"));
+  // const isOnline = useSelector(state => state.detail.place.addr1.includes("온라인"));
 
   const dispatch = useDispatch();
   const requestDetails = React.useCallback(
     (contentTypeId, contentId) => dispatch({ type: types.REQUEST_DETAILS, contentTypeId, contentId })
-    , [dispatch]);
+  , [dispatch]);
+  const setAdditional = React.useCallback(
+    (additional) => dispatch({ type: types.SET_ADDITIONAL, additional })
+  , [dispatch]);
 
   React.useEffect(() => {
     requestDetails(contentTypeId, contentId);
@@ -48,24 +51,24 @@ export default function AdditionalContainer(props) {
       {isLoading ?
         <> Loading ... </>
         :
-        <>
-          <Overview description={additional.overview} />
-          <AdditionalComponent additional={additional.additional} />
-          <MapContainer>
-            <Map origin={origin} destination={additional.destination} isOnline={isOnline} />
-          </MapContainer>
-          <ActionsWrap>
-            <IconButton
-              aria-label="add to favorites"
-              onClick={() => console.log("scrap")}
-            >
-              <FavoriteIcon style={{ width: "1.5rem", height: "1.5rem" }} />
-            </IconButton>
-            <IconButton aria-label="share" onClick={() => console.log("share")}>
-              <ShareIcon />
-            </IconButton>
-          </ActionsWrap>
-        </>
+      <>
+      <Overview description={additional.overview} />
+      <AdditionalComponent additional={additional.additional} />
+      <MapContainer>
+            <Map origin={origin} destination={additional.destination} setAdditional={setAdditional}/>
+      </MapContainer>
+      <ActionsWrap>
+        <IconButton
+          aria-label="add to favorites"
+          onClick={() => console.log("scrap")}
+        >
+          <FavoriteIcon style={{ width: "1.5rem", height: "1.5rem" }} />
+        </IconButton>
+        <IconButton aria-label="share" onClick={() => console.log("share")}>
+          <ShareIcon />
+        </IconButton>
+      </ActionsWrap>
+      </>
       }
     </React.Fragment>
   );

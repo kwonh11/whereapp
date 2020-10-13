@@ -11,10 +11,10 @@ const { isLoggedIn } = require("./middlewares");
 router.get("/:contentId", async (req, res) => {
   try {
     const contentId = req.params.contentId;
-    const totalComments = await Comment.countDocuments({});
+    console.log(contentId);
+    // const totalComments = await Comment.countDocuments({});
     const list = await Comment.find({ contentId: contentId })
-      .sort({ createAt: -1 })
-      .limit(totalComments);
+      .sort({ createAt: 1 });
     res.status(200).json(list);
   } catch (err) {
     res.status(403).send(err);

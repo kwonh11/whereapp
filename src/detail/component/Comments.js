@@ -151,13 +151,19 @@ function Reply(props) {
 }
 
 export default function Comments(props) {
-    const { comments, deleteComment, updateComment, contentId, addReply, commenter, deleteReply } = props;
+    const { comments, deleteComment, updateComment, contentId, addReply, commenter : loginUser, deleteReply, sendable, setSendable, setSnack } = props;
     const [ sort, setSort ] = React.useState("recent");
     const [replyOn, setReplyOn] = React.useState(null);
     const [modifyOn, setModifyOn] = React.useState(null);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [modifyingInput, setModifyingInput] = React.useState("");
     const open = Boolean(anchorEl);
+
+    React.useEffect(()=>{
+        if (modifyingInput.length > 300) setSendable(false);
+        if (modifyingInput.length <= 300) setSendable(true);
+        if (modifyingInput.length === 0) setSendable(false);
+    }, [modifyingInput]);
 
     const handleClickSort = (key) => {
         // 여기에 정렬 조건을 실행하는 reselect 코드 작성
@@ -176,7 +182,7 @@ export default function Comments(props) {
 
     const handleClickDelete = (e) => {
         const _id = anchorEl.dataset.id;
-        deleteComment(_id, commenter, contentId);
+        deleteComment(_id, loginUser, contentId);
         handleCloseMenu();
     };
     const handleClickModifyButton = (e) => {
@@ -186,11 +192,16 @@ export default function Comments(props) {
         handleCloseMenu();
     };
     const handleSubmitModify = (e) => {
+        if (!loginUser || !sendable) {
+            setSnack(true);
+            return;
+        }
         updateComment(e.currentTarget.dataset.id, modifyingInput, e.currentTarget.dataset.commenter, contentId);
         setReplyOn(null);
         setModifyOn(null);
     };
     const handleChangeModifyingInput = (e) => {
+        console.log(e.key);
         setModifyingInput(e.target.value);
     };
     return (
@@ -210,15 +221,21 @@ export default function Comments(props) {
                     <ProfileWrap>
                         <Avatar />
                         <span style={{ marginLeft: "10px" }}>{nick}</span>
-                    </ProfileWrap>
-                        <IconButton 
-                        aria-controls="fade-menu" 
-                        aria-haspopup="true" 
-                        data-id={_id} 
-                        data-content={content}
-                        onClick={handleClickMenu} >
-                        <MoreVert/>
-                    </IconButton>
+                        </ProfileWrap>
+                        { // 내가 쓴 글일 경우 옵션버튼 노출
+                            loginUser === commenter
+                            && 
+                            (
+                            <IconButton 
+                            aria-controls="fade-menu" 
+                            aria-haspopup="true" 
+                            data-id={_id} 
+                            data-content={content}
+                            onClick={handleClickMenu} >
+                                <MoreVert/>
+                            </IconButton>
+                            )
+                        }
                     <Menu
                     id="fade-menu"
                     anchorEl={anchorEl}
@@ -288,12 +305,15 @@ export default function Comments(props) {
                         </Button>
                     </ButtonWrap>
                 </InfoWrap>
-                {replyOn === _id && <CommentsInput 
-                        isReply={true} 
-                        commentId={_id} 
+                    {replyOn === _id && <CommentsInput
+                        setSnack={setSnack}
+                        isReply={true}
+                        commentId={_id}
                         addReply={addReply}
                         contentId={contentId}
                         commenter={commenter}
+                        sendable={sendable}
+                        setSendable={setSendable}
                         />}
                 <Reply reply={reply} contentId={contentId} commenter={commenter} commentId={_id} deleteReply={deleteReply}/>
             </Container>
