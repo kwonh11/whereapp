@@ -6,7 +6,7 @@ const webpack = require("webpack");
 
 module.exports = {
   entry: {
-    app: ["babel-polyfill","./src/index.js"],
+    app: ["babel-polyfill", "./src/index.js"],
   },
   output: {
     filename: process.env.production
@@ -69,7 +69,7 @@ module.exports = {
           {
             loader: "file-loader",
             options: {
-              publicPath: "./",
+              publicPath: "/",
               name: "[name].[hash].[ext]",
             },
           },

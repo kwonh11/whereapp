@@ -53,7 +53,8 @@ export const actions = {
   requestComments: (contentId) => ({ type: types.REQUEST_COMMENTS, contentId }),
   setComments: (comments) => ({ type: types.SET_COMMENTS, comments }),
 
-  requestAddComment: (comment) => ({type: types.REQUEST_ADD_COMMENT, comment}),
+  requestAddComment: (payload) => ({ type: types.REQUEST_ADD_COMMENT, payload }),
+  
   addComment: (comment) => ({ type: types.ADD_COMMENT, comment }),
   
   requestUpdateComment: (_id, content, commenter, contentId) => ({type: types.REQUEST_UPDATE_COMMENT, _id, content, commenter, contentId}),

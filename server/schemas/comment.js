@@ -21,14 +21,18 @@ const ReplySchema = new Schema({
   },
   createAt: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
 const CommentSchema = new Schema({
   contentId: {
     type: String,
     require: true,
+  },
+  place: {
+    type: ObjectId,
+    ref: "Place",
   },
   nick: {
     type: String,
@@ -49,12 +53,12 @@ const CommentSchema = new Schema({
   },
   like: {
     type: Number,
-    default: 0
+    default: 0,
   },
   reply: {
     type: [ReplySchema],
-    default: []
-  }
+    default: [],
+  },
 });
 
 module.exports = mongoose.model("Comment", CommentSchema);

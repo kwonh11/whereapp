@@ -1,13 +1,20 @@
-import { getUser, uploadImgAPI } from "../api";
+import { getUser, uploadImgAPI, getComments } from "../api";
 import { actions, types } from "../reducer/user";
 import { put, call, takeLatest } from "redux-saga/effects";
 
 function* logIn() {
+  console.log('-----------------------login')
   try {
     const res = yield call(getUser);
     if (res.data) {
-      yield put(actions.loginInSuccess(res.data));
+      console.log(res.data)
+
+   yield put(actions.loginInSuccess(res.data));
+      
+
     }
+     
+    
   } catch (error) {
     yield put(actions.loginInError(error));
   }
@@ -22,7 +29,10 @@ function* uploadImage(action) {
   }
 }
 
+
+
 export default function* watcher() {
   yield takeLatest(types.LOGIN_IN_REQUEST, logIn);
   yield takeLatest(types.UPLOAD_IMAGE_REQUEST, uploadImage);
+
 }

@@ -28,7 +28,7 @@ const ActionsWrap = styled.div`
 `;
 
 export default function AdditionalContainer(props) {
-  
+
   const { origin } = useSelector(state => state.location);
   const { contentTypeId, contentId } = useSelector(state => state.detail.ids);
   const { additional, isLoading } = useSelector(state => state.detail);
@@ -73,4 +73,3 @@ export default function AdditionalContainer(props) {
     </React.Fragment>
   );
 }
-

@@ -1,56 +1,54 @@
 import { useEffect, useState } from "react";
 import Search from "../component/Search";
-import { connect } from "react-redux";
 import { actions } from "../../common/reducer/location";
-import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { withRouter } from "react-router-dom";
 
-function SearchContainer(props) {
+function SearchContainer({ history }) {
   console.log("SearchContainer");
-  // const [location, setLocation] = useState({});
-  const [addr, setAddress] = useState("");
-  const [predictions, setPredictions] = useState([]);
 
-  const { address, requestLocation, requestAreaBasedList } = props;
+  const dispatch = useDispatch();
+  const { address, predictions } = useSelector((state) => state.location);
+
+  const [input, setInput] = useState(address);
 
   useEffect(() => {
-    // requestLocation();
-  }, []);
+    if (address) return;
+    dispatch(actions.requestLocation());
+  }, [dispatch, address]);
 
-  const handleKeyUp = (e) => {
-    console.log("handleKeyUp");
+  const handleAreaBasedList = () => {
+    return dispatch(actions.requestAreaBasedList());
+  };
+
+  const handleChangeAddress = (e, value) => {
+    console.log("handleChangeAddress");
     console.log(e.target.value);
-    setAddress(e.target.value);
-    try {
-      axios
-        .get("/location/autocomplete", {
-          params: {
-            input: e.target.value,
-          },
-        })
-        .then((res) => {
-          console.log(res);
-          setPredictions(res.data);
-        });
-    } catch (error) {
-      console.error(error);
-    }
+
+    setInput(e.target.value);
+    dispatch(actions.predictionsRequest(e.target.value));
+  };
+
+  const handleSelectAddress = (e, value) => {
+    console.log("handleSelectAddress");
+    console.log(value);
+
+    console.log(value.description);
+    setInput(value.description);
+
+    dispatch(actions.searchAddressRequest(value.description));
+    history.push("/place");
   };
 
   return (
     <Search
-      requestAreaBasedList={requestAreaBasedList}
-      address={addr}
-      // handleGetLocation={handleGetLocation}
-      // address={address}
-      handleKeyUp={handleKeyUp}
+      handleAreaBasedList={handleAreaBasedList}
+      address={input}
+      handleChangeAddress={handleChangeAddress}
+      handleSelectAddress={handleSelectAddress}
       predictions={predictions}
     />
   );
 }
 
-const mapStateToProps = (state, props) => ({
-  origin: state.location.origin,
-  address: state.location.address,
-});
-
-export default connect(mapStateToProps, actions)(SearchContainer);
+export default withRouter(SearchContainer);

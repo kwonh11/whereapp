@@ -33,7 +33,7 @@ const InputDatas = styled.div`
 `;
 const Characters = styled.div`
     font-size: 0.7rem;
-    color: ${props => props.color === "gray"? "#848484":"red"};
+    color: ${props => props.color === "gray" ? "#848484" : "red"};
     display: flex;
     align-self: flex-end;
 `;
@@ -43,12 +43,12 @@ export default function CommentsInput(props) {
     const { addComment, contentId, commenter, isReply, commentId, addReply, sendable, setSendable, setSnack} = props;
     const [inputValue, setInputValue] = React.useState("");
 
-    React.useEffect(()=>{
+    React.useEffect(() => {
         if (inputValue.length > 300) setSendable(false);
         if (inputValue.length <= 300) setSendable(true);
         if (inputValue.length === 0) setSendable(false);
     }, [inputValue]);
-    
+
     const handleSubmit = () => {
         if (!commenter || !sendable) {
             setSnack(true);
@@ -65,8 +65,8 @@ export default function CommentsInput(props) {
             setInputValue("");
         }
         if (!isReply) {
-            const comment = { contentId, commenter, content: inputValue };
-            addComment({ ...comment , reply:[], createAt: new Date(), like: 0});
+            const comment = { commenter, contentId, content: inputValue };
+            addComment({ ...comment, reply: [], createAt: new Date(), like: 0 });
             setInputValue("");
         }
     };
@@ -77,23 +77,23 @@ export default function CommentsInput(props) {
     return (
         <CommentsWrap>
             <StyledTextField
-            id="outlined-textarea"
-            onChange={handleChange}
-            rowsMax={5}
-            label={`댓글 달기`}
-            placeholder="바르고 고운 말을 사용해주세요."
-            multiline
-            variant="outlined"
-            value={inputValue}
+                id="outlined-textarea"
+                onChange={handleChange}
+                rowsMax={5}
+                label={`댓글 달기`}
+                placeholder="바르고 고운 말을 사용해주세요."
+                multiline
+                variant="outlined"
+                value={inputValue}
             />
             <InputDatas>
-                <Characters color={sendable? "gray":"red"}> 
+                <Characters color={sendable ? "gray" : "red"}>
                     {inputValue.length} / 300
                 </Characters>
-                <StyledButton 
-                variant="contained" 
-                color="primary"
-                onClick={handleSubmit}
+                <StyledButton
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSubmit}
                 >
                     입 력
                 </StyledButton>

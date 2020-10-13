@@ -3,13 +3,26 @@ const passport = require("passport");
 const fs = require("fs");
 const multer = require("multer");
 const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
-const User = require("../schemas/user");
 const path = require("path");
+const User = require("../schemas/user");
+const Comment = require("../schemas/comment");
 
 const router = express.Router();
 
-router.get("/checkUser", (req, res, next) => {
-  res.json(req.user || null);
+router.get("/checkUser", async (req, res, next) => {
+  if (req.user) {
+    const comments = await Comment.find(
+      { commenter: req.user.id },
+      "place"
+    ).populate("place");
+
+    res.json({
+      info: req.user,
+      comments,
+    });
+  } else {
+    res.json(null);
+  }
 });
 
 router.get("/google", passport.authenticate("google", { scope: ["profile"] }));
@@ -65,6 +78,12 @@ router.patch("/img", isLoggedIn, upload.single("img"), async (req, res) => {
   );
 
   res.json({ url: `/img/${req.file.filename}` });
+});
+
+router.get("/comments", isLoggedIn, (req, res) => {
+  console.log("--------------------");
+  const test = Comment.find({ commenter: req.user.id });
+  console.log(test);
 });
 
 module.exports = router;

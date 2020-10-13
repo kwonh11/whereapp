@@ -42,14 +42,13 @@ const Menu = styled(Button)`
   &.MuiButtonBase-root {
     padding: 0 !important;
     font-size: 18px;
-    padding: 10px 15px;
-    width: 100%;
-    & a {
-      color: black;
-      width: 100%;
-      height: 100%;
+    color: black;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    & .MuiButton-label {
       padding: 10px 15px;
-      text-align: left;
+      width: 100%;
     }
   }
 `;
@@ -131,12 +130,22 @@ export default function Login({
             <Typography variant="subtitle1">{user && user.nick}</Typography>
           </UserContainer>
           <Divider />
-          <Menu color="primary">
-            <Link to="/user/scrap">스크랩</Link>
+          <Menu
+            color="primary"
+            component={Link}
+            to="/user/heart"
+            onClick={handleClickInfoModal}
+          >
+            좋아요
           </Menu>
           <Divider />
-          <Menu color="primary">
-            <Link to="/user/comment">내 댓글</Link>
+          <Menu
+            color="primary"
+            component={Link}
+            to="/user/comment"
+            onClick={handleClickInfoModal}
+          >
+            내 댓글
           </Menu>
           <Divider />
           <BtnWrap>

@@ -11,10 +11,11 @@ export default function CommentsContainer(props) {
     const comments = useSelector(state => state.detail.comments);
     const contentId = useSelector(state => state.detail.ids.contentId);
     const user = useSelector(state => state.user.info._id);
-  
+    const { place } = useSelector(state => state.detail);
+
     const dispatch = useDispatch();
     const addComment = React.useCallback((comment) => {
-        dispatch({ type: types.REQUEST_ADD_COMMENT, comment });
+        dispatch(actions.requestAddComment({comment, place}));
     }, [dispatch]);
     const updateComment = React.useCallback((_id, content, commenter, contentId) => {
       dispatch({ type: types.REQUEST_UPDATE_COMMENT, _id, content, commenter, contentId });
