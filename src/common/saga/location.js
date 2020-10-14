@@ -53,8 +53,6 @@ export function* fetchAreaBasedList() {
 }
 
 export function* fetchAutoComplete(action) {
-  console.log("----------------------------------fetchAutocomplete");
-
   try {
     const address = action.payload;
     console.log(address);
@@ -69,11 +67,8 @@ export function* fetchAutoComplete(action) {
 }
 
 export function* fetchSearchAddress(action) {
-  console.log("---------fetchSearchAddress");
-
   try {
     const address = action.payload;
-    console.log(address);
     const locaiton = yield call(callApiGeocode, address);
 
     //좌표 변경
@@ -84,7 +79,7 @@ export function* fetchSearchAddress(action) {
 
     //place 설정
     const placeList = yield call(callApiLocationBasedList, locaiton.data);
-    console.log(placeList);
+
     yield put(placeActions.setPlaceList(placeList.data.item));
   } catch (error) {
     yield put(actions.searchAddressError(error));

@@ -5,16 +5,16 @@ require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const Comment = require("../schemas/comment");
+const Place = require("../schemas/place");
+
 const { isLoggedIn } = require("./middlewares");
 
 // 댓글 목록
 router.get("/:contentId", async (req, res) => {
   try {
     const contentId = req.params.contentId;
-    const totalComments = await Comment.countDocuments({});
-    const list = await Comment.find({ contentId: contentId })
-      .sort({ createAt: -1 })
-      .limit(totalComments);
+    const place = await Place.find({ contentid: contentId });
+    const list = await Comment.find({ place }).sort({ createAt: -1 });
     res.status(200).json(list);
   } catch (err) {
     res.status(403).send(err);

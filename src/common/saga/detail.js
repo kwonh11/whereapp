@@ -6,7 +6,7 @@ import {
   callApiDeleteComment,
   callApiAddReply,
   callApiDeleteReply,
-  addPlace,
+  callApiAddPlace,
 } from "../api";
 import { actions, types } from "../reducer/detail";
 import { fork, all, put, call, take, takeLatest } from "redux-saga/effects";
@@ -64,15 +64,14 @@ export function* addComments(action) {
   yield put(actions.setLoadingComments(true));
   yield put(actions.setError(""));
   try {
-    const contentId = yield call(addPlace, place);
-    // comment.contentId = contentId.data
-    comment.place = contentId.data;
+    const res = yield call(callApiAddPlace, place);
+    comment.place = res.data;
     yield call(callApiAddComment, comment);
 
-    // 성공시
+    // 성공시b
     // 댓글목록 다시 불러오기
     yield put(actions.setLoadingComments(true));
-    const comments = yield call(callApiCommentList, comment.contentId);
+    const comments = yield call(callApiCommentList, place.contentid);
     yield put(actions.setComments(comments.data));
   } catch (err) {
     // 실패시
@@ -154,7 +153,6 @@ export function* deleteReply(action) {
 }
 
 export default function* watcher() {
-  yield takeLatest(types.REQUEST_ADD_COMMENT, addComments);
   yield all([
     fork(fetchAdditional),
     fork(fetchComments),
@@ -163,4 +161,5 @@ export default function* watcher() {
     fork(addReply),
     fork(deleteReply),
   ]);
+  yield takeLatest(types.REQUEST_ADD_COMMENT, addComments);
 }
