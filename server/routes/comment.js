@@ -8,13 +8,15 @@ const Comment = require("../schemas/comment");
 const Place = require("../schemas/place");
 const { isLoggedIn } = require("./middlewares");
 
+
 // 댓글 목록
 router.get("/:contentId", async (req, res) => {
   try {
     const contentId = Number(req.params.contentId);
     const place = await Place.findOne({ contentid: contentId });
-    // const totalComments = await Comment.countDocuments({});
-    const list = await Comment.find({ place: place._id })
+    const condition = place ? {place : place._id} : {contentId};
+
+    const list = await Comment.find(condition)
       .sort({ createAt: 1 });
     res.status(200).json(list);
   } catch (err) {

@@ -156,7 +156,7 @@ export default function PlaceCard(props) {
       </Link>
       <CardHeader
         className={classes.small}
-        title={title}
+        title={title.length >= 33 ? title.slice(0,33) + "..." : title}
         subheader={
           <>
             {isPopular && <Badge color="red"> 인기 </Badge>}
