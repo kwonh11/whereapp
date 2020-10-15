@@ -3,6 +3,7 @@ import Comments from '../component/Comments';
 import { useSelector, useDispatch } from 'react-redux';
 import { types, actions } from '../../common/reducer/detail';
 import ErrorSnack from '../component/ErrorSnack';
+import { StarOutlined } from '@material-ui/icons';
 
 export default function CommentsContainer(props) {
     const [sendable, setSendable] = React.useState(false);  
@@ -12,6 +13,7 @@ export default function CommentsContainer(props) {
     const comments = useSelector(state => state.detail.comments);
     const contentId = useSelector(state => state.detail.ids.contentId);
     const user = useSelector(state => state.user.info._id);
+    const isLoadingComments = useSelector(state => state.detail.isLoadingComments);
     const { place } = useSelector(state => state.detail);
 
     const dispatch = useDispatch();
@@ -46,6 +48,7 @@ export default function CommentsContainer(props) {
           sendable={sendable}
         />
         <Comments
+          isLoadingComments={isLoadingComments}
           addReply={addReply}
           updateComment={updateComment}
           deleteComment={deleteComment}
