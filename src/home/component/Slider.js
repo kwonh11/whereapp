@@ -71,7 +71,7 @@ export default function Slider(props) {
   const [fade, setFade] = React.useState(false);
   const [cardsPerPage, setCardsPerPage] = React.useState(1);
 
-  const max = React.useCallback(() => bestPlaceList.length - 1, [bestPlaceList]);
+  const max = React.useMemo(() => bestPlaceList.length - 1, [bestPlaceList]);
 
   React.useEffect(() => {
     setTimeout(() => setFade(true), 200);
@@ -97,8 +97,8 @@ export default function Slider(props) {
           <ArrowBackIosOutlined style={{ fontSize: 75 }} />
         </PrevArrow>
         <NextArrow
-          visible={active + cardsPerPage >= max() ? "none" : ""}
-          onClick={() => onClickNext(max())}
+          visible={active + cardsPerPage >= max ? "none" : ""}
+          onClick={() => onClickNext(max)}
         >
           <ArrowForwardIosOutlined style={{ fontSize: 75 }} />
         </NextArrow>

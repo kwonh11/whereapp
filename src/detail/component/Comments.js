@@ -105,12 +105,11 @@ function getDateString(createAt) {
 }
 
 function Reply(props) {
-    const {commenter : loginUser , reply, commentId, deleteReply, contentId} = props;
+    const {commenter : loginUser , reply, commentId, deleteReply} = props;
 
     const handleDeleteReply = (e) => {
-        const {replyId, commenter} = e.currentTarget.dataset;
-        console.log(replyId, commenter, commentId);
-        deleteReply(contentId, commentId, replyId, commenter);
+        const {replyId} = e.currentTarget.dataset;
+        deleteReply(commentId, replyId);
     }
     return (
     <React.Fragment>
@@ -151,12 +150,15 @@ function Reply(props) {
 }
 
 export default function Comments(props) {
-    const { comments, deleteComment, updateComment, contentId, addReply, commenter : loginUser, deleteReply, sendable, setSendable, setSnack } = props;
+    const { 
+        comments, deleteComment, updateComment, contentId, addReply, addLike, commenter : loginUser, deleteReply, sendable, setSendable, 
+        setSnack, snackContent 
+    } = props;
     const [ sort, setSort ] = React.useState("recent");
-    const [replyOn, setReplyOn] = React.useState(null);
-    const [modifyOn, setModifyOn] = React.useState(null);
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [modifyingInput, setModifyingInput] = React.useState("");
+    const [ replyOn, setReplyOn ] = React.useState(null);
+    const [ modifyOn, setModifyOn ] = React.useState(null);
+    const [ anchorEl, setAnchorEl ] = React.useState(null);
+    const [ modifyingInput, setModifyingInput ] = React.useState("");
     const open = Boolean(anchorEl);
 
     React.useEffect(()=>{
@@ -177,12 +179,11 @@ export default function Comments(props) {
     };
     const handleClickReply = (e) => {
         setModifyOn(null);
-        setReplyOn(e.currentTarget.dataset.id);
+        setReplyOn(e.currentTarget.parentElement.dataset.id);
     };
-
     const handleClickDelete = (e) => {
         const _id = anchorEl.dataset.id;
-        deleteComment(_id, loginUser, contentId);
+        deleteComment(_id);
         handleCloseMenu();
     };
     const handleClickModifyButton = (e) => {
@@ -196,14 +197,20 @@ export default function Comments(props) {
             setSnack(true);
             return;
         }
-        updateComment(e.currentTarget.dataset.id, modifyingInput, e.currentTarget.dataset.commenter, contentId);
+        updateComment(e.currentTarget.dataset.id, modifyingInput);
         setReplyOn(null);
         setModifyOn(null);
     };
     const handleChangeModifyingInput = (e) => {
-        console.log(e.key);
         setModifyingInput(e.target.value);
     };
+    const handleClickLike = (e) => {
+        if (!loginUser) {
+            setSnack(true);
+            return;
+        }
+        addLike(e.currentTarget.parentElement.dataset.id);
+    }
     return (
         <CommentContainer>
         <FilterWrap>
@@ -215,6 +222,7 @@ export default function Comments(props) {
         comments.map((comment,i) => {
             const { commenter, content, createAt, like, reply, nick, _id } = comment;
             const contentWithLine = content? content.split(/\r\n|\r|\n/) : [];
+            const isLiked = like.includes( commenter );
             return (
             <Container key={i} replyOn={replyOn === _id ? "on" : ""}>
                 <CommenterWrap>
@@ -268,7 +276,6 @@ export default function Comments(props) {
                         variant="contained" 
                         color="primary"
                         data-id={_id}
-                        data-commenter={commenter}                
                         onClick={handleSubmitModify} 
                         style={{margin: "10px 0 0 auto",
                         display: "flex"}}>
@@ -295,12 +302,12 @@ export default function Comments(props) {
                     <DateWrap>
                         {getDateString(createAt)}
                     </DateWrap>
-                    <ButtonWrap>
-                        <Button variant="outlined" color={like? "primary":"default"}>
-                            {like} &nbsp;
-                            <ThumbUpIcon color={like? "action":"primary"} />
+                    <ButtonWrap data-id={_id}>
+                        <Button variant="outlined" color={isLiked? "primary":"default"} onClick={handleClickLike}>
+                            {like.length} &nbsp;
+                            <ThumbUpIcon color={isLiked? "primary":"action"} />
                         </Button>
-                        <Button variant="outlined" color="default" data-id={_id} onClick={handleClickReply}>
+                        <Button variant="outlined" color="default" onClick={handleClickReply}>
                             댓글달기
                         </Button>
                     </ButtonWrap>
@@ -315,7 +322,7 @@ export default function Comments(props) {
                         sendable={sendable}
                         setSendable={setSendable}
                         />}
-                <Reply reply={reply} contentId={contentId} commenter={commenter} commentId={_id} deleteReply={deleteReply}/>
+                <Reply reply={reply} commenter={commenter} commentId={_id} deleteReply={deleteReply}/>
             </Container>
         )})
         }

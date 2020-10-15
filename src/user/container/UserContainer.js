@@ -3,9 +3,7 @@ import User from "../component/User";
 import { useSelector } from "react-redux";
 
 export default function UserContainer({ tab }) {
-  console.log("-----------UserContainer");
-  console.log(`tab : ${tab}`);
-
+  
   const { comments, hearts } = useSelector((state) => state.user);
   const commentsPlaces = comments.map((item) => item.place);
   const heartsPlaces = hearts.map((item) => item.place);

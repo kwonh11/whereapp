@@ -8,7 +8,7 @@ import Overview from "../component/Overview";
 import AdditionalComponent from "../component/Additional";
 import Map from "../component/Map";
 import { useSelector, useDispatch } from "react-redux";
-import { types } from "../../common/reducer/detail";
+import { types, actions } from "../../common/reducer/detail";
 
 const MapContainer = styled.div`
   padding: 50px 0;
@@ -35,12 +35,15 @@ export default function AdditionalContainer(props) {
   // const isOnline = useSelector(state => state.detail.place.addr1.includes("온라인"));
 
   const dispatch = useDispatch();
-  const requestDetails = React.useCallback(
-    (contentTypeId, contentId) => dispatch({ type: types.REQUEST_DETAILS, contentTypeId, contentId })
-  , [dispatch]);
-  const setAdditional = React.useCallback(
-    (additional) => dispatch({ type: types.SET_ADDITIONAL, additional })
-  , [dispatch]);
+  const requestDetails = React.useCallback((contentTypeId, contentId) => {
+    dispatch(actions.requestDetails({ contentTypeId, contentId }))
+  }, [dispatch]);
+  const setAdditional = React.useCallback((additional) => {
+    dispatch(actions.setAdditional({ additional }))
+  }, [dispatch]);
+  const setInitializeAdditional = React.useCallback(() => {
+    dispatch(actions.setInitializeAdditional());
+  },[dispatch]);
 
   React.useEffect(() => {
     requestDetails(contentTypeId, contentId);
@@ -53,9 +56,9 @@ export default function AdditionalContainer(props) {
         :
       <>
       <Overview description={additional.overview} />
-      <AdditionalComponent additional={additional.additional} />
+      <AdditionalComponent additional={additional.additionalInfos} />
       <MapContainer>
-            <Map origin={origin} destination={additional.destination} setAdditional={setAdditional}/>
+            <Map origin={origin} destination={additional.destination} setInitializeAdditional={setInitializeAdditional}/>
       </MapContainer>
       <ActionsWrap>
         <IconButton

@@ -49,16 +49,11 @@ function toFloatLatLng(obj) {
 }
 
 export default function Map(props) {
-    const {origin, destination, setAdditional } = props;
+    const {origin, destination, setInitializeAdditional } = props;
 
     React.useEffect(() => {
         return () => {
-            setAdditional({
-                destination: { lat: "", lng: "" },
-                overview: "",
-                inProgress: false,
-                additional: [],
-            })
+            setInitializeAdditional();
         }
     }, []);
     

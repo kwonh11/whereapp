@@ -7,6 +7,7 @@ import ErrorSnack from '../component/ErrorSnack';
 export default function CommentsContainer(props) {
     const [sendable, setSendable] = React.useState(false);  
     const [snack, setSnack] = React.useState(false);
+    const [snackContent, setSnackContent] = React.useState("");
   
     const comments = useSelector(state => state.detail.comments);
     const contentId = useSelector(state => state.detail.ids.contentId);
@@ -17,42 +18,48 @@ export default function CommentsContainer(props) {
     const addComment = React.useCallback((comment) => {
         dispatch(actions.requestAddComment({comment, place}));
     }, [dispatch]);
-    const updateComment = React.useCallback((_id, content, commenter, contentId) => {
-      dispatch({ type: types.REQUEST_UPDATE_COMMENT, _id, content, commenter, contentId });
+    const updateComment = React.useCallback((_id, content) => {
+      dispatch(actions.requestUpdateComment({ commentId: _id, content, commenter: user, contentId }));
     }, [dispatch]);
-    const deleteComment = React.useCallback((_id, commenter, contentId) => {
-      dispatch({ type: types.REQUEST_DELETE_COMMENT, _id, commenter, contentId });
+    const deleteComment = React.useCallback((_id) => {
+      dispatch(actions.requestDeleteComment({ commentId: _id, commenter:user, contentId}));
     }, [dispatch]);
-    const addReply = React.useCallback((contentId, commentId, reply) => {
-      dispatch({ type: types.REQUEST_ADD_REPLY, contentId, commentId, reply });
+    const addReply = React.useCallback((commentId, reply) => {
+      dispatch(actions.requestAddReply({ contentId, commentId, reply }));
     }, [dispatch]);
-    const deleteReply = React.useCallback((contentId, commentId, replyId, commenter) => {
-      dispatch({ type: types.REQUEST_DELETE_REPLY, contentId, commentId, _id: replyId, commenter });
+    const deleteReply = React.useCallback(( commentId, replyId ) => {
+      dispatch(actions.requestDeleteReply({ contentId, commentId, replyId, commenter:user }));
+    }, [dispatch]);
+    const addLike = React.useCallback(( commentId ) => {
+      dispatch(actions.requestLike({ userId: user, commentId }));
     }, [dispatch]);
   
     return (
     <React.Fragment>
         <CommentsInput
           addComment={addComment}
+          setSendable={setSendable}
+          setSnack={setSnack}
+          setSnackContent={setSnackContent}
           contentId={contentId}
           commenter={user}
           sendable={sendable}
-          setSendable={setSendable}
-          setSnack={setSnack}
         />
         <Comments
           addReply={addReply}
           updateComment={updateComment}
           deleteComment={deleteComment}
           deleteReply={deleteReply}
+          addLike={addLike}
+          setSendable={setSendable}
+          setSnack={setSnack}
+          setSnackContent={setSnackContent}
           comments={comments}
           contentId={contentId}
           commenter={user}
           sendable={sendable}
-          setSendable={setSendable}
-          setSnack={setSnack}
         />
-        <ErrorSnack snack={snack} sendable={sendable} setSnack={setSnack} user={user} />
+        <ErrorSnack snack={snack} sendable={sendable} setSnack={setSnack} user={user} snackContent={snackContent} setSnackContent={setSnackContent}/>
     </React.Fragment>
     )
   }
