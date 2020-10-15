@@ -8,6 +8,7 @@ export const types = {
   SET_IDS: "detail/SET_IDS", // 카드 클릭시 params의 contentid, contentidtype 설정
   SET_PLACE: "detail/SET_PLACE", // DETAIL 화면
   SET_ADDITIONAL: "detail/SET_ADDITIONAL", // 소개 API를 이용한 추가데이터
+  SET_INITIALIZE_ADDITIONAL: "detail/SET_INITIALIZE_ADDITIONAL",
 
   // 댓글 관련
   SET_LOADING_COMMENTS: "detail/SET_LOADING_COMMENTS",  // 댓글 로딩
@@ -24,8 +25,8 @@ export const types = {
   REQUEST_UPDATE_COMMENT: "detail/REQUEST_UPDATE_COMMENT",  // 댓글 수정
   UPDATE_COMMENT: "detail/UPDATE_COMMENT",
 
-  ADD_LIKE: "detail/ADD_LIKE", // 댓글 좋아요
-  CANCLE_LIKE: "detail/CANCLE_LIKE", // 좋아요 취소
+  REQUEST_LIKE: "detail/REQUEST_LIKE", // 댓글 좋아요
+  ADD_LIKE: "detail/ADD_LIKE",
 
   REQUEST_ADD_REPLY: "detail/REQUEST_ADD_REPLY",
   ADD_REPLY: "detail/ADD_REPLY", // 대댓글 작성
@@ -41,11 +42,13 @@ export const actions = {
   requestDetails: (payload) => ({ type: types.REQUEST_DETAILS, payload }),
   setIds: (ids) => ({ type: types.SET_IDS, ids }),
   setPlace: (place) => ({ type: types.SET_PLACE, place }),
-  setAdditional: (additional) => ({ type: types.SET_ADDITIONAL, additional }),
+  setAdditional: (additional) => ({ type: types.SET_ADDITIONAL, ...additional }),
+  setInitializeAdditional: () => ({ type: types.SET_INITIALIZE_ADDITIONAL }),
+
   setLoadingComments: (isLoadingComments) => ({ type: types.SET_LOADING_COMMENTS, isLoadingComments }),
   
-  addLike: (contentId, id) => ({ type: types.ADD_LIKE, contentId, id }),
-  cancleLike: (contentId, id) => ({ type: types.CANCLE_LIKE, contentId, id }),
+  requestLike: (payload) => ({ type: types.REQUEST_LIKE, payload }),
+  addlike: (userId, commentId) => ({ type: types.ADD_LIKE, commentId, userId }),
 
   // requestComments: (payload) => ({ type: types.REQUEST_COMMENTS, payload }),
   setComments: (comments) => ({ type: types.SET_COMMENTS, comments }),
@@ -90,11 +93,12 @@ const INITIAL_STATE = {
     destination: { lat: "", lng: "" },
     overview: "",
     inProgress: false,
-    additional: [],
+    additionalInfos: [],
   },
   comments: [
     {
       reply: [],
+      like: [],
     },
   ],
   error: "",
@@ -111,7 +115,16 @@ const reducer = createReducer(INITIAL_STATE, {
     state.place = action.place;
   },
   [types.SET_ADDITIONAL]: (state, action) => {
-    state.additional = action.additional;
+    state.additional.additionalInfos = action.additionalInfos;
+    state.additional.destination = action.destination;
+    state.additional.inProgress = action.inProgress;
+    state.additional.overview = action.overview;
+  },
+  [types.SET_INITIALIZE_ADDITIONAL]: (state, action) => {
+    state.additional.additionalInfos = [];
+    state.additional.destination = { lat: "", lng: "" };
+    state.additional.inProgress = false;
+    state.additional.overview = "";
   },
   [types.SET_COMMENTS]: (state, action) => {
     state.comments = action.comments;
@@ -124,12 +137,18 @@ const reducer = createReducer(INITIAL_STATE, {
     state.comments.splice(index, 1);
   },
   [types.ADD_LIKE]: (state, action) => {
-    const comment = state.comments.find((item) => item._id === action._id);
-    if (comment) state.comments[index].like += 1;
-  },
-  [types.CANCLE_LIKE]: (state, action) => {
-    const comment = state.comments.find((item) => item._id === action._id);
-    if (comment) state.comments[index].like -= 1;
+    const index = state.comments.findIndex((item) => item._id === action.commentId);
+    if (index >= 0) {
+      console.log(`index : ${index}`);
+      const likeIndex = state.comments[index].like.findIndex((item)=> item === action.userId);
+      console.log(`likeIndex : ${likeIndex}`);
+      if (likeIndex >= 0 ) {
+        state.comments[index].like.splice(likeIndex, 1);
+      }
+      if (likeIndex < 0)  {
+        state.comments[index].like.push(action.userId);
+      }
+    }
   },
   [types.ADD_REPLY]: (state, action) => {
     const comment = state.comments.find((item) => item._id === action.commentId);

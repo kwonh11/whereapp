@@ -66,7 +66,7 @@ export default function CommentsInput(props) {
         }
         if (!isReply) {
             const comment = { commenter, contentId, content: inputValue };
-            addComment({ ...comment, reply: [], createAt: new Date(), like: 0 });
+            addComment({ ...comment, reply: [], createAt: new Date(), like: [] });
             setInputValue("");
         }
     };

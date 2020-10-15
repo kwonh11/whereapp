@@ -150,12 +150,15 @@ function Reply(props) {
 }
 
 export default function Comments(props) {
-    const { comments, deleteComment, updateComment, contentId, addReply, commenter : loginUser, deleteReply, sendable, setSendable, setSnack } = props;
+    const { 
+        comments, deleteComment, updateComment, contentId, addReply, addLike, commenter : loginUser, deleteReply, sendable, setSendable, 
+        setSnack, snackContent 
+    } = props;
     const [ sort, setSort ] = React.useState("recent");
-    const [replyOn, setReplyOn] = React.useState(null);
-    const [modifyOn, setModifyOn] = React.useState(null);
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [modifyingInput, setModifyingInput] = React.useState("");
+    const [ replyOn, setReplyOn ] = React.useState(null);
+    const [ modifyOn, setModifyOn ] = React.useState(null);
+    const [ anchorEl, setAnchorEl ] = React.useState(null);
+    const [ modifyingInput, setModifyingInput ] = React.useState("");
     const open = Boolean(anchorEl);
 
     React.useEffect(()=>{
@@ -176,9 +179,8 @@ export default function Comments(props) {
     };
     const handleClickReply = (e) => {
         setModifyOn(null);
-        setReplyOn(e.currentTarget.dataset.id);
+        setReplyOn(e.currentTarget.parentElement.dataset.id);
     };
-
     const handleClickDelete = (e) => {
         const _id = anchorEl.dataset.id;
         deleteComment(_id);
@@ -200,9 +202,15 @@ export default function Comments(props) {
         setModifyOn(null);
     };
     const handleChangeModifyingInput = (e) => {
-        console.log(e.key);
         setModifyingInput(e.target.value);
     };
+    const handleClickLike = (e) => {
+        if (!loginUser) {
+            setSnack(true);
+            return;
+        }
+        addLike(e.currentTarget.parentElement.dataset.id);
+    }
     return (
         <CommentContainer>
         <FilterWrap>
@@ -214,6 +222,7 @@ export default function Comments(props) {
         comments.map((comment,i) => {
             const { commenter, content, createAt, like, reply, nick, _id } = comment;
             const contentWithLine = content? content.split(/\r\n|\r|\n/) : [];
+            const isLiked = like.includes( commenter );
             return (
             <Container key={i} replyOn={replyOn === _id ? "on" : ""}>
                 <CommenterWrap>
@@ -293,12 +302,12 @@ export default function Comments(props) {
                     <DateWrap>
                         {getDateString(createAt)}
                     </DateWrap>
-                    <ButtonWrap>
-                        <Button variant="outlined" color={like? "primary":"default"}>
-                            {like} &nbsp;
-                            <ThumbUpIcon color={like? "action":"primary"} />
+                    <ButtonWrap data-id={_id}>
+                        <Button variant="outlined" color={isLiked? "primary":"default"} onClick={handleClickLike}>
+                            {like.length} &nbsp;
+                            <ThumbUpIcon color={isLiked? "primary":"action"} />
                         </Button>
-                        <Button variant="outlined" color="default" data-id={_id} onClick={handleClickReply}>
+                        <Button variant="outlined" color="default" onClick={handleClickReply}>
                             댓글달기
                         </Button>
                     </ButtonWrap>

@@ -6,6 +6,7 @@ import {
   callApiDeleteComment,
   callApiAddReply,
   callApiDeleteReply,
+  callApiAddLike,
   addPlace,
 } from "../api";
 import { actions, types } from "../reducer/detail";
@@ -32,7 +33,7 @@ export function* fetchAdditional(action) {
             response.eventstartdata,
             response.eventenddate
           ),
-          additional: Object.entries(response.data),
+          additionalInfos: Object.entries(response.data),
         })
       );
       yield put(actions.setComments(comments.data));
@@ -42,19 +43,6 @@ export function* fetchAdditional(action) {
       yield put(actions.setError(err));
     }
 }
-
-// export function* fetchComments(action) {
-//   const { contentId } = action.payload;
-//   yield put(actions.setLoadingComments(true));
-//   yield put(actions.setError(""));
-//   try {
-//     const comments = yield call(callApiCommentList, contentId);
-//     yield put(actions.setComments(comments));
-//   } catch (err) {
-//     yield put(actions.setError(err));
-//   }
-//   yield put(actions.setLoadingComments(false));
-// }
 
 export function* addComments(action) {
   let { comment, place } = action.payload;
@@ -136,6 +124,17 @@ export function* deleteReply(action) {
   }
 }
 
+export function* addLike(action) {
+  const { userId, commentId } = action.payload;
+  yield put(actions.setError(""));
+  try {
+    yield call(callApiAddLike, userId, commentId);
+    yield put(actions.addlike(userId, commentId));
+  } catch (err) {
+    yield put(actions.setError(err));
+  }
+}
+
 export default function* watcher() {
   yield takeLatest(types.REQUEST_ADD_COMMENT, addComments);
   yield takeLatest(types.REQUEST_UPDATE_COMMENT, updateComment);
@@ -143,4 +142,5 @@ export default function* watcher() {
   yield takeLatest(types.REQUEST_DETAILS, fetchAdditional);
   yield takeLatest(types.REQUEST_ADD_REPLY, addReply);
   yield takeLatest(types.REQUEST_DELETE_REPLY, deleteReply);
+  yield takeLatest(types.REQUEST_LIKE, addLike);
 }

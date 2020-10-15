@@ -41,6 +41,9 @@ export default function AdditionalContainer(props) {
   const setAdditional = React.useCallback((additional) => {
     dispatch(actions.setAdditional({ additional }))
   }, [dispatch]);
+  const setInitializeAdditional = React.useCallback(() => {
+    dispatch(actions.setInitializeAdditional());
+  },[dispatch]);
 
   React.useEffect(() => {
     requestDetails(contentTypeId, contentId);
@@ -53,9 +56,9 @@ export default function AdditionalContainer(props) {
         :
       <>
       <Overview description={additional.overview} />
-      <AdditionalComponent additional={additional.additional} />
+      <AdditionalComponent additional={additional.additionalInfos} />
       <MapContainer>
-            <Map origin={origin} destination={additional.destination} setAdditional={setAdditional}/>
+            <Map origin={origin} destination={additional.destination} setInitializeAdditional={setInitializeAdditional}/>
       </MapContainer>
       <ActionsWrap>
         <IconButton

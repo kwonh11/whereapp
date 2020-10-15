@@ -7,6 +7,7 @@ import ErrorSnack from '../component/ErrorSnack';
 export default function CommentsContainer(props) {
     const [sendable, setSendable] = React.useState(false);  
     const [snack, setSnack] = React.useState(false);
+    const [snackContent, setSnackContent] = React.useState("");
   
     const comments = useSelector(state => state.detail.comments);
     const contentId = useSelector(state => state.detail.ids.contentId);
@@ -29,30 +30,36 @@ export default function CommentsContainer(props) {
     const deleteReply = React.useCallback(( commentId, replyId ) => {
       dispatch(actions.requestDeleteReply({ contentId, commentId, replyId, commenter:user }));
     }, [dispatch]);
+    const addLike = React.useCallback(( commentId ) => {
+      dispatch(actions.requestLike({ userId: user, commentId }));
+    }, [dispatch]);
   
     return (
     <React.Fragment>
         <CommentsInput
           addComment={addComment}
+          setSendable={setSendable}
+          setSnack={setSnack}
+          setSnackContent={setSnackContent}
           contentId={contentId}
           commenter={user}
           sendable={sendable}
-          setSendable={setSendable}
-          setSnack={setSnack}
         />
         <Comments
           addReply={addReply}
           updateComment={updateComment}
           deleteComment={deleteComment}
           deleteReply={deleteReply}
+          addLike={addLike}
+          setSendable={setSendable}
+          setSnack={setSnack}
+          setSnackContent={setSnackContent}
           comments={comments}
           contentId={contentId}
           commenter={user}
           sendable={sendable}
-          setSendable={setSendable}
-          setSnack={setSnack}
         />
-        <ErrorSnack snack={snack} sendable={sendable} setSnack={setSnack} user={user} />
+        <ErrorSnack snack={snack} sendable={sendable} setSnack={setSnack} user={user} snackContent={snackContent} setSnackContent={setSnackContent}/>
     </React.Fragment>
     )
   }

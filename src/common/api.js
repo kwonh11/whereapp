@@ -82,8 +82,8 @@ export function callApiDeleteReply(commentId, replyId, commenter) {
 };
 
 // 좋아요 관련
-export function callApiAddLike(userId, commentId, contentId) {
-  
+export function callApiAddLike(userId, commentId) {
+  return axios.post("/comment/like", {userId, commentId});
 }
 
 export function callApiGeocode(location) {
