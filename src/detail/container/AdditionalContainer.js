@@ -47,7 +47,7 @@ export default function AdditionalContainer(props) {
 
   React.useEffect(() => {
     requestDetails(contentTypeId, contentId);
-  }, []);
+  }, [contentId]);
 
   return (
     <React.Fragment>
