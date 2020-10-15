@@ -3,28 +3,25 @@ import User from "../component/User";
 import { useSelector } from "react-redux";
 
 export default function UserContainer({ tab }) {
-  console.log("-----------UserContainer");
-  console.log(`tab : ${tab}`);
+  console.log("-----UserContainer");
 
   const { comments, hearts } = useSelector((state) => state.user);
-  const commentsPlaces = comments.map((item) => item.place);
-  const heartsPlaces = hearts.map((item) => item.place);
-
-  console.log(`comments : ${comments}`);
-  console.log(`hearts : ${hearts}`);
 
   const [tabValue, setTabValue] = useState(tab === "heart" ? 0 : 1);
   const [places, setPlaces] = useState([]);
-  const [order, setOrder] = useState(0);
+  const [viewType, setViewType] = useState("card");
 
   useEffect(() => {
-    tab === "comment" ? setPlaces(commentsPlaces) : setPlaces(heartsPlaces);
-    console.log(`places : ${places}`);
-  }, [tabValue]);
+    tab === "comment" ? setPlaces(comments) : setPlaces(hearts);
+  }, []);
 
   const handleChangeTab = (event, newValue) => {
-    newValue ? setPlaces(commentsPlaces) : setPlaces(heartsPlaces);
+    newValue ? setPlaces(comments) : setPlaces(hearts);
     setTabValue(newValue);
+  };
+
+  const setPlaceListType = (vlaue) => {
+    setViewType(value);
   };
 
   return (
@@ -32,6 +29,8 @@ export default function UserContainer({ tab }) {
       tabValue={tabValue}
       places={places}
       handleChangeTab={handleChangeTab}
+      setPlaceListType={setPlaceListType}
+      listType={viewType}
     />
   );
 }
