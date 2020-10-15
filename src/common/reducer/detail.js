@@ -108,6 +108,9 @@ const reducer = createReducer(INITIAL_STATE, {
   [types.SET_LOADING]: (state, action) => {
     state.isLoading = action.isLoading;
   },
+  [types.SET_LOADING_COMMENTS]: (state, action) => {
+    state.isLoadingComments = action.isLoadingComments;
+  },
   [types.SET_IDS]: (state, action) => {
     state.ids = action.ids;
   },

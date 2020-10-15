@@ -10,7 +10,7 @@ import {
   addPlace,
 } from "../api";
 import { actions, types } from "../reducer/detail";
-import { fork, all, put, call, take, takeLatest } from "redux-saga/effects";
+import { fork, all, put, call, take, takeLatest, delay } from "redux-saga/effects";
 import isInProgress from "../isInProgressDate";
 
 
@@ -38,6 +38,8 @@ export function* fetchAdditional(action) {
       );
       yield put(actions.setComments(comments.data));
       yield put(actions.setLoading(false));
+      // 로딩 테스트용 딜레이
+      yield delay(2000);
       yield put(actions.setLoadingComments(false));
     } catch (err) {
       yield put(actions.setError(err));

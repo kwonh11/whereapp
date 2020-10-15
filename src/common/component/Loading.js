@@ -3,7 +3,7 @@ import Loading from '../../images/loading.gif';
 
 const Container = styled.div`
     width: 100%;
-    height: 20vh;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -11,7 +11,7 @@ const Container = styled.div`
 export default function Progress () {
     return (
         <Container>
-            <img src={Loading} alt='Loading...' width='150px' height='150px' />
+            <img src={Loading} alt='Loading...' width='200px' height='150px' />
         </Container>
     )
 }

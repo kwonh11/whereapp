@@ -5,7 +5,14 @@ import CommentsInput from './CommentsInput';
 import { MoreVert, DeleteForever } from '@material-ui/icons';
 import { IconButton } from '@material-ui/core';
 import Fade from '@material-ui/core/Fade';
+import Loading from '../../common/component/Loading';
 
+const LoadingContainer = styled.div`
+    display: flex;
+    width: 100%;
+    height: 400px;
+    padding: 30px;
+`;
 const CommentContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -152,7 +159,7 @@ function Reply(props) {
 export default function Comments(props) {
     const { 
         comments, deleteComment, updateComment, contentId, addReply, addLike, commenter : loginUser, deleteReply, sendable, setSendable, 
-        setSnack, snackContent 
+        setSnack, isLoadingComments
     } = props;
     const [ sort, setSort ] = React.useState("recent");
     const [ replyOn, setReplyOn ] = React.useState(null);
@@ -219,112 +226,119 @@ export default function Comments(props) {
              <ByLikeButton sort={sort} onClick={()=>handleClickSort("like")}> 좋아요순 </ByLikeButton>
         </FilterWrap>
         {
-        comments.map((comment,i) => {
-            const { commenter, content, createAt, like, reply, nick, _id } = comment;
-            const contentWithLine = content? content.split(/\r\n|\r|\n/) : [];
-            const isLiked = like.includes( commenter );
-            return (
-            <Container key={i} replyOn={replyOn === _id ? "on" : ""}>
-                <CommenterWrap>
-                    <ProfileWrap>
-                        <Avatar />
-                        <span style={{ marginLeft: "10px" }}>{nick}</span>
-                        </ProfileWrap>
-                        { // 내가 쓴 글일 경우 옵션버튼 노출
-                            loginUser === commenter
-                            && 
+            isLoadingComments ?
+            (<LoadingContainer>
+                <Loading />
+            </LoadingContainer>)
+            :
+            (
+                comments.map((comment,i) => {
+                    const { commenter, content, createAt, like, reply, nick, _id } = comment;
+                    const contentWithLine = content? content.split(/\r\n|\r|\n/) : [];
+                    const isLiked = like.includes( commenter );
+                    return (
+                    <Container key={i} replyOn={replyOn === _id ? "on" : ""}>
+                        <CommenterWrap>
+                            <ProfileWrap>
+                                <Avatar />
+                                <span style={{ marginLeft: "10px" }}>{nick}</span>
+                                </ProfileWrap>
+                                { // 내가 쓴 글일 경우 옵션버튼 노출
+                                    loginUser === commenter
+                                    && 
+                                    (
+                                    <IconButton 
+                                    aria-controls="fade-menu" 
+                                    aria-haspopup="true" 
+                                    data-id={_id} 
+                                    data-content={content}
+                                    onClick={handleClickMenu} >
+                                        <MoreVert/>
+                                    </IconButton>
+                                    )
+                                }
+                            <Menu
+                            id="fade-menu"
+                            anchorEl={anchorEl}
+                            keepMounted
+                            open={open}
+                            onClose={handleCloseMenu}
+                            TransitionComponent={Fade}
+                            elevation={1}
+                            >
+                                <MenuItem onClick={handleClickDelete}> 삭제하기 </MenuItem>
+                                <MenuItem onClick={handleClickModifyButton}> 수정하기 </MenuItem>
+                            </Menu>
+                        </CommenterWrap>
+                        {
+                            modifyOn === _id ?
                             (
-                            <IconButton 
-                            aria-controls="fade-menu" 
-                            aria-haspopup="true" 
-                            data-id={_id} 
-                            data-content={content}
-                            onClick={handleClickMenu} >
-                                <MoreVert/>
-                            </IconButton>
+                            <ContentWrap>
+                                <TextField
+                                id="outlined-multiline-static"
+                                label="수정하기"
+                                fullWidth
+                                multiline
+                                rowsMax={5}
+                                rows={contentWithLine.length}
+                                variant="outlined"
+                                onChange={handleChangeModifyingInput}
+                                value={modifyingInput}
+                                />
+                                <Button 
+                                variant="contained" 
+                                color="primary"
+                                data-id={_id}
+                                onClick={handleSubmitModify} 
+                                style={{margin: "10px 0 0 auto",
+                                display: "flex"}}>
+                                    수정완료
+                                </Button>
+                            </ContentWrap>
+                            )
+                            :
+                            (
+                            <ContentWrap>
+                                {
+                                    contentWithLine?
+                                    contentWithLine.map((line,i) => (
+                                        <React.Fragment key={i}>
+                                        {line} <br/>
+                                        </React.Fragment>
+                                    )):
+                                    content
+                                }
+                            </ContentWrap>
                             )
                         }
-                    <Menu
-                    id="fade-menu"
-                    anchorEl={anchorEl}
-                    keepMounted
-                    open={open}
-                    onClose={handleCloseMenu}
-                    TransitionComponent={Fade}
-                    elevation={1}
-                    >
-                        <MenuItem onClick={handleClickDelete}> 삭제하기 </MenuItem>
-                        <MenuItem onClick={handleClickModifyButton}> 수정하기 </MenuItem>
-                    </Menu>
-                </CommenterWrap>
-                {
-                    modifyOn === _id ?
-                    (
-                    <ContentWrap>
-                        <TextField
-                        id="outlined-multiline-static"
-                        label="수정하기"
-                        fullWidth
-                        multiline
-                        rowsMax={5}
-                        rows={contentWithLine.length}
-                        variant="outlined"
-                        onChange={handleChangeModifyingInput}
-                        value={modifyingInput}
-                        />
-                        <Button 
-                        variant="contained" 
-                        color="primary"
-                        data-id={_id}
-                        onClick={handleSubmitModify} 
-                        style={{margin: "10px 0 0 auto",
-                        display: "flex"}}>
-                            수정완료
-                        </Button>
-                    </ContentWrap>
-                    )
-                    :
-                    (
-                    <ContentWrap>
-                        {
-                            contentWithLine?
-                            contentWithLine.map((line,i) => (
-                                <React.Fragment key={i}>
-                                {line} <br/>
-                                </React.Fragment>
-                            )):
-                            content
-                        }
-                    </ContentWrap>
-                    )
-                }
-                <InfoWrap>
-                    <DateWrap>
-                        {getDateString(createAt)}
-                    </DateWrap>
-                    <ButtonWrap data-id={_id}>
-                        <Button variant="outlined" color={isLiked? "primary":"default"} onClick={handleClickLike}>
-                            {like.length} &nbsp;
-                            <ThumbUpIcon color={isLiked? "primary":"action"} />
-                        </Button>
-                        <Button variant="outlined" color="default" onClick={handleClickReply}>
-                            댓글달기
-                        </Button>
-                    </ButtonWrap>
-                </InfoWrap>
-                    {replyOn === _id && <CommentsInput
-                        setSnack={setSnack}
-                        isReply={true}
-                        commentId={_id}
-                        addReply={addReply}
-                        contentId={contentId}
-                        commenter={commenter}
-                        sendable={sendable}
-                        setSendable={setSendable}
-                        />}
-                <Reply reply={reply} commenter={commenter} commentId={_id} deleteReply={deleteReply}/>
-            </Container>
-        )})
+                        <InfoWrap>
+                            <DateWrap>
+                                {getDateString(createAt)}
+                            </DateWrap>
+                            <ButtonWrap data-id={_id}>
+                                <Button variant="outlined" color={isLiked? "primary":"default"} onClick={handleClickLike}>
+                                    {like.length} &nbsp;
+                                    <ThumbUpIcon color={isLiked? "primary":"action"} />
+                                </Button>
+                                <Button variant="outlined" color="default" onClick={handleClickReply}>
+                                    댓글달기
+                                </Button>
+                            </ButtonWrap>
+                        </InfoWrap>
+                            {replyOn === _id && <CommentsInput
+                                setSnack={setSnack}
+                                isReply={true}
+                                commentId={_id}
+                                addReply={addReply}
+                                contentId={contentId}
+                                commenter={commenter}
+                                sendable={sendable}
+                                setSendable={setSendable}
+                                />}
+                        <Reply reply={reply} commenter={commenter} commentId={_id} deleteReply={deleteReply}/>
+                    </Container>
+                )})
+            )
         }
     </CommentContainer>
     )
