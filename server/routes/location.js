@@ -107,7 +107,7 @@ router.get("/best/:region", async (req, res) => {
       placeList.sort((a, b) => {
         return b.readcount - a.readcount;
       });
-      res.json(placeList.slice(0, 10));
+      res.json(placeList);
     })
     .catch((err) => {
       res.send(err).end();
