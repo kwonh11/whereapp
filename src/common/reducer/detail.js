@@ -33,6 +33,8 @@ export const types = {
 
   REQUEST_DELETE_REPLY: "detail/REQUEST_DELETE_REPLY",
   DELETE_REPLY: "detail/REMOVE_REPLY", // 대댓글 삭제
+
+  SET_SORT_KEY_COMMENTS: "detail/SET_SORT_KEY_COMMENTS",
   // 에러
   SET_ERROR: "detail/SET_ERROR",
 };
@@ -67,6 +69,9 @@ export const actions = {
   // addReply: (commentId, reply) => ({type: types.ADD_REPLY, commentId, reply}),
   requestDeleteReply: (payload) => ({type: types.REQUEST_DELETE_REPLY, payload}),
   // deleteReply: (_id) => ({ type: types.REMOVE_REPLY, id }),
+
+  setSortKey: (commentSortKey) => ({type: types.SET_SORT_KEY_COMMENTS, commentSortKey}),
+
   setError: (error) => ({ type: types.SET_ERROR, error }),
 };
 
@@ -95,6 +100,7 @@ const INITIAL_STATE = {
     inProgress: false,
     additionalInfos: [],
   },
+  commentSortKey: "registered",
   comments: [
     {
       reply: [],
@@ -165,6 +171,9 @@ const reducer = createReducer(INITIAL_STATE, {
         reply.splice(idx, 1);
       }
     }
+  },
+  [types.SET_SORT_KEY_COMMENTS]: (state, action) => {
+    state.commentSortKey = action.commentSortKey;
   },
   [types.SET_ERROR]: (state, action) => {
     state.error = action.error;

@@ -1,19 +1,43 @@
+import { useSelector, useDispatch } from 'react-redux';
+import { createSelector } from 'reselect';
 import CommentsInput from '../component/CommentsInput';
 import Comments from '../component/Comments';
-import { useSelector, useDispatch } from 'react-redux';
 import { types, actions } from '../../common/reducer/detail';
 import ErrorSnack from '../component/ErrorSnack';
-import { StarOutlined } from '@material-ui/icons';
+
+const getComments = state => state.detail.comments;
+const getSortKey = state => state.detail.commentSortKey;
+const getCommentsWithSortKey = createSelector(
+  [getComments, getSortKey],
+  (comments, sortKey) => {
+    const commentList = [...comments];
+    if (sortKey === "registered" ) {
+      return commentList;
+    }
+    if (sortKey === "recent") {
+      return commentList.reverse();
+    }
+    if (sortKey === "like") {
+      commentList.sort((a, b)=> {
+        return b.like.length - a.like.length;
+      })
+      return commentList;
+    }
+    return commentList;
+  }
+)
+
 
 export default function CommentsContainer(props) {
     const [sendable, setSendable] = React.useState(false);  
     const [snack, setSnack] = React.useState(false);
     const [snackContent, setSnackContent] = React.useState("");
   
-    const comments = useSelector(state => state.detail.comments);
+    const comments = useSelector(getCommentsWithSortKey);
     const contentId = useSelector(state => state.detail.ids.contentId);
     const user = useSelector(state => state.user.info._id);
     const isLoadingComments = useSelector(state => state.detail.isLoadingComments);
+    const sortKey = useSelector(state => state.detail.commentSortKey );
     const { place } = useSelector(state => state.detail);
 
     const dispatch = useDispatch();
@@ -35,7 +59,10 @@ export default function CommentsContainer(props) {
     const addLike = React.useCallback(( commentId ) => {
       dispatch(actions.requestLike({ userId: user, commentId }));
     }, [dispatch]);
-  
+    const setSortKey = React.useCallback((key) => {
+      dispatch(actions.setSortKey(key));
+    }, [dispatch]);
+
     return (
     <React.Fragment>
         <CommentsInput
@@ -49,6 +76,7 @@ export default function CommentsContainer(props) {
         />
         <Comments
           isLoadingComments={isLoadingComments}
+          setSortKey={setSortKey}
           addReply={addReply}
           updateComment={updateComment}
           deleteComment={deleteComment}
@@ -57,6 +85,7 @@ export default function CommentsContainer(props) {
           setSendable={setSendable}
           setSnack={setSnack}
           setSnackContent={setSnackContent}
+          sortKey={sortKey}
           comments={comments}
           contentId={contentId}
           commenter={user}

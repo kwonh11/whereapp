@@ -15,7 +15,6 @@ router.get("/:contentId", async (req, res) => {
     const contentId = Number(req.params.contentId);
     const place = await Place.findOne({ contentid: contentId });
     const condition = place ? {place : place._id} : {contentId};
-
     const list = await Comment.find(condition)
       .sort({ createAt: 1 });
     res.status(200).json(list);
