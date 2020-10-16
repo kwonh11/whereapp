@@ -12,6 +12,7 @@ export const types = {
 
   // 댓글 관련
   SET_LOADING_COMMENTS: "detail/SET_LOADING_COMMENTS", // 댓글 로딩
+
   REQUEST_COMMENTS: "detail/REQUEST_COMMENTS", // 댓글 목록 요청
   SET_COMMENTS: "detail/SET_COMMENTS", // 댓글목록 REDUX저장
 
@@ -75,6 +76,13 @@ export const actions = {
     type: types.REQUEST_DELETE_COMMENT,
     payload,
   }),
+  // deleteComment: (_id, commenter) => ({type: types.DELETE_COMMENT, _id, commenter}),
+
+  requestDeleteComment: (payload) => ({
+    type: types.REQUEST_DELETE_COMMENT,
+    payload,
+  }),
+  // deleteComment: (_id, commenter) => ({type: types.DELETE_COMMENT, _id, commenter}),
 
   requestAddReply: (payload) => ({ type: types.REQUEST_ADD_REPLY, payload }),
   // addReply: (commentId, reply) => ({type: types.ADD_REPLY, commentId, reply}),

@@ -109,8 +109,4 @@ router.get("/comment", isLoggedIn, async (req, res) => {
   }
 });
 
-router.get("/comments", isLoggedIn, (req, res) => {
-  const test = Comment.find({ commenter: req.user.id });
-});
-
 module.exports = router;
