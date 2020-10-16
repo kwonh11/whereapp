@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 
 const placeSchema = new Schema({
   contentid: {
-    type: Number,
+    type: String,
     require: true,
     unique: true,
   },

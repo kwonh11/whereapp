@@ -61,27 +61,107 @@ const ChatBtn = styled(IconButton)`
   }
 `;
 
-export default function Chat({ visual, handleClick }) {
+const ChatWrap = styled.ul`
+  /* list-style: none; */
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  & .you + & .me {
+    border-bottom-right-radius: 5px;
+  }
+
+  & li {
+    padding: 20px;
+    border-radius: 30px;
+    margin-bottom: 2px;
+
+    /* &.you + &.me {
+      border-bottom-right-radius: 5px;
+    } */
+
+    &.you {
+      background: #eee;
+      align-self: flex-start;
+    }
+
+    &.me {
+      align-self: flex-end;
+      background: #3f63bf;
+      color: #fff;
+
+      &.me + &.me {
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+      }
+
+      &:last-of-type {
+        border-bottom-right-radius: 30px;
+      }
+    }
+  }
+`;
+
+export default function Chat({
+  input,
+  chat,
+  visual,
+  handleClick,
+  handleChangeInput,
+  handleClickSubmit,
+  user,
+}) {
   const classes = useStyles();
+
   return visual ? (
     <Zoom in={visual}>
       <Paper elevation={3} className={classes.paper}>
         <div className={classes.header}>
-          <span>참여인원</span>
+          <span>{`참여인원 : ${chat.length}`}</span>
           <IconButton onClick={handleClick}>
             <CloseIcon />
           </IconButton>
         </div>
-        <div className={classes.contents}></div>
+        <ChatWrap className={classes.contents}>
+          {chat.map((item, idx) => {
+            if (item.user === "system") {
+              return (
+                <li className={item.user} key={idx}>
+                  {item.chat}
+                </li>
+              );
+            } else if (item.user === user) {
+              return (
+                <li className="me" key={idx}>
+                  {item.chat}
+                </li>
+              );
+            } else {
+              return (
+                <li className="you" key={idx}>
+                  {item.chat}
+                </li>
+              );
+            }
+          })}
+        </ChatWrap>
         <form className={classes.form}>
           <IconButton>
             <AttachFileIcon />
           </IconButton>
           <InputBase
             className={classes.inputBase}
+            value={input}
             placeholder="메세지를 입력해주세요."
+            onChange={handleChangeInput}
           />
-          <IconButton>
+          <IconButton onClick={handleClickSubmit}>
             <SendIcon />
           </IconButton>
         </form>

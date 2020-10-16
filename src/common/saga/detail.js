@@ -7,7 +7,7 @@ import {
   callApiAddReply,
   callApiDeleteReply,
   callApiAddLike,
-  addPlace,
+  callApiAddPlace,
 } from "../api";
 import { actions, types } from "../reducer/detail";
 import { fork, all, put, call, take, takeLatest, delay } from "redux-saga/effects";

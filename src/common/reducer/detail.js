@@ -20,9 +20,9 @@ export const types = {
   ADD_COMMENT: "detail/ADD_COMMENT", // 댓글 작성
 
   REQUEST_DELETE_COMMENT: "detail/REQUEST_DELETE_COMMENT", // 선택한 댓글 삭제
-  DELETE_COMMENT: "detail/DELETE_COMMENT", 
+  DELETE_COMMENT: "detail/DELETE_COMMENT",
 
-  REQUEST_UPDATE_COMMENT: "detail/REQUEST_UPDATE_COMMENT",  // 댓글 수정
+  REQUEST_UPDATE_COMMENT: "detail/REQUEST_UPDATE_COMMENT", // 댓글 수정
   UPDATE_COMMENT: "detail/UPDATE_COMMENT",
 
   REQUEST_LIKE: "detail/REQUEST_LIKE", // 댓글 좋아요
@@ -55,8 +55,11 @@ export const actions = {
   // requestComments: (payload) => ({ type: types.REQUEST_COMMENTS, payload }),
   setComments: (comments) => ({ type: types.SET_COMMENTS, comments }),
 
-  requestAddComment: (payload) => ({ type: types.REQUEST_ADD_COMMENT, payload }),
-  
+  requestAddComment: (payload) => ({
+    type: types.REQUEST_ADD_COMMENT,
+    payload,
+  }),
+
   addComment: (comment) => ({ type: types.ADD_COMMENT, comment }),
   
   requestUpdateComment: (payload) => ({type: types.REQUEST_UPDATE_COMMENT, payload}),
@@ -64,6 +67,8 @@ export const actions = {
   requestDeleteComment: (payload) => ({type: types.REQUEST_DELETE_COMMENT, payload}),
   // deleteComment: (_id, commenter) => ({type: types.DELETE_COMMENT, _id, commenter}),
 
+  requestDeleteComment: (payload) => ({ type: types.REQUEST_DELETE_COMMENT, payload }),
+  // deleteComment: (_id, commenter) => ({type: types.DELETE_COMMENT, _id, commenter}),
 
   requestAddReply: (payload) => ({type: types.REQUEST_ADD_REPLY, payload}),
   // addReply: (commentId, reply) => ({type: types.ADD_REPLY, commentId, reply}),
@@ -160,13 +165,17 @@ const reducer = createReducer(INITIAL_STATE, {
     }
   },
   [types.ADD_REPLY]: (state, action) => {
-    const comment = state.comments.find((item) => item._id === action.commentId);
+    const comment = state.comments.find(
+      (item) => item._id === action.commentId
+    );
     if (comment) comment.reply.push(action.reply);
   },
   [types.REMOVE_REPLY]: (state, action) => {
-    const comment = state.comments.find((item) => item._id === action.commentId);
+    const comment = state.comments.find(
+      (item) => item._id === action.commentId
+    );
     if (comment) {
-      const idx = comment.reply.findIndex(rep => rep._id === action._id);
+      const idx = comment.reply.findIndex((rep) => rep._id === action._id);
       if (idx >= 0) {
         reply.splice(idx, 1);
       }

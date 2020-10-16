@@ -29,7 +29,13 @@ const FilterWrap = styled.div`
   justify-content: space-between;
 `;
 
-export default function User({ tabValue, places, handleChangeTab }) {
+export default function User({
+  tabValue,
+  places,
+  handleChangeTab,
+  listType,
+  setPlaceListType,
+}) {
   const classes = useStyles();
 
   const categoryList = ["scrap", "comment"];
@@ -65,7 +71,10 @@ export default function User({ tabValue, places, handleChangeTab }) {
       </AppBar>
       <ContentsWrap>
         <FilterWrap>
-          <ViewTypeBtn />
+          <ViewTypeBtn
+            setPlaceListType={setPlaceListType}
+            listType={listType}
+          />
           <div>
             {/* {makeSelect(["조선", "중앙"], order)}
             {makeSelect(orderList, order)} */}

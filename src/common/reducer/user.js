@@ -9,13 +9,9 @@ export const types = {
   UPLOAD_IMAGE_SUCCESS: "user/UPLOAD_IMAGE_SUCCESS",
   UPLOAD_IMAGE_ERROR: "user/UPLOAD_IMAGE_ERROR",
 
-  GET_SCRAP_REQUEST: "user/GET_SCRAP_REQUEST",
-  GET_SCRAP_SUCCESS: "user/GET_SCRAP_SUCCESS",
-  GET_SCRAP_ERROR: "user/GET_SCRAP_ERROR",
-
-  GET_COMMENTS_REQUEST: "user/GET_COMMENTS_REQUEST",
-  GET_COMMENTS_SUCCESS: "user/GET_COMMENTS_SUCCESS",
-  GET_COMMENTS_ERROR: "user/GET_COMMENTS_ERROR",
+  SET_HEARTS_REQUEST: "user/SET_HEARTS_REQUEST",
+  SET_HEARTS_SUCCESS: "user/SET_HEARTS_SUCCESS",
+  SET_HEARTS_ERROR: "user/SET_HEARTS_ERROR",
 };
 
 export const actions = {
@@ -27,15 +23,9 @@ export const actions = {
   uploadImageSuccess: (image) => ({ type: types.UPLOAD_IMAGE_SUCCESS, image }),
   uploadImageError: (error) => ({ type: types.UPLOAD_IMAGE_ERROR, error }),
 
-  getCommentsRequest: (payload) => ({
-    type: types.GET_COMMENTS_REQUEST,
-    payload,
-  }),
-  getCommentsSuccess: (payload) => ({
-    type: types.GET_COMMENTS_SUCCESS,
-    payload,
-  }),
-  getCommentsError: (payload) => ({ type: types.GET_COMMENTS_ERROR, payload }),
+  setHeartsRequest: (payload) => ({ type: types.SET_HEARTS_REQUEST, payload }),
+  setHeartsSuccess: (payload) => ({ type: types.SET_HEARTS_SUCCESS, payload }),
+  setHeartsError: (payload) => ({ type: types.SET_HEARTS_ERROR, payload }),
 };
 
 const INITIAL_STATE = {
@@ -45,6 +35,7 @@ const INITIAL_STATE = {
   },
   hearts: [],
   comments: [],
+  error: null,
 };
 
 const reducer = createReducer(INITIAL_STATE, {
@@ -52,10 +43,18 @@ const reducer = createReducer(INITIAL_STATE, {
     state.isLoggedIn = true;
     state.info = action.payload.info;
     state.comments = action.payload.comments;
+    state.hearts = action.payload.hearts;
   },
 
   [types.UPLOAD_IMAGE_SUCCESS]: (state, action) => {
     state.info.image = action.image;
+  },
+
+  [types.SET_HEARTS_SUCCESS]: (state, action) => {
+    state.hearts = action.payload;
+  },
+  [types.SET_HEARTS_ERROR]: (state, action) => {
+    state.error = action.payload;
   },
 });
 

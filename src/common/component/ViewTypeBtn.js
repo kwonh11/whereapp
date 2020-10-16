@@ -21,8 +21,7 @@ const ToggleBtnGroup = styled(ToggleButtonGroup)`
   }
 `;
 
-function ViewButton({setPlaceListType, listType}) {
-
+function ViewButton({ setPlaceListType, listType }) {
   const handleView = (event, viewType) => {
     setPlaceListType(viewType);
   };

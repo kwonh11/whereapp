@@ -15,7 +15,7 @@ function SearchContainer({ history }) {
   useEffect(() => {
     if (address) return;
     dispatch(actions.requestLocation());
-  }, [dispatch, address]);
+  }, []);
 
   const handleAreaBasedList = () => {
     return dispatch(actions.requestAreaBasedList());

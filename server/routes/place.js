@@ -32,6 +32,7 @@ router.get("/", async (req, res) => {
 
 router.post("/", isLoggedIn, async (req, res) => {
   const { contentid } = req.body;
+  console.log(contentid);
 
   try {
     const exPlace = await Place.findOne({
@@ -39,9 +40,12 @@ router.post("/", isLoggedIn, async (req, res) => {
     });
 
     if (exPlace) {
+      console.log("------exPlace");
+      console.log(exPlace);
       res.json(exPlace._id);
     } else {
       const newPlace = await Place.create(req.body);
+      console.log(newPlace);
       res.json(newPlace._id);
     }
   } catch (err) {
