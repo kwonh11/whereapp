@@ -33,6 +33,7 @@ const CommentSchema = new Schema({
   place: {
     type: ObjectId,
     ref: "Place",
+    require: true,
   },
   nick: {
     type: String,

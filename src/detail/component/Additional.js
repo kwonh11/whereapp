@@ -1,6 +1,6 @@
-import styled from 'styled-components';
-import toKorean from '../../common/toKorean';
-import { Chip, Divider } from '@material-ui/core';
+import styled from "styled-components";
+import toKorean from "../../common/toKorean";
+import { Chip, Divider } from "@material-ui/core";
 
 const AdditionalContainer = styled.div`
   width: 1000px;
@@ -43,10 +43,11 @@ const AdditionalLeft = styled.div`
 const AdditionalRight = styled.div`
   width: 50%;
   font-weight: bold;
-  color: ${props => props.color === "red" ? "red" : props.color === "blue"? "blue" : ""};
+  color: ${(props) =>
+    props.color === "red" ? "red" : props.color === "blue" ? "blue" : ""};
 `;
 const StyledChip = styled(Chip)`
-  $ .MuiChip-label {
+  & .MuiChip-label {
     padding: 20px;
   }
 `;
@@ -56,31 +57,39 @@ const ShorterDivider = styled(Divider)`
 `;
 
 export default function AdditionalInfos({ additional }) {
-
-    return (
-        <AdditionalContainer>
-        <AdditionalHeader>
-          상세정보
-          <ShorterDivider />
-        </AdditionalHeader>
-        {additional.map((info, i) => {
-          const key = toKorean(info[0]);
-          if (key && info[1]) {
-            return (
-              <AdditionalWrap key={i}>
-                <AdditionalInfo>
-                    <AdditionalLeft>
-                      <StyledChip variant="outlined" label={key} />
-                    </AdditionalLeft>
-                    <AdditionalRight 
-                    color={info[1]==="없음" || info[1]==="불가" ? "red" :
-                    info[1]==="있음" || info[1]==="가능" || info[1] === "무료" ? "blue" :""} dangerouslySetInnerHTML={{__html: info[1] }} />
-                </AdditionalInfo>
-            </AdditionalWrap> 
-            )
-          }
-          return null;
-        })}
-      </AdditionalContainer>
-    )
+  return (
+    <AdditionalContainer>
+      <AdditionalHeader>
+        상세정보
+        <ShorterDivider />
+      </AdditionalHeader>
+      {additional.map((info, i) => {
+        const key = toKorean(info[0]);
+        if (key && info[1]) {
+          return (
+            <AdditionalWrap key={i}>
+              <AdditionalInfo>
+                <AdditionalLeft>
+                  <StyledChip variant="outlined" label={key} />
+                </AdditionalLeft>
+                <AdditionalRight
+                  color={
+                    info[1] === "없음" || info[1] === "불가"
+                      ? "red"
+                      : info[1] === "있음" ||
+                        info[1] === "가능" ||
+                        info[1] === "무료"
+                      ? "blue"
+                      : ""
+                  }
+                  dangerouslySetInnerHTML={{ __html: info[1] }}
+                />
+              </AdditionalInfo>
+            </AdditionalWrap>
+          );
+        }
+        return null;
+      })}
+    </AdditionalContainer>
+  );
 }

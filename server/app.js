@@ -4,19 +4,32 @@ const path = require("path");
 const passport = require("passport");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
+const middlewares = require("./routes/middlewares");
+const ColorHash = require("color-hash");
 require("dotenv").config();
 
+const webSocket = require("./socket");
 const passportConfig = require("./passport");
 const connect = require("./schemas");
 const authRouter = require("./routes/auth");
 const locationRouter = require("./routes/location");
 const placeRouter = require("./routes/place");
 const commentRouter = require("./routes/comment");
-const middlewares = require("./routes/middlewares");
+const chatRouter = require("./routes/chat");
 
 const app = express();
 connect();
 passportConfig(passport);
+
+const sessionMiddleware = session({
+  resave: false,
+  saveUninitialized: false,
+  secret: process.env.COOKIE_SECRET,
+  cookie: {
+    httpOnly: true,
+    secure: false,
+  },
+});
 
 app.set("port", process.env.PORT || 8000);
 
@@ -25,27 +38,26 @@ app.use(morgan("dev"));
 app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: false }));
 app.use("/img", express.static(path.join(__dirname, "uploads")));
-app.use(cookieParser("secret"));
-app.use(
-  session({
-    resave: false,
-    saveUninitialized: false,
-    secret: "secret",
-    cookie: {
-      httpOnly: true,
-      secure: false,
-    },
-  })
-);
+app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(sessionMiddleware);
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use((req, res, next) => {
+  const colorHash = new ColorHash();
+  if (!req.session.color) {
+    req.session.color = colorHash.hex(req.sessionID);
+  }
+  next();
+});
 
 app.use("/", express.static(path.join(__dirname, "view")));
 app.use("/auth", authRouter);
 app.use("/location", locationRouter);
 app.use("/place", placeRouter);
 app.use("/comment", commentRouter);
+app.use("/chat", chatRouter);
 
 app.use((req, res, next) => {
   const err = new Error("Not Fount");
@@ -59,7 +71,8 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500);
 });
 
-app.listen(app.get("port"), () => {
+const server = app.listen(app.get("port"), () => {
   console.log(app.get("port"), "번 대기중!!!");
 });
 
+webSocket(server, app, sessionMiddleware);

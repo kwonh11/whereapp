@@ -6,23 +6,12 @@ const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
 const path = require("path");
 const User = require("../schemas/user");
 const Comment = require("../schemas/comment");
+const Heart = require("../schemas/heart");
 
 const router = express.Router();
 
 router.get("/checkUser", async (req, res, next) => {
-  if (req.user) {
-    const comments = await Comment.find(
-      { commenter: req.user.id },
-      "place"
-    ).populate("place");
-
-    res.json({
-      info: req.user,
-      comments,
-    });
-  } else {
-    res.json(null);
-  }
+  res.json(req.user || null);
 });
 
 router.get("/google", passport.authenticate("google", { scope: ["profile"] }));
@@ -80,8 +69,44 @@ router.patch("/img", isLoggedIn, upload.single("img"), async (req, res) => {
   res.json({ url: `/img/${req.file.filename}` });
 });
 
-router.get("/comments", isLoggedIn, (req, res) => {
-  const test = Comment.find({ commenter: req.user.id });
+router.patch("/heart", isLoggedIn, async (req, res) => {
+  const { place } = req.body;
+  try {
+    const exHeart = await Heart.findOne({ user: req.user.id, place });
+    if (exHeart) {
+      await Heart.remove(exHeart);
+      res.end();
+    } else {
+      await Heart.create({ user: req.user.id, place });
+      res.status(201).end();
+    }
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+router.get("/heart", isLoggedIn, async (req, res) => {
+  try {
+    const hearts = await Heart.find({ user: req.user.id }, "place").populate(
+      "place"
+    );
+    res.json(hearts.map((heart) => heart.place));
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+router.get("/comment", isLoggedIn, async (req, res) => {
+  try {
+    const comments = await Comment.find(
+      { commenter: req.user.id },
+      "place"
+    ).populate("place");
+
+    res.json(comments.map((comment) => comment.place));
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 module.exports = router;
