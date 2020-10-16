@@ -96,10 +96,11 @@ router.get("/search", async (req, res, next) => {
 //   }
 // });
 
-router.get("/best", async (req, res) => {
+router.get("/best/:region", async (req, res) => {
+  const { region } = req.params;
   await axios
     .get(
-      `http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchFestival?ServiceKey=${process.env.TOUR_KEY}&areaCode=1&numOfRows=20&pageNo=1&arrange=Q&MobileOS=ETC&MobileApp=Where`
+      `http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchFestival?ServiceKey=${process.env.TOUR_KEY}&areaCode=${region}&numOfRows=20&pageNo=1&arrange=Q&MobileOS=ETC&MobileApp=Where`
     )
     .then((result) => {
       const placeList = result.data.response.body.items.item;

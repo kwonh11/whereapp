@@ -14,8 +14,8 @@ const SliderContainer = styled.div`
   align-items: center;
   padding-top: 80px;
   position: relative;
-  padding-bottom: 150px;
   background-color: #f1f1f1;
+  padding-bottom: 150px;
   opacity: ${props => props.fade === "in" ? 1 : 0.3};
   transition: opacity 0.3s ease-out;
 `;

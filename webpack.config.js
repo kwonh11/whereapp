@@ -2,6 +2,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const webpack = require("webpack");
+const faviconPath = path.resolve(__dirname, "template")
 
 module.exports = {
   entry: {
@@ -80,7 +81,7 @@ module.exports = {
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: "./template/index.html",
-      favicon: "./template/faviconA.ico"
+      favicon: `${faviconPath}/faviconA.ico`
     }),
     new webpack.ProvidePlugin({
       React: "react",

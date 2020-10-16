@@ -31,19 +31,17 @@ function SkeletonCard() {
 
 export default function SliderContainer() {
 
-  const { bestPlaceList, isLoading } = useSelector(state => ({
-    bestPlaceList: state.home.bestPlaceList,
-    isLoading: state.home.isLoading,
-  }))
+  const { bestPlaceList, isLoading, regionCode } = useSelector(state => state.home);
+  const { origin, isHandledAddress } = useSelector(state => state.location);
 
   const dispatch = useDispatch();
-  const requestBestPlaceList = React.useCallback(() => {
-    dispatch(actions.requestBestPlaceList());
+  const requestBestPlaceList = React.useCallback((regionCode) => {
+    dispatch(actions.requestBestPlaceList({regionCode, isHandledAddress, origin}));
   }, [dispatch]);
 
   React.useEffect(() => {
-    requestBestPlaceList();
-  }, []);
+    requestBestPlaceList(regionCode);
+  }, [regionCode]);
 
   if (isLoading) {
     return (
