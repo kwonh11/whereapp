@@ -8,7 +8,6 @@ import Fade from '@material-ui/core/Fade';
 import Loading from '../../common/component/Loading';
 
 const LoadingContainer = styled.div`
-    background: #f5f5f5;
     display: flex;
     width: 100%;
     height: 400px;

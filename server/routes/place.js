@@ -21,7 +21,7 @@ router.get("/", async (req, res) => {
           ...commonResult.data.response.body.items.item,
           ...detailResult.data.response.body.items.item,
         };
-        res.json(additional);
+        res.json(additional).end();
       })
     )
     .catch((err) => {

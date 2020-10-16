@@ -84,10 +84,10 @@ router.post("/reply", isLoggedIn, async (req, res) => {
       { _id: commentId },
       { reply: [...comment.reply, currentReply] }
     ).exec();
+    res.status(200).end();
   } catch (err) {
     res.status(403).send(err);
   }
-  res.status(200).end();
 });
 
 // 대댓글 삭제
