@@ -8,8 +8,8 @@ export function callApiGetAddress(location) {
   });
 }
 
-export function callApiBestList() {
-  return axios.get("/location/best");
+export function callApiBestList(regionCode) {
+  return axios.get(`/location/best/${regionCode}`);
 }
 
 export function callApiDetailIntro(contentTypeId, contentId) {

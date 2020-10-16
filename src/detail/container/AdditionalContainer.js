@@ -41,22 +41,18 @@ export default function AdditionalContainer(props) {
 
   const { origin } = useSelector(state => state.location);
   const { contentTypeId, contentId } = useSelector(state => state.detail.ids);
-  const { additional, isLoading } = useSelector(state => state.detail);
+  const { additional, isLoading, place } = useSelector(state => state.detail);
   const isOnline = useSelector(state => state.detail.place.addr1.includes("온라인"));
   const dispatch = useDispatch();
 
   const requestDetails = React.useCallback((contentTypeId, contentId) => {
     dispatch(actions.requestDetails({ contentTypeId, contentId }))
   }, [dispatch]);
-  const setAdditional = React.useCallback((additional) => {
-    dispatch(actions.setAdditional({ additional }))
-  }, [dispatch]);
   const setInitializeAdditional = React.useCallback(() => {
     dispatch(actions.setInitializeAdditional());
   },[dispatch]);
   const { hearts, isLoggedIn } = useSelector((state) => state.user);
   const [isHeart, setIsHeart] = useState(false);
-  const [snack, setSnack] = React.useState(false);
 
   useEffect(() => {
     requestDetails(contentTypeId, contentId);
@@ -73,10 +69,6 @@ export default function AdditionalContainer(props) {
     } else {
       setSnack(true);
     }
-  };
-
-  const handleCloseSnackbar = () => {
-    setSnack(false);
   };
 
   return (

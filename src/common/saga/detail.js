@@ -51,7 +51,7 @@ export function* addComments(action) {
   yield put(actions.setLoadingComments(true));
   yield put(actions.setError(""));
   try {
-    const res = yield call(addPlace, place);
+    const res = yield call(callApiAddPlace, place);
     // comment.contentId = contentId.data
     comment.place = res.data;
     yield call(callApiAddComment, comment);

@@ -29,20 +29,29 @@ export function* fetchLocation() {
 
 // 최초 접속시 user의 location을 얻고 reverse geocode하고 저장한다.
 // 위치기반 사용자 주변의 place list를 요청하고 store에 저장한다.
-export function* fetchAreaBasedList() {
+export function* fetchAreaBasedList(action) {
+  const { origin, isHandledAddress } = action.payload;
   yield put(actions.setError(""));
   try {
-    // getlocation 현재좌표
-    const usersLocation = yield call(getUsersLocation);
-    yield put(actions.setOrigin(usersLocation)); // store에 user location 저장
+    if (!isHandledAddress) {
+      // getlocation 현재좌표
+      const usersLocation = yield call(getUsersLocation);
+      yield put(actions.setOrigin(usersLocation)); // store에 user location 저장
+      // reverse geocode 좌표로 주소 변환
+      const address = yield call(callApiGetAddress, usersLocation);
+      yield put(actions.setAddress(address.data));
+      
+      yield put(placeActions.setPlaceListLoading(true));
+      const placeList = yield call(callApiLocationBasedList, usersLocation);
+      yield put(placeActions.setPlaceList(placeList.data.item));
 
-    // reverse geocode 좌표로 주소 변환
-    const address = yield call(callApiGetAddress, usersLocation);
-    yield put(actions.setAddress(address.data));
+    } else {
 
-    yield put(placeActions.setPlaceListLoading(true));
-    const placeList = yield call(callApiLocationBasedList, usersLocation);
-    yield put(placeActions.setPlaceList(placeList.data.item));
+      yield put(placeActions.setPlaceListLoading(true));
+      const placeList = yield call(callApiLocationBasedList, origin);
+      yield put(placeActions.setPlaceList(placeList.data.item));
+
+    }
   } catch (err) {
     yield put(actions.setError(err));
     yield put(actions.setOrigin({}));
