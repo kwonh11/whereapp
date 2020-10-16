@@ -25,10 +25,10 @@ const Container = styled.div`
   width: 275px; 
   height: 275px;
   box-shadow: 0 13px 27px -5px rgba(50,50,93,0.25), 0 8px 16px -8px rgba(0,0,0,0.3), 0 -6px 16px -6px rgba(0,0,0,0.025);
-  transition: all 0.2s ease-out;
   &:hover {
     transform: translateY(-5px);
   }
+  transition: all 0.2s ease-out;
 `;
 export default function Category({image, name}) {
   return (

@@ -1,8 +1,7 @@
-
 import { useDispatch, useSelector } from "react-redux";
 import styled from 'styled-components';
 import Slider from "../component/Slider";
-import { types } from "../../common/reducer/home";
+import { actions } from "../../common/reducer/home";
 import Skeleton from "@material-ui/lab/Skeleton";
 
 const SkeletonContainer = styled.div`
@@ -39,7 +38,7 @@ export default function SliderContainer() {
 
   const dispatch = useDispatch();
   const requestBestPlaceList = React.useCallback(() => {
-    dispatch({ type: types.REQUEST_BEST_PLACE_LIST });
+    dispatch(actions.requestBestPlaceList());
   }, [dispatch]);
 
   React.useEffect(() => {

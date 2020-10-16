@@ -3,4 +3,4 @@
 .env
 /server/uploads
 /server/view
-/server/view/index.html
+!/server/view/index.html

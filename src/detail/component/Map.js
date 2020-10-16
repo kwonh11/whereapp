@@ -12,7 +12,7 @@ const options = {
 };
 function Directions (props) {
     const [directions, setDirections] = React.useState();
-    const {origin, destination } = props;
+    const { origin, destination } = props;
     const count = React.useRef(0);
 
     React.useEffect(()=>{
@@ -49,11 +49,16 @@ function toFloatLatLng(obj) {
 }
 
 export default function Map(props) {
-    const {origin, destination, isOnline} = props;
+    const {origin, destination, setInitializeAdditional } = props;
+
+    React.useEffect(() => {
+        return () => {
+            setInitializeAdditional();
+        }
+    }, []);
     
     if( origin.lat && origin.lng && destination.lat && destination.lng ) {
         return (
-            // key
             <LoadScript googleMapsApiKey={"AIzaSyALHpeFI7Zg9iOcp7DjETfJNZkcPRByN58"}>
                 <GoogleMap
                     mapContainerStyle={{

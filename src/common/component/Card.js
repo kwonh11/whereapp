@@ -130,25 +130,20 @@ export default function PlaceCard(props) {
 
   const dispatch = useDispatch();
   const setIds = React.useCallback((contentTypeId, contentId) => {
-    dispatch({
-      type: types.SET_IDS,
-      ids: {
-        contentTypeId,
-        contentId,
-    }});
+    dispatch(actions.setIds({contentTypeId, contentId}));
   }, [dispatch]);
   const setPlace = React.useCallback((place) => {
-    dispatch({
-      type: types.SET_PLACE, place: {
+    dispatch(actions.setPlace({
         ...place,
         isClose: place.dist <= 1000
-    } });
-  }, [dispatch]);
+    }));
+    }, [dispatch]);
 
   const handleClickCard = (contentTypeId, contentId, place) => {
     setIds(contentTypeId, contentId);
     setPlace(place);
   };
+
   return (
     <StyledCard>
       <Link to={`/place/${contenttypeid}/${contentid}`}>
@@ -161,7 +156,7 @@ export default function PlaceCard(props) {
       </Link>
       <CardHeader
         className={classes.small}
-        title={title}
+        title={title.length >= 33 ? title.slice(0,33) + "..." : title}
         subheader={
           <>
             {isPopular && <Badge color="red"> 인기 </Badge>}
@@ -208,25 +203,3 @@ export default function PlaceCard(props) {
     </StyledCard>
   );
 }
-
-// const mapDispatchToProps = (dispatch, props) => {
-//   return {
-//     setIds: () =>
-//       dispatch({
-//         type: types.SET_IDS,
-//         ids: {
-//           contentId: props.place.contentid,
-//           contentTypeId: props.place.contenttypeid,
-//         },
-//       }),
-//     setPlace: () =>
-//       dispatch({
-//         type: types.SET_PLACE,
-//         place: {
-//           isClose: props.place.dist <= 1000,
-//           ...props.place,
-//         },
-//       }),
-//   };
-// };
-// export default connect(null, mapDispatchToProps)(PlaceCard);

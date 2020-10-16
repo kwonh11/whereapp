@@ -3,8 +3,6 @@ import User from "../component/User";
 import { useSelector } from "react-redux";
 
 export default function UserContainer({ tab }) {
-  console.log("-----UserContainer");
-
   const { comments, hearts } = useSelector((state) => state.user);
 
   const [tabValue, setTabValue] = useState(tab === "heart" ? 0 : 1);

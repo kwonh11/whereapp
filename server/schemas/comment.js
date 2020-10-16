@@ -53,8 +53,8 @@ const CommentSchema = new Schema({
     require: true,
   },
   like: {
-    type: Number,
-    default: 0,
+    type: [{type: ObjectId, ref: "User"}],
+    default: [],
   },
   reply: {
     type: [ReplySchema],

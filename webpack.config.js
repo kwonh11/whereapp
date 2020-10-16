@@ -80,6 +80,7 @@ module.exports = {
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: "./template/index.html",
+      favicon: "./template/faviconA.ico"
     }),
     new webpack.ProvidePlugin({
       React: "react",

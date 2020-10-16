@@ -19,7 +19,7 @@ router.get("/", (req, res, next) => {
       res.json(r.data.results[0].formatted_address);
     })
     .catch((e) => {
-      console.log(e);
+      res.send(e).end();
     });
 });
 
@@ -41,7 +41,7 @@ router.get("/geocode", (req, res, next) => {
       res.json(r.data.results[0].geometry.location);
     })
     .catch((e) => {
-      console.log(e);
+      res.send(e).end();
     });
 });
 
@@ -63,7 +63,7 @@ router.get("/autocomplete", async (req, res, next) => {
       res.json(r.data.predictions);
     })
     .catch((e) => {
-      console.log(e);
+      res.send(e).end();
     });
 });
 
@@ -76,7 +76,7 @@ router.get("/search", async (req, res, next) => {
     );
     res.json(data.data.response.body.items);
   } catch (error) {
-    console.error(error);
+    res.send(error).end();
   }
 });
 
@@ -109,7 +109,7 @@ router.get("/best", async (req, res) => {
       res.json(placeList.slice(0, 10));
     })
     .catch((err) => {
-      console.log(err);
+      res.send(err).end();
     });
 });
 

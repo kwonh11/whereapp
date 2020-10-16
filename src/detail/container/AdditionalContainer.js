@@ -10,8 +10,8 @@ import Overview from "../component/Overview";
 import AdditionalComponent from "../component/Additional";
 import Map from "../component/Map";
 import { useSelector, useDispatch } from "react-redux";
-import { types } from "../../common/reducer/detail";
-import { actions } from "../../common/reducer/user";
+import { actions as userActions } from "../../common/reducer/user";
+import { types, actions } from "../../common/reducer/detail";
 
 const MapContainer = styled.div`
   padding: 50px 0;
@@ -49,14 +49,20 @@ export default function AdditionalContainer(props) {
   );
 
   const requestDetails = React.useCallback(
-    (contentTypeId, contentId) =>
-      dispatch({
-        type: types.REQUEST_DETAILS,
-        contentTypeId,
-        contentId,
-      }),
+    (contentTypeId, contentId) => {
+      dispatch(actions.requestDetails({ contentTypeId, contentId }));
+    },
     [dispatch]
   );
+  const setAdditional = React.useCallback(
+    (additional) => {
+      dispatch(actions.setAdditional({ additional }));
+    },
+    [dispatch]
+  );
+  const setInitializeAdditional = React.useCallback(() => {
+    dispatch(actions.setInitializeAdditional());
+  }, [dispatch]);
 
   const [isHeart, setIsHeart] = useState(false);
   const [snack, setSnack] = React.useState(false);
@@ -72,7 +78,7 @@ export default function AdditionalContainer(props) {
   const handleClickHeart = () => {
     if (isLoggedIn) {
       setIsHeart(!isHeart);
-      dispatch(actions.setHeartsRequest(place));
+      dispatch(userActions.setHeartsRequest(place));
     } else {
       setSnack(true);
     }
@@ -89,12 +95,12 @@ export default function AdditionalContainer(props) {
       ) : (
         <>
           <Overview description={additional.overview} />
-          <AdditionalComponent additional={additional.additional} />
+          <AdditionalComponent additional={additional.additionalInfos} />
           <MapContainer>
             <Map
               origin={origin}
               destination={additional.destination}
-              isOnline={isOnline}
+              setInitializeAdditional={setInitializeAdditional}
             />
           </MapContainer>
           <ActionsWrap>

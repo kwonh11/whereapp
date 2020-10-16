@@ -8,6 +8,7 @@ export const types = {
   SET_IDS: "detail/SET_IDS", // 카드 클릭시 params의 contentid, contentidtype 설정
   SET_PLACE: "detail/SET_PLACE", // DETAIL 화면
   SET_ADDITIONAL: "detail/SET_ADDITIONAL", // 소개 API를 이용한 추가데이터
+  SET_INITIALIZE_ADDITIONAL: "detail/SET_INITIALIZE_ADDITIONAL",
 
   // 댓글 관련
   SET_LOADING_COMMENTS: "detail/SET_LOADING_COMMENTS", // 댓글 로딩
@@ -23,37 +24,39 @@ export const types = {
   REQUEST_UPDATE_COMMENT: "detail/REQUEST_UPDATE_COMMENT", // 댓글 수정
   UPDATE_COMMENT: "detail/UPDATE_COMMENT",
 
-  ADD_LIKE: "detail/ADD_LIKE", // 댓글 좋아요
-  CANCLE_LIKE: "detail/CANCLE_LIKE", // 좋아요 취소
+  REQUEST_LIKE: "detail/REQUEST_LIKE", // 댓글 좋아요
+  ADD_LIKE: "detail/ADD_LIKE",
 
   REQUEST_ADD_REPLY: "detail/REQUEST_ADD_REPLY",
   ADD_REPLY: "detail/ADD_REPLY", // 대댓글 작성
 
   REQUEST_DELETE_REPLY: "detail/REQUEST_DELETE_REPLY",
   DELETE_REPLY: "detail/REMOVE_REPLY", // 대댓글 삭제
+
+  SET_SORT_KEY_COMMENTS: "detail/SET_SORT_KEY_COMMENTS",
   // 에러
   SET_ERROR: "detail/SET_ERROR",
 };
 
 export const actions = {
   setLoading: (isLoading) => ({ type: types.SET_LOADING, isLoading }),
-  requestDetails: (contentTypeId, contentId) => ({
-    type: types.SET_DETAILS,
-    contentTypeId,
-    contentId,
-  }),
+  requestDetails: (payload) => ({ type: types.REQUEST_DETAILS, payload }),
   setIds: (ids) => ({ type: types.SET_IDS, ids }),
   setPlace: (place) => ({ type: types.SET_PLACE, place }),
-  setAdditional: (additional) => ({ type: types.SET_ADDITIONAL, additional }),
+  setAdditional: (additional) => ({
+    type: types.SET_ADDITIONAL,
+    ...additional,
+  }),
+  setInitializeAdditional: () => ({ type: types.SET_INITIALIZE_ADDITIONAL }),
+
   setLoadingComments: (isLoadingComments) => ({
     type: types.SET_LOADING_COMMENTS,
     isLoadingComments,
   }),
 
-  addLike: (contentId, id) => ({ type: types.ADD_LIKE, contentId, id }),
-  cancleLike: (contentId, id) => ({ type: types.CANCLE_LIKE, contentId, id }),
+  requestLike: (payload) => ({ type: types.REQUEST_LIKE, payload }),
+  addlike: (userId, commentId) => ({ type: types.ADD_LIKE, commentId, userId }),
 
-  requestComments: (contentId) => ({ type: types.REQUEST_COMMENTS, contentId }),
   setComments: (comments) => ({ type: types.SET_COMMENTS, comments }),
 
   requestAddComment: (payload) => ({
@@ -63,37 +66,29 @@ export const actions = {
 
   addComment: (comment) => ({ type: types.ADD_COMMENT, comment }),
 
-  requestUpdateComment: (_id, content, commenter, contentId) => ({
+  requestUpdateComment: (payload) => ({
     type: types.REQUEST_UPDATE_COMMENT,
-    _id,
-    content,
-    commenter,
-    contentId,
+    payload,
   }),
 
-  requestDeleteComment: (_id, commenter, contentId) => ({
+  requestDeleteComment: (payload) => ({
     type: types.REQUEST_DELETE_COMMENT,
-    _id,
-    commenter,
-    contentId,
+    payload,
   }),
-  // deleteComment: (_id, commenter) => ({type: types.DELETE_COMMENT, _id, commenter}),
 
-  requestAddReply: (contentId, commentId, reply) => ({
-    type: types.REQUEST_ADD_REPLY,
-    contentId,
-    commentId,
-    reply,
-  }),
+  requestAddReply: (payload) => ({ type: types.REQUEST_ADD_REPLY, payload }),
   // addReply: (commentId, reply) => ({type: types.ADD_REPLY, commentId, reply}),
-  requestDeleteReply: (contentId, commentId, _id, commenter) => ({
+  requestDeleteReply: (payload) => ({
     type: types.REQUEST_DELETE_REPLY,
-    contentId,
-    commentId,
-    _id,
-    commenter,
+    payload,
   }),
   // deleteReply: (_id) => ({ type: types.REMOVE_REPLY, id }),
+
+  setSortKey: (commentSortKey) => ({
+    type: types.SET_SORT_KEY_COMMENTS,
+    commentSortKey,
+  }),
+
   setError: (error) => ({ type: types.SET_ERROR, error }),
 };
 
@@ -120,11 +115,13 @@ const INITIAL_STATE = {
     destination: { lat: "", lng: "" },
     overview: "",
     inProgress: false,
-    additional: [],
+    additionalInfos: [],
   },
+  commentSortKey: "registered",
   comments: [
     {
       reply: [],
+      like: [],
     },
   ],
   error: "",
@@ -134,6 +131,9 @@ const reducer = createReducer(INITIAL_STATE, {
   [types.SET_LOADING]: (state, action) => {
     state.isLoading = action.isLoading;
   },
+  [types.SET_LOADING_COMMENTS]: (state, action) => {
+    state.isLoadingComments = action.isLoadingComments;
+  },
   [types.SET_IDS]: (state, action) => {
     state.ids = action.ids;
   },
@@ -141,7 +141,16 @@ const reducer = createReducer(INITIAL_STATE, {
     state.place = action.place;
   },
   [types.SET_ADDITIONAL]: (state, action) => {
-    state.additional = action.additional;
+    state.additional.additionalInfos = action.additionalInfos;
+    state.additional.destination = action.destination;
+    state.additional.inProgress = action.inProgress;
+    state.additional.overview = action.overview;
+  },
+  [types.SET_INITIALIZE_ADDITIONAL]: (state, action) => {
+    state.additional.additionalInfos = [];
+    state.additional.destination = { lat: "", lng: "" };
+    state.additional.inProgress = false;
+    state.additional.overview = "";
   },
   [types.SET_COMMENTS]: (state, action) => {
     state.comments = action.comments;
@@ -154,12 +163,22 @@ const reducer = createReducer(INITIAL_STATE, {
     state.comments.splice(index, 1);
   },
   [types.ADD_LIKE]: (state, action) => {
-    const comment = state.comments.find((item) => item._id === action._id);
-    if (comment) state.comments[index].like += 1;
-  },
-  [types.CANCLE_LIKE]: (state, action) => {
-    const comment = state.comments.find((item) => item._id === action._id);
-    if (comment) state.comments[index].like -= 1;
+    const index = state.comments.findIndex(
+      (item) => item._id === action.commentId
+    );
+    if (index >= 0) {
+      console.log(`index : ${index}`);
+      const likeIndex = state.comments[index].like.findIndex(
+        (item) => item === action.userId
+      );
+      console.log(`likeIndex : ${likeIndex}`);
+      if (likeIndex >= 0) {
+        state.comments[index].like.splice(likeIndex, 1);
+      }
+      if (likeIndex < 0) {
+        state.comments[index].like.push(action.userId);
+      }
+    }
   },
   [types.ADD_REPLY]: (state, action) => {
     const comment = state.comments.find(
@@ -177,6 +196,9 @@ const reducer = createReducer(INITIAL_STATE, {
         reply.splice(idx, 1);
       }
     }
+  },
+  [types.SET_SORT_KEY_COMMENTS]: (state, action) => {
+    state.commentSortKey = action.commentSortKey;
   },
   [types.SET_ERROR]: (state, action) => {
     state.error = action.error;

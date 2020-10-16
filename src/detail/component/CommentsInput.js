@@ -40,18 +40,17 @@ const Characters = styled.div`
 
 
 export default function CommentsInput(props) {
-    const { addComment, contentId, commenter, isReply, commentId, addReply } = props;
+    const { addComment, contentId, commenter, isReply, commentId, addReply, sendable, setSendable, setSnack} = props;
     const [inputValue, setInputValue] = React.useState("");
-    const [sendable, setSendable] = React.useState(true);
-    const [snack, setSnack] = React.useState(false);
 
     React.useEffect(() => {
         if (inputValue.length > 300) setSendable(false);
         if (inputValue.length <= 300) setSendable(true);
+        if (inputValue.length === 0) setSendable(false);
     }, [inputValue]);
 
     const handleSubmit = () => {
-        if (!commenter || !inputValue || !sendable) {
+        if (!commenter || !sendable) {
             setSnack(true);
             return;
         }
@@ -62,28 +61,21 @@ export default function CommentsInput(props) {
                 content: inputValue,
                 createAt: new Date()
             }
-            addReply(contentId, commentId, replyComment);
+            addReply(commentId, replyComment);
             setInputValue("");
         }
         if (!isReply) {
             const comment = { commenter, contentId, content: inputValue };
-            addComment({ ...comment, reply: [], createAt: new Date(), like: 0 });
+            addComment({ ...comment, reply: [], createAt: new Date(), like: [] });
             setInputValue("");
         }
     };
     const handleChange = (event) => {
         setInputValue(event.target.value);
     };
-    const handleCloseSnackbar = () => {
-        setSnack(false);
-    };
+
     return (
         <CommentsWrap>
-            <Snackbar open={snack} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
-                <Alert onClose={handleCloseSnackbar} severity="error" variant="filled" style={{ fontWeight: "bold" }}>
-                    {!commenter ? "로그인 후 이용해주세요." : "300글자 이하로 작성해주세요."}
-                </Alert>
-            </Snackbar>
             <StyledTextField
                 id="outlined-textarea"
                 onChange={handleChange}

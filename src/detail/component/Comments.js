@@ -1,11 +1,20 @@
-import styled, { css } from 'styled-components';
-import { Button, Avatar, Menu, MenuItem, Input, TextField } from '@material-ui/core';
+import styled from 'styled-components';
+import { Button, Avatar, Menu, MenuItem, TextField } from '@material-ui/core';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
-import CommentsInput from './CommentsInput';
-import { MoreVert, DeleteForever } from '@material-ui/icons';
+import { MoreVert } from '@material-ui/icons';
 import { IconButton } from '@material-ui/core';
 import Fade from '@material-ui/core/Fade';
+import Loading from '../../common/component/Loading';
+import CommentsInput from './CommentsInput';
+import getDateString from '../../common/getDateString';
+import Reply from './Reply';
 
+const LoadingContainer = styled.div`
+    display: flex;
+    width: 100%;
+    height: 400px;
+    padding: 30px;
+`;
 const CommentContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -22,22 +31,6 @@ const Container = styled.div`
     flex-direction: column;
     justify-content: center;
     transition: all 0.2s ease-out;
-`;
-const ProfileWrap = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.2rem;
-    font-weight: bold;
-`;
-const CommenterWrap = styled.div`
-    width: 100%;
-    height: 30px;
-    margin: 30px 0;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
 `;
 const ContentWrap = styled.div`
     width: 100%;
@@ -64,6 +57,30 @@ const FilterWrap = styled.div`
     width: 100%;
     height: 50px;
 `;
+const ProfileWrap = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+`;
+const CommenterWrap = styled.div`
+    width: 100%;
+    height: 30px;
+    margin: 30px 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+`;
+const ByRegisteredButton = styled(Button)`
+    margin: 0 5px;
+    & .MuiButton-label {
+        font-size: 1.1rem;
+        font-weight: ${props => props.sort === "registered" ? "bold" : "unset"};
+        color: ${props => props.sort === "registered" ? "#2c0097" : "darkgray"}
+    }
+`;
 const ByRecentButton = styled(Button)`
     margin: 0 5px;
     & .MuiButton-label {
@@ -80,88 +97,32 @@ const ByLikeButton = styled(Button)`
         color: ${props => props.sort === "like" ? "#2c0097" : "darkgray"}
     }
 `;
-const ReplyContainer = styled.div`
-    width: 100%;
-    height: 200px;
-    padding-left: 150px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    border-top: 1px solid rgba(0,0,0,0.2);
+const Nick = styled.span`
+    margin-left: 10px;
 `;
 const ButtonWrap = styled.div`
 
 `;
-function getDateString(createAt) {
-    const date = new Date(createAt);
-    const year = date.getFullYear();
-    const Month = date.getMonth()+1;
-    const month = Month < 10? "0" + Month : Month;
-    const Day = date.getDate();
-    const day = Day < 10? "0" + Day : Day;
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    return `${year}-${month}-${day} ${hours}:${minutes}`;
-}
-
-function Reply(props) {
-    const {commenter : loginUser , reply, commentId, deleteReply, contentId} = props;
-
-    const handleDeleteReply = (e) => {
-        const {replyId, commenter} = e.currentTarget.dataset;
-        console.log(replyId, commenter, commentId);
-        deleteReply(contentId, commentId, replyId, commenter);
-    }
-    return (
-    <React.Fragment>
-    {
-        reply.map((rep, i) => {
-            const {commenter, nick, content, createAt, _id} = rep;
-            return (
-            <ReplyContainer key={i}>
-                <CommenterWrap>
-                    <ProfileWrap>
-                        <Avatar />
-                        <span style={{ marginLeft: "10px" }}>{nick}</span>
-                    </ProfileWrap>
-                    {
-                        loginUser === commenter
-                        && 
-                        <IconButton 
-                        data-commenter={commenter}
-                        data-reply-id={_id}
-                        onClick={handleDeleteReply}>
-                            <DeleteForever/>
-                        </IconButton>
-                    }
-                </CommenterWrap>
-                <ContentWrap>
-                    {content}
-                </ContentWrap>
-                <InfoWrap>
-                    <DateWrap>
-                        {getDateString(createAt)}
-                    </DateWrap>
-                </InfoWrap>
-            </ReplyContainer>
-            )})
-        }
-    </React.Fragment>
-    )
-}
 
 export default function Comments(props) {
-    const { comments, deleteComment, updateComment, contentId, addReply, commenter, deleteReply } = props;
-    const [ sort, setSort ] = React.useState("recent");
-    const [replyOn, setReplyOn] = React.useState(null);
-    const [modifyOn, setModifyOn] = React.useState(null);
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [modifyingInput, setModifyingInput] = React.useState("");
+    const { 
+        comments, deleteComment, updateComment, contentId, addReply, addLike, commenter : loginUser, deleteReply, sendable, setSendable, 
+        setSnack, isLoadingComments, sortKey, setSortKey
+    } = props;
+    const [ replyOn, setReplyOn ] = React.useState(null);
+    const [ modifyOn, setModifyOn ] = React.useState(null);
+    const [ anchorEl, setAnchorEl ] = React.useState(null);
+    const [ modifyingInput, setModifyingInput ] = React.useState("");
     const open = Boolean(anchorEl);
 
-    const handleClickSort = (key) => {
-        // 여기에 정렬 조건을 실행하는 reselect 코드 작성
-        setSort(key);
+    React.useEffect(()=>{
+        if (modifyingInput.length > 300) setSendable(false);
+        if (modifyingInput.length <= 300) setSendable(true);
+        if (modifyingInput.length === 0) setSendable(false);
+    }, [modifyingInput]);
+
+    const handleClickSort = (e) => {
+        setSortKey(e.currentTarget.dataset.key);
     };
     const handleClickMenu = (event) => {
         setAnchorEl(event.currentTarget);
@@ -171,12 +132,11 @@ export default function Comments(props) {
     };
     const handleClickReply = (e) => {
         setModifyOn(null);
-        setReplyOn(e.currentTarget.dataset.id);
+        setReplyOn(e.currentTarget.parentElement.dataset.id);
     };
-
     const handleClickDelete = (e) => {
         const _id = anchorEl.dataset.id;
-        deleteComment(_id, commenter, contentId);
+        deleteComment(_id);
         handleCloseMenu();
     };
     const handleClickModifyButton = (e) => {
@@ -186,118 +146,148 @@ export default function Comments(props) {
         handleCloseMenu();
     };
     const handleSubmitModify = (e) => {
-        updateComment(e.currentTarget.dataset.id, modifyingInput, e.currentTarget.dataset.commenter, contentId);
+        if (!loginUser || !sendable) {
+            setSnack(true);
+            return;
+        }
+        updateComment(e.currentTarget.dataset.id, modifyingInput);
         setReplyOn(null);
         setModifyOn(null);
     };
     const handleChangeModifyingInput = (e) => {
         setModifyingInput(e.target.value);
     };
+    const handleClickLike = (e) => {
+        if (!loginUser) {
+            setSnack(true);
+            return;
+        }
+        addLike(e.currentTarget.parentElement.dataset.id);
+    }
+    
     return (
         <CommentContainer>
         <FilterWrap>
-            <ByRecentButton sort={sort} onClick={()=>handleClickSort("recent")}> 최신순 </ByRecentButton>
+            <ByRegisteredButton sort={sortKey} data-key="registered" onClick={handleClickSort}> 등록순 </ByRegisteredButton>
+             |
+            <ByRecentButton sort={sortKey} data-key="recent" onClick={handleClickSort}> 최신순 </ByRecentButton>
              | 
-             <ByLikeButton sort={sort} onClick={()=>handleClickSort("like")}> 좋아요순 </ByLikeButton>
+             <ByLikeButton sort={sortKey} data-key="like" onClick={handleClickSort}> 좋아요순 </ByLikeButton>
         </FilterWrap>
         {
-        comments.map((comment,i) => {
-            const { commenter, content, createAt, like, reply, nick, _id } = comment;
-            const contentWithLine = content? content.split(/\r\n|\r|\n/) : [];
-            return (
-            <Container key={i} replyOn={replyOn === _id ? "on" : ""}>
-                <CommenterWrap>
-                    <ProfileWrap>
-                        <Avatar />
-                        <span style={{ marginLeft: "10px" }}>{nick}</span>
-                    </ProfileWrap>
-                        <IconButton 
-                        aria-controls="fade-menu" 
-                        aria-haspopup="true" 
-                        data-id={_id} 
-                        data-content={content}
-                        onClick={handleClickMenu} >
-                        <MoreVert/>
-                    </IconButton>
-                    <Menu
-                    id="fade-menu"
-                    anchorEl={anchorEl}
-                    keepMounted
-                    open={open}
-                    onClose={handleCloseMenu}
-                    TransitionComponent={Fade}
-                    elevation={1}
-                    >
-                        <MenuItem onClick={handleClickDelete}> 삭제하기 </MenuItem>
-                        <MenuItem onClick={handleClickModifyButton}> 수정하기 </MenuItem>
-                    </Menu>
-                </CommenterWrap>
-                {
-                    modifyOn === _id ?
-                    (
-                    <ContentWrap>
-                        <TextField
-                        id="outlined-multiline-static"
-                        label="수정하기"
-                        fullWidth
-                        multiline
-                        rowsMax={5}
-                        rows={contentWithLine.length}
-                        variant="outlined"
-                        onChange={handleChangeModifyingInput}
-                        value={modifyingInput}
-                        />
-                        <Button 
-                        variant="contained" 
-                        color="primary"
-                        data-id={_id}
-                        data-commenter={commenter}                
-                        onClick={handleSubmitModify} 
-                        style={{margin: "10px 0 0 auto",
-                        display: "flex"}}>
-                            수정완료
-                        </Button>
-                    </ContentWrap>
-                    )
-                    :
-                    (
-                    <ContentWrap>
+            isLoadingComments ?
+            (<LoadingContainer>
+                <Loading />
+            </LoadingContainer>)
+            :
+            (
+                comments.map((comment,i) => {
+                    const { commenter, content, createAt, like, reply, nick, _id } = comment;
+                    const contentWithLine = content? content.split(/\r\n|\r|\n/) : [];
+                    const isLiked = like.includes( commenter );
+                    return (
+                    <Container key={i} replyOn={replyOn === _id ? "on" : ""}>
+                        <CommenterWrap>
+                            <ProfileWrap>
+                                <Avatar />
+                                <Nick>{nick}</Nick>
+                                </ProfileWrap>
+                                { // 내가 쓴 글일 경우 옵션버튼 노출
+                                    loginUser === commenter
+                                    && 
+                                    (
+                                    <IconButton 
+                                    aria-controls="fade-menu" 
+                                    aria-haspopup="true" 
+                                    data-id={_id} 
+                                    data-content={content}
+                                    onClick={handleClickMenu} >
+                                        <MoreVert/>
+                                    </IconButton>
+                                    )
+                                }
+                            <Menu
+                            id="fade-menu"
+                            anchorEl={anchorEl}
+                            keepMounted
+                            open={open}
+                            onClose={handleCloseMenu}
+                            TransitionComponent={Fade}
+                            elevation={1}
+                            >
+                                <MenuItem onClick={handleClickDelete}> 삭제하기 </MenuItem>
+                                <MenuItem onClick={handleClickModifyButton}> 수정하기 </MenuItem>
+                            </Menu>
+                        </CommenterWrap>
                         {
-                            contentWithLine?
-                            contentWithLine.map((line,i) => (
-                                <React.Fragment key={i}>
-                                {line} <br/>
-                                </React.Fragment>
-                            )):
-                            content
+                            modifyOn === _id ?
+                            (
+                            <ContentWrap>
+                                <TextField
+                                id="outlined-multiline-static"
+                                label="수정하기"
+                                fullWidth
+                                multiline
+                                rowsMax={5}
+                                rows={contentWithLine.length}
+                                variant="outlined"
+                                onChange={handleChangeModifyingInput}
+                                value={modifyingInput}
+                                />
+                                <Button 
+                                variant="contained" 
+                                color="primary"
+                                data-id={_id}
+                                onClick={handleSubmitModify} 
+                                style={{margin: "10px 0 0 auto",
+                                display: "flex"}}>
+                                    수정완료
+                                </Button>
+                            </ContentWrap>
+                            )
+                            :
+                            (
+                            <ContentWrap>
+                                {
+                                    contentWithLine?
+                                    contentWithLine.map((line,i) => (
+                                        <React.Fragment key={i}>
+                                        {line} <br/>
+                                        </React.Fragment>
+                                    )):
+                                    content
+                                }
+                            </ContentWrap>
+                            )
                         }
-                    </ContentWrap>
-                    )
-                }
-                <InfoWrap>
-                    <DateWrap>
-                        {getDateString(createAt)}
-                    </DateWrap>
-                    <ButtonWrap>
-                        <Button variant="outlined" color={like? "primary":"default"}>
-                            {like} &nbsp;
-                            <ThumbUpIcon color={like? "action":"primary"} />
-                        </Button>
-                        <Button variant="outlined" color="default" data-id={_id} onClick={handleClickReply}>
-                            댓글달기
-                        </Button>
-                    </ButtonWrap>
-                </InfoWrap>
-                {replyOn === _id && <CommentsInput 
-                        isReply={true} 
-                        commentId={_id} 
-                        addReply={addReply}
-                        contentId={contentId}
-                        commenter={commenter}
-                        />}
-                <Reply reply={reply} contentId={contentId} commenter={commenter} commentId={_id} deleteReply={deleteReply}/>
-            </Container>
-        )})
+                        <InfoWrap>
+                            <DateWrap>
+                                {getDateString(createAt)}
+                            </DateWrap>
+                            <ButtonWrap data-id={_id}>
+                                <Button variant="outlined" color={isLiked? "primary":"default"} onClick={handleClickLike}>
+                                    {like.length} &nbsp;
+                                    <ThumbUpIcon color={isLiked? "primary":"action"} />
+                                </Button>
+                                <Button variant="outlined" color="default" onClick={handleClickReply}>
+                                    댓글달기
+                                </Button>
+                            </ButtonWrap>
+                        </InfoWrap>
+                            {replyOn === _id && <CommentsInput
+                                setSnack={setSnack}
+                                isReply={true}
+                                commentId={_id}
+                                addReply={addReply}
+                                contentId={contentId}
+                                commenter={commenter}
+                                sendable={sendable}
+                                setSendable={setSendable}
+                                />}
+                        <Reply reply={reply} commenter={commenter} commentId={_id} deleteReply={deleteReply}/>
+                    </Container>
+                )})
+            )
         }
     </CommentContainer>
     )

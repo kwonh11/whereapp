@@ -47,10 +47,12 @@ export function uploadImgAPI(formData) {
   return axios.patch("/auth/img", formData);
 }
 
+// 댓글 목록
 export function callApiCommentList(contentId) {
   return axios.get(`/comment/${contentId}`);
 }
 
+// 댓글 관련
 export function callApiAddComment(comment) {
   return axios.post("/comment", comment);
 }
@@ -59,18 +61,16 @@ export function callApiAddPlace(place) {
   return axios.post("/place", place);
 }
 
-export function callApiUpdateComment(_id, content, commenter) {
-  return axios.patch("/comment", { _id, content, commenter });
+export function callApiUpdateComment(commentId, content, commenter) {
+  return axios.patch("/comment", { commentId, content, commenter });
 }
 export function callApiDeleteComment(_id, commenter) {
   return axios.delete(`/comment/delete/${_id}/${commenter}`);
 }
 
+// 대댓글 관련
 export function callApiAddReply(commentId, reply) {
-  return axios.post("/comment/reply", {
-    commentId,
-    reply,
-  });
+  return axios.post("/comment/reply", { commentId, reply });
 }
 export function callApiDeleteReply(commentId, replyId, commenter) {
   return axios.delete(
@@ -78,12 +78,9 @@ export function callApiDeleteReply(commentId, replyId, commenter) {
   );
 }
 
-export function callAutoComplete(address) {
-  return axios.get("/location/autocomplete", {
-    params: {
-      input: address,
-    },
-  });
+// 좋아요 관련
+export function callApiAddLike(userId, commentId) {
+  return axios.post("/comment/like", { userId, commentId });
 }
 
 export function callApiGeocode(location) {
@@ -108,4 +105,12 @@ export function callApiGetHeart() {
 
 export function callApiGetComment() {
   return axios.get("/auth/comment");
+}
+
+export function callAutoComplete(address) {
+  return axios.get("/location/autocomplete", {
+    params: {
+      input: address,
+    },
+  });
 }

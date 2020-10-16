@@ -4,7 +4,6 @@ const path = require("path");
 const passport = require("passport");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
-const middlewares = require("./routes/middlewares");
 const ColorHash = require("color-hash");
 require("dotenv").config();
 
@@ -16,6 +15,7 @@ const locationRouter = require("./routes/location");
 const placeRouter = require("./routes/place");
 const commentRouter = require("./routes/comment");
 const chatRouter = require("./routes/chat");
+const middlewares = require("./routes/middlewares");
 
 const app = express();
 connect();
