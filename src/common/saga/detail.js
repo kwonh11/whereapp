@@ -37,9 +37,9 @@ export function* fetchAdditional(action) {
         })
       );
       yield put(actions.setComments(comments.data));
-      yield put(actions.setLoading(false));
       // 로딩 테스트용 딜레이
-      yield delay(2000);
+      yield delay(1000);
+      yield put(actions.setLoading(false));
       yield put(actions.setLoadingComments(false));
     } catch (err) {
       yield put(actions.setError(err));
@@ -54,17 +54,16 @@ export function* addComments(action) {
     const res = yield call(addPlace, place);
     // comment.contentId = contentId.data
     comment.place = res.data;
-    console.log(res.data);
     yield call(callApiAddComment, comment);
     // 성공시
     // 댓글목록 다시 불러오기
-    yield put(actions.setLoadingComments(true));
     const comments = yield call(callApiCommentList, place.contentid);
     yield put(actions.setComments(comments.data));
     } catch (err) {
       // 실패시
       yield put(actions.setError(err));
     }
+    yield delay(1000);
     yield put(actions.setLoadingComments(false));
 }
 
@@ -82,6 +81,7 @@ export function* updateComment(action) {
   } catch (err) {
     yield put(actions.setError(err));
   }
+  yield delay(1000);
   yield put(actions.setLoadingComments(false));
 }
 
@@ -98,11 +98,13 @@ export function* deleteComment(action) {
     } catch (err) {
       yield put(actions.setError(err));
     }
+    yield delay(1000);
     yield put(actions.setLoadingComments(false));
 }
 
 export function* addReply(action) {
   const { contentId, commentId, reply } = action.payload;
+  yield put(actions.setLoadingComments(true));
   yield put(actions.setError(""));
   try {
     yield call(callApiAddReply, commentId, reply);
@@ -112,10 +114,13 @@ export function* addReply(action) {
   } catch (err) {
     yield put(actions.setError(err));
   }
+  yield delay(1000);
+  yield put(actions.setLoadingComments(false));
 }
 
 export function* deleteReply(action) {
   const { contentId, commentId, replyId, commenter } = action.payload;
+  yield put(actions.setLoadingComments(true));
   yield put(actions.setError(""));
   try {
     yield call(callApiDeleteReply, commentId, replyId, commenter);
@@ -124,6 +129,8 @@ export function* deleteReply(action) {
   } catch (err) {
     yield put(actions.setError(err));
   }
+  yield delay(1000);
+  yield put(actions.setLoadingComments(false));
 }
 
 export function* addLike(action) {

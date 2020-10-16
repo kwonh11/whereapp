@@ -15,7 +15,6 @@ router.get("/:contentId", async (req, res) => {
     const contentId = Number(req.params.contentId);
     const place = await Place.findOne({ contentid: contentId });
     const condition = place ? {place : place._id} : {contentId};
-
     const list = await Comment.find(condition)
       .sort({ createAt: 1 });
     res.status(200).json(list);
@@ -84,10 +83,10 @@ router.post("/reply", isLoggedIn, async (req, res) => {
       { _id: commentId },
       { reply: [...comment.reply, currentReply] }
     ).exec();
+    res.status(200).end();
   } catch (err) {
     res.status(403).send(err);
   }
-  res.status(200).end();
 });
 
 // 대댓글 삭제
