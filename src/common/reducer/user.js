@@ -12,6 +12,8 @@ export const types = {
   SET_HEARTS_REQUEST: "user/SET_HEARTS_REQUEST",
   SET_HEARTS_SUCCESS: "user/SET_HEARTS_SUCCESS",
   SET_HEARTS_ERROR: "user/SET_HEARTS_ERROR",
+
+  SET_VIEW_TYPE: "user/SET_VIEW_TYPE"
 };
 
 export const actions = {
@@ -26,6 +28,8 @@ export const actions = {
   setHeartsRequest: (payload) => ({ type: types.SET_HEARTS_REQUEST, payload }),
   setHeartsSuccess: (payload) => ({ type: types.SET_HEARTS_SUCCESS, payload }),
   setHeartsError: (payload) => ({ type: types.SET_HEARTS_ERROR, payload }),
+
+  setViewType: (viewType) => ({ type: types.SET_VIEW_TYPE, viewType })
 };
 
 const INITIAL_STATE = {
@@ -36,6 +40,7 @@ const INITIAL_STATE = {
   hearts: [],
   comments: [],
   error: null,
+  viewType: "card"
 };
 
 const reducer = createReducer(INITIAL_STATE, {
@@ -56,6 +61,9 @@ const reducer = createReducer(INITIAL_STATE, {
   [types.SET_HEARTS_ERROR]: (state, action) => {
     state.error = action.payload;
   },
+  [types.SET_VIEW_TYPE]: (state, action) => {
+    state.viewType = action.viewType;
+  }
 });
 
 export default reducer;

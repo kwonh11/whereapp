@@ -21,13 +21,13 @@ const ToggleBtnGroup = styled(ToggleButtonGroup)`
   }
 `;
 
-function ViewButton({ setPlaceListType, listType }) {
+function ViewButton({ setPlaceViewType, viewType }) {
   const handleView = (event, viewType) => {
-    setPlaceListType(viewType);
+    setPlaceViewType(viewType);
   };
 
   return (
-    <ToggleBtnGroup value={listType} exclusive onChange={handleView}>
+    <ToggleBtnGroup value={viewType} exclusive onChange={handleView}>
       <ToggleButton value="card">
         <ViewModuleIcon />
       </ToggleButton>

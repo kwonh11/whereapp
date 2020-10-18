@@ -18,9 +18,9 @@ const placeListWithCategoryCode = createSelector(
 export default function PlaceContainer(props) {
 
   const {
-    listType, isLoading, categoryCode
+    viewType, isLoading, categoryCode
   } = useSelector(state => ({
-    listType: state.place.listType,
+    viewType: state.place.viewType,
     categoryCode: state.place.categoryCode,
     isLoading: state.place.isLoading,
   }));
@@ -31,8 +31,8 @@ export default function PlaceContainer(props) {
   const handleSelectTab = React.useCallback((contentTypeId) => {
     dispatch(actions.setPlaceListCategoryCode(contentTypeId));
   }, [dispatch]);
-  const setPlaceListType = React.useCallback((listType) => {
-    dispatch(actions.setPlaceListType(listType));
+  const setPlaceViewType = React.useCallback((viewType) => {
+    dispatch(actions.setPlaceViewType(viewType));
   }, [dispatch]);
   const requestAreaBasedList = React.useCallback((origin) => {
     dispatch(locationActions.requestAreaBasedList({origin, isHandledAddress}));
@@ -48,9 +48,9 @@ export default function PlaceContainer(props) {
       placeList={placeList}
       isLoading={isLoading}
       categoryCode={categoryCode}
-      listType={listType}
+      viewType={viewType}
       handleSelectTab={handleSelectTab}
-      setPlaceListType={setPlaceListType}
+      setPlaceViewType={setPlaceViewType}
     />
   );
 };

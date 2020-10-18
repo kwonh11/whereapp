@@ -9,7 +9,7 @@ export const types = {
 
 export const actions = {
   setPlaceList: (placeList) => ({ type: types.SET_PLACELIST, placeList }),
-  setPlaceListType: (listType) => ({
+  setPlaceViewType: (listType) => ({
     type: types.SET_PLACELIST_TYPE,
     listType,
   }),
@@ -25,7 +25,7 @@ export const actions = {
 
 const INITIAL_STATE = {
   placeList: [],
-  listType: "card",
+  viewType: "card",
   isLoading: true,
   categoryCode: "",
 };
@@ -35,7 +35,7 @@ const reducer = createReducer(INITIAL_STATE, {
     state.placeList = action.placeList;
   },
   [types.SET_PLACELIST_TYPE]: (state, action) => {
-    state.listType = action.listType;
+    state.viewType = action.viewType;
   },
   [types.SET_PLACELIST_CATEGORY_CODE]: (state, action) => {
     state.categoryCode = action.categoryCode;

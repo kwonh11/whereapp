@@ -33,7 +33,6 @@ const sessionMiddleware = session({
 
 app.set("port", process.env.PORT || 8000);
 
-app.use(middlewares.logger);
 app.use(morgan("dev"));
 app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: false }));

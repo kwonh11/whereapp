@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Card,
@@ -19,7 +19,8 @@ import { getCategory } from "../categoryCode";
 import { Link } from "react-router-dom";
 import defaultImage from "../../images/defaultImage.png";
 import { useDispatch, useSelector } from "react-redux";
-import { actions, types } from "../reducer/detail";
+import { actions } from "../reducer/detail";
+import { actions as userActions } from "../reducer/user";
 
 const StyledCard = styled(Card)`
   width: 480px;
@@ -108,6 +109,13 @@ const Badge = styled.span`
   margin: 0 3px;
   color: ${(props) => (props.color === "red" ? "red" : "green")};
 `;
+const HeartBtn = styled(IconButton)`
+  ${(props) =>
+    props.heart &&
+    css`
+      color: red !important;
+    `}
+`;
 
 // image, title, description, category 를 입력받아 Card를 리턴하는 컴포넌트 함수
 export default function PlaceCard(props) {
@@ -130,6 +138,8 @@ export default function PlaceCard(props) {
     isLoading,
   } = place;
 
+  const { hearts, isLoggedIn } = useSelector((state) => state.user);
+
   const dispatch = useDispatch();
   const setIds = React.useCallback((contentTypeId, contentId) => {
     dispatch(actions.setIds({contentTypeId, contentId}));
@@ -139,11 +149,18 @@ export default function PlaceCard(props) {
         ...place,
         isClose: place.dist <= 1000
     }));
-    }, [dispatch]);
+  }, [dispatch]);
 
+  const isHeart = React.useMemo(() => hearts.some(heart => parseInt(heart.contentid) === contentid), [contentid, hearts]);
+  
   const handleClickCard = (contentTypeId, contentId, place) => {
     setIds(contentTypeId, contentId);
     setPlace(place);
+  };
+  const handleClickHeart = () => {
+    if (isLoggedIn) {
+      dispatch(userActions.setHeartsRequest(place));
+    }
   };
 
   return (
@@ -182,9 +199,9 @@ export default function PlaceCard(props) {
       </CardContent>
       <BottomIconsWrap>
         <CardActions disableSpacing>
-          <IconButton>
+          <HeartBtn onClick={handleClickHeart} heart={isHeart ? 1 : 0}>
             <FavoriteIcon />
-          </IconButton>
+          </HeartBtn>
           <IconButton>
             <ShareIcon />
           </IconButton>

@@ -58,8 +58,8 @@ export default function PlaceList({
   isLoading,
   handleSelectTab,
   categoryCode,
-  setPlaceListType,
-  listType,
+  setPlaceViewType,
+  viewType,
 }) {
   const [tab, setTab] = React.useState(0);
   React.useEffect(()=>{
@@ -89,7 +89,7 @@ export default function PlaceList({
         </Tabs>
       </AppBar>
       <FilterWrap>
-        <ViewTypeBtn setPlaceListType={setPlaceListType} listType={listType}/>
+        <ViewTypeBtn setPlaceViewType={setPlaceViewType} viewType={viewType}/>
         <ViewSelectFilter />
       </FilterWrap>
       {
@@ -107,7 +107,7 @@ export default function PlaceList({
           </ContentsContainer>
         ):
         (
-          <ViewTypePage data={placeList} listType={listType} isLoading={isLoading}/>
+          <ViewTypePage data={placeList} viewType={viewType} isLoading={isLoading}/>
         )
       }
     </>
