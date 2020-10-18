@@ -34,7 +34,9 @@ const StyledCard = styled(Card)`
     transform: translateY(-5px);
     cursor: pointer;
   }
-
+  & .MuiCardHeader-root {
+    padding: 10px;
+  }
   & .MuiCardHeader-content {
     display: flex;
     width: 100%;

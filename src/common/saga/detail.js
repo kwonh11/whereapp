@@ -10,7 +10,7 @@ import {
   callApiAddPlace,
 } from "../api";
 import { actions, types } from "../reducer/detail";
-import { fork, all, put, call, take, takeLatest, delay } from "redux-saga/effects";
+import { put, call, takeLatest, delay } from "redux-saga/effects";
 import isInProgress from "../isInProgressDate";
 
 
@@ -38,7 +38,7 @@ export function* fetchAdditional(action) {
       );
       yield put(actions.setComments(comments.data));
       // 로딩 테스트용 딜레이
-      yield delay(1000);
+      yield delay(500);
       yield put(actions.setLoading(false));
       yield put(actions.setLoadingComments(false));
     } catch (err) {
@@ -63,7 +63,7 @@ export function* addComments(action) {
       // 실패시
       yield put(actions.setError(err));
     }
-    yield delay(1000);
+    yield delay(500);
     yield put(actions.setLoadingComments(false));
 }
 
@@ -81,7 +81,7 @@ export function* updateComment(action) {
   } catch (err) {
     yield put(actions.setError(err));
   }
-  yield delay(1000);
+  yield delay(500);
   yield put(actions.setLoadingComments(false));
 }
 
@@ -98,7 +98,7 @@ export function* deleteComment(action) {
     } catch (err) {
       yield put(actions.setError(err));
     }
-    yield delay(1000);
+    yield delay(500);
     yield put(actions.setLoadingComments(false));
 }
 
@@ -114,7 +114,7 @@ export function* addReply(action) {
   } catch (err) {
     yield put(actions.setError(err));
   }
-  yield delay(1000);
+  yield delay(500);
   yield put(actions.setLoadingComments(false));
 }
 
@@ -129,7 +129,7 @@ export function* deleteReply(action) {
   } catch (err) {
     yield put(actions.setError(err));
   }
-  yield delay(1000);
+  yield delay(500);
   yield put(actions.setLoadingComments(false));
 }
 
