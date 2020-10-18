@@ -137,7 +137,6 @@ export default function PlaceCard(props) {
     isPopular,
     isLoading,
   } = place;
-  const [isHeart, setIsHeart] = React.useState(false);
 
   const { hearts, isLoggedIn } = useSelector((state) => state.user);
 
@@ -152,13 +151,7 @@ export default function PlaceCard(props) {
     }));
   }, [dispatch]);
 
-  
-  React.useEffect(() => {
-    const heartCheck = hearts.some(
-      (heart) => parseInt(heart.contentid) === contentid
-    );
-    setIsHeart(heartCheck);
-  }, []);
+  const isHeart = React.useMemo(() => hearts.some(heart => parseInt(heart.contentid) === contentid), [contentid, hearts]);
   
   const handleClickCard = (contentTypeId, contentId, place) => {
     setIds(contentTypeId, contentId);
@@ -166,7 +159,6 @@ export default function PlaceCard(props) {
   };
   const handleClickHeart = () => {
     if (isLoggedIn) {
-      setIsHeart(!isHeart);
       dispatch(userActions.setHeartsRequest(place));
     }
   };
