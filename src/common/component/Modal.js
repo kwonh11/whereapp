@@ -16,7 +16,7 @@ const ModalContainer = styled.div`
 `;
 const ModalBox = styled.div`
   display: "flex";
-  opacity: ${(props) => (props.on === "on" ? 1 : 0)};
+  opacity: 1;
   justify-content: center;
   background-color: white;
   align-items: center;
@@ -24,9 +24,7 @@ const ModalBox = styled.div`
   box-shadow: 0px 6px 13px -5px rgba(133, 133, 133, 1);
   width: 500px;
   height: 400px;
-  margin-top: ${(props) => (props.on === "on" ? "0px" : "30px")};
   border-radius: 10px;
-  transition: all 0.3s ease-out;
 `;
 const ExitWrap = styled.div`
   display: flex;
