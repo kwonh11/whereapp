@@ -1,16 +1,13 @@
-import { makeStyles } from "@material-ui/core/styles";
 import {
-  Paper,
-  FormControl,
+  AppBar, FormControl, Paper,
   Select,
-  AppBar,
-  Tabs,
-  Tab,
+  Tab, Tabs
 } from "@material-ui/core";
-import ViewTypePage from "../../common/component/ViewTypePage";
-import ViewTypeBtn from "../../common/component/ViewTypeBtn";
-import styled from "styled-components";
+import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
+import ViewTypeBtn from "../../common/component/ViewTypeBtn";
+import ViewTypePage from "../../common/component/ViewTypePage";
 
 const useStyles = makeStyles({
   formControl: {
@@ -33,13 +30,10 @@ export default function User({
   tabValue,
   places,
   handleChangeTab,
-  listType,
-  setPlaceListType,
+  viewType,
+  setPlaceViewType,
 }) {
   const classes = useStyles();
-
-  const categoryList = ["scrap", "comment"];
-  const orderList = ["push", "latest", "comments"];
 
   const makeSelect = (selectList, value) => {
     return (
@@ -72,15 +66,15 @@ export default function User({
       <ContentsWrap>
         <FilterWrap>
           <ViewTypeBtn
-            setPlaceListType={setPlaceListType}
-            listType={listType}
+            setPlaceViewType={setPlaceViewType}
+            viewType={viewType}
           />
           <div>
             {/* {makeSelect(["조선", "중앙"], order)}
             {makeSelect(orderList, order)} */}
           </div>
         </FilterWrap>
-        <ViewTypePage data={places} />
+        <ViewTypePage data={places} viewType={viewType}/>
       </ContentsWrap>
     </Paper>
   );

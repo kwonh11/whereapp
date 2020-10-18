@@ -181,10 +181,10 @@ const ContentsContainer = styled.div`
   }
 `;
 
-function ViewTypePage({ listType, data, isLoading }) {
+function ViewTypePage({ viewType, data, isLoading }) {
   return (
-    <ContentsContainer view={listType} isLoading={isLoading}>
-      {listType === "card" ? (
+    <ContentsContainer view={viewType} isLoading={isLoading}>
+      {viewType === "card" ? (
         <CardView data={data} />
       ) : (
         <ListView data={data} />

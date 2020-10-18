@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import User from "../component/User";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { actions } from '../../common/reducer/user';
 
 export default function UserContainer({ tab }) {
   
@@ -8,7 +9,12 @@ export default function UserContainer({ tab }) {
 
   const [tabValue, setTabValue] = useState(tab === "heart" ? 0 : 1);
   const [places, setPlaces] = useState([]);
-  const [viewType, setViewType] = useState("card");
+
+  const viewType = useSelector(state => state.user.viewType);
+  const dispatch = useDispatch();
+  const setPlaceViewType = React.useCallback((viewType) => {
+    dispatch(actions.setViewType(viewType));
+  }, []);
 
   useEffect(() => {
     tab === "comment" ? setPlaces(comments) : setPlaces(hearts);
@@ -19,17 +25,13 @@ export default function UserContainer({ tab }) {
     setTabValue(newValue);
   };
 
-  const setPlaceListType = (vlaue) => {
-    setViewType(value);
-  };
-
   return (
     <User
       tabValue={tabValue}
       places={places}
       handleChangeTab={handleChangeTab}
-      setPlaceListType={setPlaceListType}
-      listType={viewType}
+      setPlaceViewType={setPlaceViewType}
+      viewType={viewType}
     />
   );
 }
