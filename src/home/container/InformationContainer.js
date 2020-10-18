@@ -24,7 +24,6 @@ export default function InformationContainer(props) {
     const handleChangeRegionCode = (e, value) => {
         if (!value) return;
         setRegionCode(value.code);
-        // requestBestPlaceList();
     }
     return (
         <Container>

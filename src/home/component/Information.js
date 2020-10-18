@@ -48,7 +48,7 @@ export default function Information(props) {
                 onChange={handleChangeRegionCode}
                 > 
                 </Autocomplete>
-                &nbsp; TOP10 관광정보
+                &nbsp; TOP20 관광정보
             </LocationSelectorWrap>
             <LocationInfoWrap>
                {`현재 위치는 ${address} 입니다.`}

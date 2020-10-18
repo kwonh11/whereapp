@@ -1,9 +1,8 @@
+import { call, delay, put, takeLatest } from "redux-saga/effects";
 import { callApiBestList, callApiGetAddress, getUsersLocation } from "../api";
-import { fork, all, put, call, take, delay, takeLatest } from "redux-saga/effects";
+import getDistance from "../getDistance";
 import { actions, types } from "../reducer/home";
 import { actions as locationActions } from "../reducer/location";
-import { actions as placeActions, types as placeTypes } from "../reducer/place";
-import getDistance from "../getDistance";
 
 export function* fetchBestList(action) {
     const { regionCode, isHandledAddress, origin } = action.payload;

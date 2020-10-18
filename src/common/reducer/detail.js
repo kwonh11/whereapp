@@ -1,4 +1,3 @@
-import comment from "../../../server/schemas/comment";
 import createReducer from "../createReducer";
 
 export const types = {
@@ -41,42 +40,24 @@ export const types = {
 
 export const actions = {
   setLoading: (isLoading) => ({ type: types.SET_LOADING, isLoading }),
+  setLoadingComments: (isLoadingComments) => ({ type: types.SET_LOADING_COMMENTS, isLoadingComments }),
   requestDetails: (payload) => ({ type: types.REQUEST_DETAILS, payload }),
   setIds: (ids) => ({ type: types.SET_IDS, ids }),
   setPlace: (place) => ({ type: types.SET_PLACE, place }),
+  setComments: (comments) => ({ type: types.SET_COMMENTS, comments }),
   setAdditional: (additional) => ({ type: types.SET_ADDITIONAL, ...additional }),
   setInitializeAdditional: () => ({ type: types.SET_INITIALIZE_ADDITIONAL }),
-
-  setLoadingComments: (isLoadingComments) => ({ type: types.SET_LOADING_COMMENTS, isLoadingComments }),
   
   requestLike: (payload) => ({ type: types.REQUEST_LIKE, payload }),
   addlike: (userId, commentId) => ({ type: types.ADD_LIKE, commentId, userId }),
 
-  // requestComments: (payload) => ({ type: types.REQUEST_COMMENTS, payload }),
-  setComments: (comments) => ({ type: types.SET_COMMENTS, comments }),
-
-  requestAddComment: (payload) => ({
-    type: types.REQUEST_ADD_COMMENT,
-    payload,
-  }),
-
-  addComment: (comment) => ({ type: types.ADD_COMMENT, comment }),
-  
+  requestAddComment: (payload) => ({ type: types.REQUEST_ADD_COMMENT, payload }),
   requestUpdateComment: (payload) => ({type: types.REQUEST_UPDATE_COMMENT, payload}),
-
-  requestDeleteComment: (payload) => ({type: types.REQUEST_DELETE_COMMENT, payload}),
-  // deleteComment: (_id, commenter) => ({type: types.DELETE_COMMENT, _id, commenter}),
-
   requestDeleteComment: (payload) => ({ type: types.REQUEST_DELETE_COMMENT, payload }),
-  // deleteComment: (_id, commenter) => ({type: types.DELETE_COMMENT, _id, commenter}),
-
   requestAddReply: (payload) => ({type: types.REQUEST_ADD_REPLY, payload}),
-  // addReply: (commentId, reply) => ({type: types.ADD_REPLY, commentId, reply}),
   requestDeleteReply: (payload) => ({type: types.REQUEST_DELETE_REPLY, payload}),
-  // deleteReply: (_id) => ({ type: types.REMOVE_REPLY, id }),
 
   setSortKey: (commentSortKey) => ({type: types.SET_SORT_KEY_COMMENTS, commentSortKey}),
-
   setError: (error) => ({ type: types.SET_ERROR, error }),
 };
 
@@ -143,13 +124,13 @@ const reducer = createReducer(INITIAL_STATE, {
   [types.SET_COMMENTS]: (state, action) => {
     state.comments = action.comments;
   },
-  [types.ADD_COMMENT]: (state, action) => {
-    state.comments.push(action.comment);
-  },
-  [types.DELETE_COMMENT]: (state, action) => {
-    const index = state.comments.findIndex((item) => item._id === action._id);
-    state.comments.splice(index, 1);
-  },
+  // [types.ADD_COMMENT]: (state, action) => {
+  //   state.comments.push(action.comment);
+  // },
+  // [types.DELETE_COMMENT]: (state, action) => {
+  //   const index = state.comments.findIndex((item) => item._id === action._id);
+  //   state.comments.splice(index, 1);
+  // },
   [types.ADD_LIKE]: (state, action) => {
     const index = state.comments.findIndex((item) => item._id === action.commentId);
     if (index >= 0) {
@@ -164,23 +145,23 @@ const reducer = createReducer(INITIAL_STATE, {
       }
     }
   },
-  [types.ADD_REPLY]: (state, action) => {
-    const comment = state.comments.find(
-      (item) => item._id === action.commentId
-    );
-    if (comment) comment.reply.push(action.reply);
-  },
-  [types.REMOVE_REPLY]: (state, action) => {
-    const comment = state.comments.find(
-      (item) => item._id === action.commentId
-    );
-    if (comment) {
-      const idx = comment.reply.findIndex((rep) => rep._id === action._id);
-      if (idx >= 0) {
-        reply.splice(idx, 1);
-      }
-    }
-  },
+  // [types.ADD_REPLY]: (state, action) => {
+  //   const comment = state.comments.find(
+  //     (item) => item._id === action.commentId
+  //   );
+  //   if (comment) comment.reply.push(action.reply);
+  // },
+  // [types.REMOVE_REPLY]: (state, action) => {
+  //   const comment = state.comments.find(
+  //     (item) => item._id === action.commentId
+  //   );
+  //   if (comment) {
+  //     const idx = comment.reply.findIndex((rep) => rep._id === action._id);
+  //     if (idx >= 0) {
+  //       reply.splice(idx, 1);
+  //     }
+  //   }
+  // },
   [types.SET_SORT_KEY_COMMENTS]: (state, action) => {
     state.commentSortKey = action.commentSortKey;
   },

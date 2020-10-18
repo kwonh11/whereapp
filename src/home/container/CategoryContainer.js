@@ -23,8 +23,6 @@ export default function CategoryContainer(props) {
   const [target, setTarget] = React.useState(null);
   const [rise, setRise] = React.useState("0");
 
-  const {address, origin } = useSelector(state => state.location);
-
   const dispatch = useDispatch();
   const handleClickCategory = React.useCallback((e) => {
     const categoryCode = Number(e.currentTarget.dataset.categoryCode);
