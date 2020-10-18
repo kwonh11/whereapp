@@ -3,7 +3,7 @@ import ChatPage from "./chat/page/ChatPage";
 import PlacePage from "./place/page/PlacePage";
 import HomePage from "./home/page/HomePage";
 import { createBrowserHistory } from "history";
-import styled, { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle, css } from "styled-components";
 import reset from "styled-reset";
 import GNBPage from "./gnb/page/GNBPage";
 import DetailPage from "./detail/page/DetailPage";
@@ -11,15 +11,21 @@ import UserPage from "./user/page/UserPage";
 import Footer from "./common/component/Footer";
 import SliderContainer from "./home/container/SliderContainer";
 
-// login test
-import SignIn from "./gnb/component/Signin";
-
 const customHistory = createBrowserHistory();
+const GlobalFontStyle = createGlobalStyle`
+`;
 const GlobalStyle = createGlobalStyle`
   ${reset};
+  @font-face {
+    font-family: 'S-CoreDream-3Light';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  };
   * {
     box-sizing : border-box;
     text-decoration: none;
+    font-family: 'S-CoreDream-3Light' !important;
   }
   body {
     background-color: rgb(249, 249, 249);
@@ -37,21 +43,19 @@ const AppContainer = styled.div`
 
 // router
 export default function App() {
-  console.log("app!!!!!!!!!");
   return (
     <React.Fragment>
+      <GlobalFontStyle />
+      <GlobalStyle />
       <Router history={customHistory}>
         <GNBPage />
         <Switch>
           <Route path="/" exact component={SliderContainer} />
         </Switch>
         <AppContainer>
-          <GlobalStyle />
           <Switch>
             <Route path="/user/:tab" component={UserPage} />
             <Route path="/chat" component={ChatPage} />
-            {/* <Route path="/detail/:id" component={DetailPage} />
-            <Route path="/place/:type?" component={PlacePage} /> */}
             <Route
               path="/place/:contenttypeid/:contentid"
               component={DetailPage}
