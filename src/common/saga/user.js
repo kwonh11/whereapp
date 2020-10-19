@@ -47,8 +47,18 @@ function* setHearts(action) {
   }
 }
 
+function* setComments() {
+  try {
+    const comments = yield call(callApiGetComment);
+    yield put(actions.setCommentsSuccess(comments.data));
+  } catch (error) {
+    yield put(actions.setCommentsError(error));
+  }
+}
+
 export default function* watcher() {
   yield takeLatest(types.LOGIN_IN_REQUEST, logIn);
   yield takeLatest(types.UPLOAD_IMAGE_REQUEST, uploadImage);
   yield takeLatest(types.SET_HEARTS_REQUEST, setHearts);
+  yield takeLatest(types.SET_COMMENTS_REQUEST, setComments);
 }

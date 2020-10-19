@@ -12,6 +12,7 @@ import {
 import { actions, types } from "../reducer/detail";
 import { put, call, takeLatest, delay } from "redux-saga/effects";
 import isInProgress from "../isInProgressDate";
+import { actions as userAction } from "../reducer/user";
 
 export function* fetchAdditional(action) {
   const { contentTypeId, contentId } = action.payload;
@@ -59,6 +60,7 @@ export function* addComments(action) {
     yield put(actions.setLoadingComments(true));
     const comments = yield call(callApiCommentList, place.contentid);
     yield put(actions.setComments(comments.data));
+    yield put(userAction.setCommentsRequest());
   } catch (err) {
     // 실패시
     yield put(actions.setError(err));
@@ -94,6 +96,7 @@ export function* deleteComment(action) {
     yield put(actions.setLoadingComments(true));
     const comments = yield call(callApiCommentList, contentId);
     yield put(actions.setComments(comments.data));
+    yield put(userAction.setCommentsRequest());
   } catch (err) {
     yield put(actions.setError(err));
   }
