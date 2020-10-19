@@ -12,7 +12,7 @@ import Card from "./Card";
 import { getCategory } from "../categoryCode";
 import { blue, red } from "@material-ui/core/colors";
 import { useDispatch } from "react-redux";
-import { actions } from '../reducer/detail';
+import { actions } from "../reducer/detail";
 
 const useStyles = makeStyles({
   list: {
@@ -86,17 +86,25 @@ const TitleWrap = styled.div`
 
 function ListView({ data }) {
   const classes = useStyles();
-  
+
   const dispatch = useDispatch();
-  const setIds = React.useCallback((contentTypeId, contentId) => {
-    dispatch(actions.setIds({contentTypeId, contentId}));
-  }, [dispatch]);
-  const setPlace = React.useCallback((place) => {
-    dispatch(actions.setPlace({
-        ...place,
-        isClose: place.dist <= 1000
-    }));
-  }, [dispatch]);
+  const setIds = React.useCallback(
+    (contentTypeId, contentId) => {
+      dispatch(actions.setIds({ contentTypeId, contentId }));
+    },
+    [dispatch]
+  );
+  const setPlace = React.useCallback(
+    (place) => {
+      dispatch(
+        actions.setPlace({
+          ...place,
+          isClose: place.dist <= 1000,
+        })
+      );
+    },
+    [dispatch]
+  );
 
   const handleClickList = (contentTypeId, contentId, place) => {
     setIds(contentTypeId, contentId);
@@ -119,7 +127,7 @@ function ListView({ data }) {
                 className={classes.img}
                 onClick={() => handleClickList(contenttypeid, contentid, place)}
               />
-            </Link>  
+            </Link>
             <div>
               <div>
                 <TitleWrap>
@@ -152,8 +160,8 @@ function ListView({ data }) {
                 </Avatar>
               </IconWrap>
             </div>
-            </ListItem>
-        )
+          </ListItem>
+        );
       })}
     </List>
   );

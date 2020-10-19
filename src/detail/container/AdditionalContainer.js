@@ -95,9 +95,8 @@ export default function AdditionalContainer(props) {
               <FavoriteIcon style={{ width: "1.5rem", height: "1.5rem" }} />
             </HeartBtn>
             <IconButton onClick={() => console.log("share")}>
-              <ShareIcon />R
+              <ShareIcon />
             </IconButton>
-            W
           </ActionsWrap>
         </>
       )}
