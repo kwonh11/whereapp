@@ -9,8 +9,8 @@ import Overview from "../component/Overview";
 import AdditionalComponent from "../component/Additional";
 import Map from "../component/Map";
 import { useSelector, useDispatch } from "react-redux";
-import { types, actions } from "../../common/reducer/detail";
 import { actions as userActions } from "../../common/reducer/user";
+import { types, actions } from "../../common/reducer/detail";
 
 const MapContainer = styled.div`
   padding: 50px 0;
@@ -28,6 +28,7 @@ const ActionsWrap = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
 const HeartBtn = styled(IconButton)`
   ${(props) =>
     props.heart &&
@@ -37,20 +38,25 @@ const HeartBtn = styled(IconButton)`
 `;
 
 export default function AdditionalContainer(props) {
-
-  const { origin } = useSelector(state => state.location);
-  const { contentTypeId, contentId } = useSelector(state => state.detail.ids);
-  const { additional, isLoading, place } = useSelector(state => state.detail);
-  const isOnline = useSelector(state => state.detail.place.addr1.includes("온라인"));
   const dispatch = useDispatch();
+  const { origin } = useSelector((state) => state.location);
+  const { contentTypeId, contentId } = useSelector((state) => state.detail.ids);
+  const { additional, isLoading, place } = useSelector((state) => state.detail);
+  const { hearts, isLoggedIn } = useSelector((state) => state.user);
+  const isOnline = useSelector((state) =>
+    state.detail.place.addr1.includes("온라인")
+  );
 
-  const requestDetails = React.useCallback((contentTypeId, contentId) => {
-    dispatch(actions.requestDetails({ contentTypeId, contentId }))
-  }, [dispatch]);
+  const requestDetails = React.useCallback(
+    (contentTypeId, contentId) => {
+      dispatch(actions.requestDetails({ contentTypeId, contentId }));
+    },
+    [dispatch]
+  );
   const setInitializeAdditional = React.useCallback(() => {
     dispatch(actions.setInitializeAdditional());
-  },[dispatch]);
-  const { hearts, isLoggedIn } = useSelector((state) => state.user);
+  }, [dispatch]);
+
   const [isHeart, setIsHeart] = useState(false);
 
   useEffect(() => {
@@ -59,7 +65,7 @@ export default function AdditionalContainer(props) {
       (heart) => parseInt(heart.contentid) === contentId
     );
     setIsHeart(heartCheck);
-  }, [contentId]);
+  }, []);
 
   const handleClickHeart = () => {
     if (!isLoggedIn) return;
@@ -74,21 +80,26 @@ export default function AdditionalContainer(props) {
       {isLoading ? (
         <> Loading ... </>
       ) : (
-      <>
-      <Overview description={additional.overview} />
-      <AdditionalComponent additional={additional.additionalInfos} />
-      <MapContainer>
-            <Map origin={origin} destination={additional.destination} setInitializeAdditional={setInitializeAdditional}/>
-      </MapContainer>
+        <>
+          <Overview description={additional.overview} />
+          <AdditionalComponent additional={additional.additionalInfos} />
+          <MapContainer>
+            <Map
+              origin={origin}
+              destination={additional.destination}
+              setInitializeAdditional={setInitializeAdditional}
+            />
+          </MapContainer>
           <ActionsWrap>
             <HeartBtn onClick={handleClickHeart} heart={isHeart ? 1 : 0}>
               <FavoriteIcon style={{ width: "1.5rem", height: "1.5rem" }} />
             </HeartBtn>
             <IconButton onClick={() => console.log("share")}>
-              <ShareIcon />
+              <ShareIcon />R
             </IconButton>
+            W
           </ActionsWrap>
-      </>
+        </>
       )}
     </React.Fragment>
   );

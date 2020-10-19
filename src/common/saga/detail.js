@@ -6,44 +6,43 @@ import {
   callApiDeleteComment,
   callApiAddReply,
   callApiDeleteReply,
-  callApiAddLike,
   callApiAddPlace,
+  callApiAddLike,
 } from "../api";
 import { actions, types } from "../reducer/detail";
 import { put, call, takeLatest, delay } from "redux-saga/effects";
 import isInProgress from "../isInProgressDate";
 
-
 export function* fetchAdditional(action) {
-    const { contentTypeId, contentId } = action.payload;
-    yield put(actions.setLoading(true));
-    yield put(actions.setLoadingComments(true));
-    try {
-      const response = yield call(callApiDetailIntro, contentTypeId, contentId);
-      const comments = yield call(callApiCommentList, contentId);
+  const { contentTypeId, contentId } = action.payload;
+  yield put(actions.setLoading(true));
+  yield put(actions.setLoadingComments(true));
+  try {
+    const response = yield call(callApiDetailIntro, contentTypeId, contentId);
+    const comments = yield call(callApiCommentList, contentId);
 
-      yield put(
-        actions.setAdditional({
-          destination: {
-            lat: response.data.mapy,
-            lng: response.data.mapx,
-          },
-          overview: response.data.overview,
-          inProgress: isInProgress(
-            response.eventstartdata,
-            response.eventenddate
-          ),
-          additionalInfos: Object.entries(response.data),
-        })
-      );
-      yield put(actions.setComments(comments.data));
-      // 로딩 테스트용 딜레이
-      yield delay(500);
-      yield put(actions.setLoading(false));
-      yield put(actions.setLoadingComments(false));
-    } catch (err) {
-      yield put(actions.setError(err));
-    }
+    yield put(
+      actions.setAdditional({
+        destination: {
+          lat: response.data.mapy,
+          lng: response.data.mapx,
+        },
+        overview: response.data.overview,
+        inProgress: isInProgress(
+          response.eventstartdata,
+          response.eventenddate
+        ),
+        additionalInfos: Object.entries(response.data),
+      })
+    );
+    yield put(actions.setComments(comments.data));
+    // 로딩 테스트용 딜레이
+    yield delay(500);
+    yield put(actions.setLoading(false));
+    yield put(actions.setLoadingComments(false));
+  } catch (err) {
+    yield put(actions.setError(err));
+  }
 }
 
 export function* addComments(action) {
@@ -52,27 +51,27 @@ export function* addComments(action) {
   yield put(actions.setError(""));
   try {
     const res = yield call(callApiAddPlace, place);
-    // comment.contentId = contentId.data
     comment.place = res.data;
     yield call(callApiAddComment, comment);
-    // 성공시
+
+    // 성공시b
     // 댓글목록 다시 불러오기
+    yield put(actions.setLoadingComments(true));
     const comments = yield call(callApiCommentList, place.contentid);
     yield put(actions.setComments(comments.data));
-    } catch (err) {
-      // 실패시
-      yield put(actions.setError(err));
-    }
-    yield delay(500);
-    yield put(actions.setLoadingComments(false));
+  } catch (err) {
+    // 실패시
+    yield put(actions.setError(err));
+  }
+  yield delay(500);
+  yield put(actions.setLoadingComments(false));
 }
-
 
 export function* updateComment(action) {
   const { commentId, content, commenter, contentId } = action.payload;
   yield put(actions.setLoadingComments(true));
   yield put(actions.setError(""));
-    try {
+  try {
     yield call(callApiUpdateComment, commentId, content, commenter);
     // 댓글목록 다시 불러오기
     yield put(actions.setLoadingComments(true));
@@ -86,20 +85,20 @@ export function* updateComment(action) {
 }
 
 export function* deleteComment(action) {
-    const { commentId, commenter, contentId } = action.payload;
+  const { commentId, commenter, contentId } = action.payload;
+  yield put(actions.setLoadingComments(true));
+  yield put(actions.setError(""));
+  try {
+    yield call(callApiDeleteComment, commentId, commenter);
+    // 댓글목록 다시 불러오기
     yield put(actions.setLoadingComments(true));
-    yield put(actions.setError(""));
-    try {
-      yield call(callApiDeleteComment, commentId, commenter);
-      // 댓글목록 다시 불러오기
-      yield put(actions.setLoadingComments(true));
-      const comments = yield call(callApiCommentList, contentId);
-      yield put(actions.setComments(comments.data));
-    } catch (err) {
-      yield put(actions.setError(err));
-    }
-    yield delay(500);
-    yield put(actions.setLoadingComments(false));
+    const comments = yield call(callApiCommentList, contentId);
+    yield put(actions.setComments(comments.data));
+  } catch (err) {
+    yield put(actions.setError(err));
+  }
+  yield delay(500);
+  yield put(actions.setLoadingComments(false));
 }
 
 export function* addReply(action) {

@@ -151,7 +151,7 @@ export default function PlaceCard(props) {
     }));
   }, [dispatch]);
 
-  const isHeart = React.useMemo(() => hearts.some(heart => heart.contentid == contentid), [contentid, hearts]);
+  const isHeart = React.useMemo(() => hearts.some(heart => parseInt(heart.contentid) === parseInt(contentid)), [contentid, hearts]);
   
   const handleClickCard = (contentTypeId, contentId, place) => {
     setIds(contentTypeId, contentId);

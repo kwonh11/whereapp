@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { actions } from '../../common/reducer/user';
 
 export default function UserContainer({ tab }) {
-  
   const { comments, hearts } = useSelector((state) => state.user);
 
   const [tabValue, setTabValue] = useState(tab === "heart" ? 0 : 1);
