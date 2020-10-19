@@ -62,8 +62,8 @@ export function callApiAddPlace(place) {
 }
 
 export function callApiUpdateComment(commentId, content, commenter) {
-  return axios.patch("/comment", {commentId, content, commenter});
-};
+  return axios.patch("/comment", { commentId, content, commenter });
+}
 export function callApiDeleteComment(_id, commenter) {
   return axios.delete(`/comment/delete/${_id}/${commenter}`);
 }
@@ -71,14 +71,16 @@ export function callApiDeleteComment(_id, commenter) {
 // 대댓글 관련
 export function callApiAddReply(commentId, reply) {
   return axios.post("/comment/reply", { commentId, reply });
-};
+}
 export function callApiDeleteReply(commentId, replyId, commenter) {
-  return axios.delete(`/comment/reply/delete/${commentId}/${replyId}/${commenter}`);
-};
+  return axios.delete(
+    `/comment/reply/delete/${commentId}/${replyId}/${commenter}`
+  );
+}
 
 // 좋아요 관련
 export function callApiAddLike(userId, commentId) {
-  return axios.post("/comment/like", {userId, commentId});
+  return axios.post("/comment/like", { userId, commentId });
 }
 
 export function callApiGeocode(location) {
