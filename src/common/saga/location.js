@@ -64,10 +64,8 @@ export function* fetchAreaBasedList(action) {
 export function* fetchAutoComplete(action) {
   try {
     const address = action.payload;
-    console.log(address);
     yield delay(500);
     const res = yield call(callAutoComplete, address);
-    console.log(res);
 
     yield put(actions.predictionsSuccess(res.data));
   } catch (error) {
@@ -102,4 +100,4 @@ export default function* watcher() {
   yield takeLatest(types.REQUEST_LOCATION, fetchLocation);
   yield takeLatest(types.PREDICTIONS_REQUEST, fetchAutoComplete);
   yield takeLatest(types.SEARCH_ADDRESS_REQUEST, fetchSearchAddress);
-}
+};

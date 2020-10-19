@@ -14,6 +14,7 @@ export default function UserContainer({ tab }) {
   const setPlaceViewType = React.useCallback((viewType) => {
     dispatch(actions.setViewType(viewType));
   }, []);
+  
 
   useEffect(() => {
     tab === "comment" ? setPlaces(comments) : setPlaces(hearts);
