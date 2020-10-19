@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import { withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Typography,
@@ -11,6 +11,8 @@ import {
 import Card from "./Card";
 import { getCategory } from "../categoryCode";
 import { blue, red } from "@material-ui/core/colors";
+import { useDispatch } from "react-redux";
+import { actions } from '../reducer/detail';
 
 const useStyles = makeStyles({
   list: {
@@ -84,50 +86,75 @@ const TitleWrap = styled.div`
 
 function ListView({ data }) {
   const classes = useStyles();
+  
+  const dispatch = useDispatch();
+  const setIds = React.useCallback((contentTypeId, contentId) => {
+    dispatch(actions.setIds({contentTypeId, contentId}));
+  }, [dispatch]);
+  const setPlace = React.useCallback((place) => {
+    dispatch(actions.setPlace({
+        ...place,
+        isClose: place.dist <= 1000
+    }));
+  }, [dispatch]);
+
+  const handleClickList = (contentTypeId, contentId, place) => {
+    setIds(contentTypeId, contentId);
+    setPlace(place);
+  };
 
   return (
     <List className={classes.list}>
-      {data.map((place, idx) => (
-        <ListItem
-          alignItems="flex-start"
-          key={idx}
-          className={classes.listItem}
-        >
-          <img src={place.firstimage} className={classes.img} />
-          <div>
+      {data.map((place, idx) => {
+        const { contenttypeid, contentid } = place;
+        return (
+          <ListItem
+            alignItems="flex-start"
+            key={idx}
+            className={classes.listItem}
+          >
+            <Link to={`/place/${contenttypeid}/${contentid}`}>
+              <img
+                src={place.firstimage}
+                className={classes.img}
+                onClick={() => handleClickList(contenttypeid, contentid, place)}
+              />
+            </Link>  
             <div>
-              <TitleWrap>
-                <ListItemText
-                  primary={
-                    <Typography
-                      component="span"
-                      variant="h6"
-                      color="textPrimary"
-                    >
-                      {place.title}
-                    </Typography>
-                  }
-                />
-                {place.readcount >= 2000 && <Badge color="red"> 추천 </Badge>}
-                {place.dist < 1000 && <Badge color="green"> 가까움 </Badge>}
-              </TitleWrap>
-              <ListItemText primary={place.addr1} secondary={place.addr2} />
-              <ListItemText primary={place.tel} />
-            </div>
+              <div>
+                <TitleWrap>
+                  <ListItemText
+                    primary={
+                      <Typography
+                        component="span"
+                        variant="h6"
+                        color="textPrimary"
+                      >
+                        {place.title}
+                      </Typography>
+                    }
+                  />
+                  {place.readcount >= 2000 && <Badge color="red"> 추천 </Badge>}
+                  {place.dist < 1000 && <Badge color="green"> 가까움 </Badge>}
+                </TitleWrap>
+                <ListItemText primary={place.addr1} secondary={place.addr2} />
+                <ListItemText primary={place.tel} />
+              </div>
 
-            <IconWrap>
-              <Avatar className={classes.typeAvatar}>
-                {getCategory(place.contenttypeid)}
-              </Avatar>
-              <Avatar
-                className={place.dist >= 1000 ? classes.red : classes.green}
-              >
-                {`${place.dist / 1000}km`}
-              </Avatar>
-            </IconWrap>
-          </div>
-        </ListItem>
-      ))}
+              <IconWrap>
+                <Avatar className={classes.typeAvatar}>
+                  {getCategory(place.contenttypeid)}
+                </Avatar>
+                <Avatar
+                  className={place.dist >= 1000 ? classes.red : classes.green}
+                >
+                  {`${place.dist / 1000}km`}
+                </Avatar>
+              </IconWrap>
+            </div>
+            </ListItem>
+        )
+      })}
     </List>
   );
 }
@@ -181,10 +208,10 @@ const ContentsContainer = styled.div`
   }
 `;
 
-function ViewTypePage({ listType, data, isLoading }) {
+function ViewTypePage({ viewType, data, isLoading }) {
   return (
-    <ContentsContainer view={listType} isLoading={isLoading}>
-      {listType === "card" ? (
+    <ContentsContainer view={viewType} isLoading={isLoading}>
+      {viewType === "card" ? (
         <CardView data={data} />
       ) : (
         <ListView data={data} />

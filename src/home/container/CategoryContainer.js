@@ -3,8 +3,8 @@ import Category from "../component/Category";
 import styled from "styled-components";
 import CATEGORY from "../../common/categoryCode";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { types } from "../../common/reducer/home";
+import { useDispatch, useSelector } from "react-redux";
+import { actions as placeActions } from "../../common/reducer/place";
 
 const Container = styled.div`
   width: 100%;
@@ -26,7 +26,7 @@ export default function CategoryContainer(props) {
   const dispatch = useDispatch();
   const handleClickCategory = React.useCallback((e) => {
     const categoryCode = Number(e.currentTarget.dataset.categoryCode);
-    dispatch({ type: types.REQUEST_CATEGORY_CODE, categoryCode });
+    dispatch(placeActions.setPlaceListCategoryCode(categoryCode));
   }, [dispatch]);
 
   React.useEffect(() => {
