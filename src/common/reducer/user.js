@@ -13,7 +13,11 @@ export const types = {
   SET_HEARTS_SUCCESS: "user/SET_HEARTS_SUCCESS",
   SET_HEARTS_ERROR: "user/SET_HEARTS_ERROR",
 
-  SET_VIEW_TYPE: "user/SET_VIEW_TYPE"
+  SET_COMMENTS_REQUEST: "user/SET_COMMENTS_REQUEST",
+  SET_COMMENTS_SUCCESS: "user/SET_COMMENTS_SUCCESS",
+  SET_COMMENTS_ERROR: "user/SET_COMMENTS_ERROR",
+
+  SET_VIEW_TYPE: "user/SET_VIEW_TYPE",
 };
 
 export const actions = {
@@ -29,7 +33,14 @@ export const actions = {
   setHeartsSuccess: (payload) => ({ type: types.SET_HEARTS_SUCCESS, payload }),
   setHeartsError: (payload) => ({ type: types.SET_HEARTS_ERROR, payload }),
 
-  setViewType: (viewType) => ({ type: types.SET_VIEW_TYPE, viewType })
+  setCommentsRequest: () => ({ type: types.SET_COMMENTS_REQUEST }),
+  setCommentsSuccess: (payload) => ({
+    type: types.SET_COMMENTS_SUCCESS,
+    payload,
+  }),
+  setCommentsError: (payload) => ({ type: types.SET_COMMENTS_ERROR, payload }),
+
+  setViewType: (viewType) => ({ type: types.SET_VIEW_TYPE, viewType }),
 };
 
 const INITIAL_STATE = {
@@ -40,7 +51,7 @@ const INITIAL_STATE = {
   hearts: [],
   comments: [],
   error: null,
-  viewType: "card"
+  viewType: "card",
 };
 
 const reducer = createReducer(INITIAL_STATE, {
@@ -63,7 +74,13 @@ const reducer = createReducer(INITIAL_STATE, {
   },
   [types.SET_VIEW_TYPE]: (state, action) => {
     state.viewType = action.viewType;
-  }
+  },
+  [types.SET_COMMENTS_SUCCESS]: (state, action) => {
+    state.comments = action.payload;
+  },
+  [types.SET_HEARTS_ERROR]: (state, action) => {
+    state.error = action.payload;
+  },
 });
 
 export default reducer;
