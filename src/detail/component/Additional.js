@@ -1,9 +1,10 @@
 import styled from "styled-components";
 import toKorean from "../../common/toKorean";
 import { Chip, Divider } from "@material-ui/core";
+import device from "../../common/device";
 
 const AdditionalContainer = styled.div`
-  width: 1000px;
+  width: 100%;
   padding: 50px 0;
   display: flex;
   justify-content: center;
@@ -19,6 +20,9 @@ const AdditionalHeader = styled.div`
   align-items: center;
   flex-direction: column;
   font-size: 1.8rem;
+  @media ${device.mobileL} {
+    font-size: 1.2rem;
+  }
 `;
 const AdditionalWrap = styled.div`
   min-height: 22px;
@@ -28,6 +32,10 @@ const AdditionalWrap = styled.div`
   justify-content: space-around;
   flex-direction: column;
   align-items: flex-start;
+  @media ${device.mobileL} {
+    width: 100%;
+    padding: 0 30px;
+  }
 `;
 const AdditionalInfo = styled.div`
   width: 100%;
@@ -39,16 +47,30 @@ const AdditionalLeft = styled.div`
   display: inline;
   width: 50%;
   font-weight: bold;
+  @media ${device.mobileL} {
+    text-align: center;
+    font-size: 0.7rem;
+  }
 `;
 const AdditionalRight = styled.div`
   width: 50%;
   font-weight: bold;
   color: ${(props) =>
     props.color === "red" ? "red" : props.color === "blue" ? "blue" : ""};
+  @media ${device.mobileL} {
+    font-size: 0.7rem;
+  }
 `;
 const StyledChip = styled(Chip)`
   & .MuiChip-label {
     padding: 20px;
+    @media ${device.mobileL} {
+      padding: 10px;
+      font-size: 0.7rem;
+    }
+  }
+  @media ${device.mobileL} {
+    height: 20px;
   }
 `;
 const ShorterDivider = styled(Divider)`

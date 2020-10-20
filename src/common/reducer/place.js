@@ -9,9 +9,9 @@ export const types = {
 
 export const actions = {
   setPlaceList: (placeList) => ({ type: types.SET_PLACELIST, placeList }),
-  setPlaceViewType: (listType) => ({
+  setPlaceViewType: (viewType) => ({
     type: types.SET_PLACELIST_TYPE,
-    listType,
+    viewType,
   }),
   setPlaceListCategoryCode: (categoryCode) => ({
     type: types.SET_PLACELIST_CATEGORY_CODE,
