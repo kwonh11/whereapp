@@ -8,8 +8,12 @@ function SearchContainer({ history }) {
   console.log("SearchContainer");
 
   const dispatch = useDispatch();
-  const { address, predictions, origin } = useSelector((state) => state.location);
-  const isHandledAddress = useSelector((state) => state.location.isHandledAddress);
+  const { address, predictions, origin } = useSelector(
+    (state) => state.location
+  );
+  const isHandledAddress = useSelector(
+    (state) => state.location.isHandledAddress
+  );
 
   const [input, setInput] = useState(address);
 
@@ -21,22 +25,19 @@ function SearchContainer({ history }) {
 
   const handleAreaBasedList = () => {
     dispatch(actions.setHandledAddress(true));
-    return dispatch(actions.requestAreaBasedList({origin, isHandledAddress}));
+    return dispatch(actions.requestAreaBasedList({ origin, isHandledAddress }));
   };
 
   const handleChangeAddress = (e, value) => {
-    console.log("handleChangeAddress");
-    console.log(e.target.value);
-    dispatch(actions.setHandledAddress(false));
     setInput(e.target.value);
-    dispatch(actions.predictionsRequest(e.target.value));
+
+    if (value) {
+      dispatch(actions.setHandledAddress(false));
+      dispatch(actions.predictionsRequest(e.target.value));
+    }
   };
 
   const handleSelectAddress = (e, value) => {
-    console.log("handleSelectAddress");
-    console.log(value);
-
-    console.log(value.description);
     setInput(value.description);
     dispatch(actions.setHandledAddress(true));
     dispatch(actions.setAddress(value.description));

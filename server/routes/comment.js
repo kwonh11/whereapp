@@ -8,15 +8,13 @@ const Comment = require("../schemas/comment");
 const Place = require("../schemas/place");
 const { isLoggedIn } = require("./middlewares");
 
-
 // 댓글 목록
 router.get("/:contentId", async (req, res) => {
   try {
     const contentId = Number(req.params.contentId);
     const place = await Place.findOne({ contentid: contentId });
-    const condition = place ? {place : place._id} : {contentId};
-    const list = await Comment.find(condition)
-      .sort({ createAt: 1 });
+    const condition = place ? { place: place._id } : { contentId };
+    const list = await Comment.find(condition).sort({ createAt: 1 });
     res.status(200).json(list);
   } catch (err) {
     res.status(403).send(err);
@@ -46,7 +44,10 @@ router.patch("/", isLoggedIn, async (req, res) => {
   const { commentId, content, commenter } = req.body;
   try {
     if (req.user._id == commenter) {
-      await Comment.findOneAndUpdate({ _id: commentId }, { content: content }).exec();
+      await Comment.findOneAndUpdate(
+        { _id: commentId },
+        { content: content }
+      ).exec();
     } else {
       throw new Error();
     }
@@ -113,31 +114,30 @@ router.delete(
 );
 
 // 좋아요
-router.post("/like", isLoggedIn, async ( req, res )=>{
+router.post("/like", isLoggedIn, async (req, res) => {
   const { commentId, userId } = req.body;
   try {
-    if(req.user._id == userId) {
+    if (req.user._id == userId) {
       const comment = await Comment.findOne({ _id: commentId }).exec();
-      const likeIndex = comment.like.findIndex(id => id == userId );
+      const likeIndex = comment.like.findIndex((id) => id == userId);
       if (likeIndex < 0) {
         await Comment.updateOne(
           { _id: commentId },
           { like: [...comment.like, userId] }
-        )
+        );
       } else {
         await Comment.updateOne(
           { _id: commentId },
-          { like: [...comment.like.filter(id => id != userId)] }
-        )
+          { like: [...comment.like.filter((id) => id != userId)] }
+        );
       }
       res.status(200).end();
     } else {
       throw new Error();
     }
-  } catch(err) {
+  } catch (err) {
     res.status(403).send(err);
   }
-})
-
+});
 
 module.exports = router;

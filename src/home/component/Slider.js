@@ -4,6 +4,7 @@ import {
   ArrowBackIosOutlined,
   ArrowForwardIosOutlined,
 } from "@material-ui/icons";
+import device from "../../common/device";
 
 const SliderContainer = styled.div`
   width: 100%;
@@ -16,8 +17,11 @@ const SliderContainer = styled.div`
   position: relative;
   background-color: #f1f1f1;
   padding-bottom: 150px;
-  opacity: ${props => props.fade === "in" ? 1 : 0.3};
+  opacity: ${(props) => (props.fade === "in" ? 1 : 0.3)};
   transition: opacity 0.3s ease-out;
+  @media ${device.tablet} {
+    overflow: auto;
+  } ;
 `;
 const CardContainer = styled.div`
   width: 100%;
@@ -37,6 +41,9 @@ const ArrowContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  @media ${device.tablet} {
+    display: none;
+  } ;
 `;
 const ArrowHoverAction = css`
   &:hover {
@@ -66,7 +73,7 @@ const NextArrow = styled(PrevArrow)`
 `;
 
 export default function Slider(props) {
-  const { bestPlaceList, isLoading} = props;
+  const { bestPlaceList, isLoading } = props;
   const [active, setActive] = React.useState(0);
   const [fade, setFade] = React.useState(false);
   const [cardsPerPage, setCardsPerPage] = React.useState(1);
@@ -76,46 +83,51 @@ export default function Slider(props) {
   React.useEffect(() => {
     setTimeout(() => setFade(true), 200);
   }, [isLoading]);
-
   React.useEffect(() => {
     setCardsPerPage(Math.floor(document.documentElement.clientWidth / 495));
   }, [document.documentElement.clientWidth]);
 
-  const onClickPrev = () => {
+  const handleClickPrev = () => {
     const index = active - cardsPerPage > 0 ? active - cardsPerPage : 0;
     setActive(index);
   };
-  const onClickNext = (max) => {
+  const handleClickNext = () => {
     const index = active + cardsPerPage < max ? active + cardsPerPage : max;
     setActive(index);
   };
 
   return (
-    <SliderContainer device={"web"} fade={fade? "in" : "out"}>
+    <SliderContainer device={"web"} fade={fade ? "in" : "out"}>
       <ArrowContainer device={"web"}>
-        <PrevArrow visible={active <= 0 ? "none" : ""} onClick={onClickPrev}>
+        <PrevArrow
+          visible={active <= 0 ? "none" : ""}
+          onClick={handleClickPrev}
+        >
           <ArrowBackIosOutlined style={{ fontSize: 75 }} />
         </PrevArrow>
         <NextArrow
           visible={active + cardsPerPage >= max ? "none" : ""}
-          onClick={() => onClickNext(max)}
+          onClick={handleClickNext}
         >
           <ArrowForwardIosOutlined style={{ fontSize: 75 }} />
         </NextArrow>
       </ArrowContainer>
-        <CardContainer active={active} page={cardsPerPage}>
-          {bestPlaceList.map((place, index) => {
-            return (
-            <PlaceCard 
+      <CardContainer active={active} page={cardsPerPage}>
+        {bestPlaceList.map((place, index) => {
+          return (
+            <PlaceCard
               key={index}
               place={{
-                dist: place.dist, isClose: place.dist <= 1000, 
-                isPopular: place.readcount >= 3000, 
+                dist: place.dist,
+                isClose: place.dist <= 1000,
+                isPopular: place.readcount >= 3000,
                 isOnline: place.addr1.includes("온라인"),
-                ...place}} />
-              );
-          })}
-        </CardContainer>
+                ...place,
+              }}
+            />
+          );
+        })}
+      </CardContainer>
     </SliderContainer>
   );
 }

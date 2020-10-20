@@ -7,6 +7,7 @@ const path = require("path");
 const User = require("../schemas/user");
 const Comment = require("../schemas/comment");
 const Heart = require("../schemas/heart");
+const Place = require("../schemas/place");
 
 const router = express.Router();
 
@@ -98,12 +99,14 @@ router.get("/heart", isLoggedIn, async (req, res) => {
 
 router.get("/comment", isLoggedIn, async (req, res) => {
   try {
-    const comments = await Comment.find(
-      { commenter: req.user.id },
+    const comments = await Comment.find({ commenter: req.user.id }).distinct(
       "place"
-    ).populate("place");
+    );
+    const places = await Promise.all(
+      comments.map((comment) => Place.findOne({ _id: comment }))
+    );
 
-    res.json(comments.map((comment) => comment.place));
+    res.json(places);
   } catch (error) {
     console.error(error);
   }

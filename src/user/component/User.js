@@ -1,7 +1,10 @@
 import {
-  AppBar, FormControl, Paper,
+  AppBar,
+  FormControl,
+  Paper,
   Select,
-  Tab, Tabs
+  Tab,
+  Tabs,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
@@ -74,7 +77,7 @@ export default function User({
             {makeSelect(orderList, order)} */}
           </div>
         </FilterWrap>
-        <ViewTypePage data={places} viewType={viewType}/>
+        <ViewTypePage data={places} viewType={viewType} />
       </ContentsWrap>
     </Paper>
   );

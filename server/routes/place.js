@@ -40,12 +40,9 @@ router.post("/", isLoggedIn, async (req, res) => {
     });
 
     if (exPlace) {
-      console.log("------exPlace");
-      console.log(exPlace);
       res.json(exPlace._id);
     } else {
       const newPlace = await Place.create(req.body);
-      console.log(newPlace);
       res.json(newPlace._id);
     }
   } catch (err) {

@@ -2,7 +2,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const webpack = require("webpack");
-const faviconPath = path.resolve(__dirname, "template")
+const faviconPath = path.resolve(__dirname, "template");
 
 module.exports = {
   entry: {
@@ -51,7 +51,9 @@ module.exports = {
               [
                 "@babel/preset-env",
                 {
-                  modules: false,
+                  targets: {
+                    esmodules: true,
+                  },
                 },
               ],
               "@babel/preset-react",
@@ -81,7 +83,7 @@ module.exports = {
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: "./template/index.html",
-      favicon: `${faviconPath}/faviconA.ico`
+      favicon: `${faviconPath}/faviconA.ico`,
     }),
     new webpack.ProvidePlugin({
       React: "react",

@@ -15,9 +15,9 @@ export const types = {
   SET_LOADING_COMMENTS: "detail/SET_LOADING_COMMENTS",
   REQUEST_COMMENTS: "detail/REQUEST_COMMENTS",
   SET_COMMENTS: "detail/SET_COMMENTS",
-  REQUEST_ADD_COMMENT: "detail/REQUEST_ADD_COMMENT",       
-  REQUEST_DELETE_COMMENT: "detail/REQUEST_DELETE_COMMENT", 
-  REQUEST_UPDATE_COMMENT: "detail/REQUEST_UPDATE_COMMENT", 
+  REQUEST_ADD_COMMENT: "detail/REQUEST_ADD_COMMENT",
+  REQUEST_DELETE_COMMENT: "detail/REQUEST_DELETE_COMMENT",
+  REQUEST_UPDATE_COMMENT: "detail/REQUEST_UPDATE_COMMENT",
   REQUEST_ADD_REPLY: "detail/REQUEST_ADD_REPLY",
   REQUEST_DELETE_REPLY: "detail/REQUEST_DELETE_REPLY",
 
@@ -34,25 +34,46 @@ export const types = {
 
 export const actions = {
   setLoading: (isLoading) => ({ type: types.SET_LOADING, isLoading }),
-  setLoadingComments: (isLoadingComments) => ({ type: types.SET_LOADING_COMMENTS, isLoadingComments }),
+  setLoadingComments: (isLoadingComments) => ({
+    type: types.SET_LOADING_COMMENTS,
+    isLoadingComments,
+  }),
   requestDetails: (payload) => ({ type: types.REQUEST_DETAILS, payload }),
   setIds: (ids) => ({ type: types.SET_IDS, ids }),
   setPlace: (place) => ({ type: types.SET_PLACE, place }),
   setComments: (comments) => ({ type: types.SET_COMMENTS, comments }),
-  setAdditional: (additional) => ({ type: types.SET_ADDITIONAL, ...additional }),
+  setAdditional: (additional) => ({
+    type: types.SET_ADDITIONAL,
+    ...additional,
+  }),
 
   setInitializeAdditional: () => ({ type: types.SET_INITIALIZE_ADDITIONAL }),
-  
-  requestAddComment: (payload) => ({ type: types.REQUEST_ADD_COMMENT, payload }),
-  requestUpdateComment: (payload) => ({type: types.REQUEST_UPDATE_COMMENT, payload}),
-  requestDeleteComment: (payload) => ({ type: types.REQUEST_DELETE_COMMENT, payload }),
-  requestAddReply: (payload) => ({type: types.REQUEST_ADD_REPLY, payload}),
-  requestDeleteReply: (payload) => ({type: types.REQUEST_DELETE_REPLY, payload}),
-  
+
+  requestAddComment: (payload) => ({
+    type: types.REQUEST_ADD_COMMENT,
+    payload,
+  }),
+  requestUpdateComment: (payload) => ({
+    type: types.REQUEST_UPDATE_COMMENT,
+    payload,
+  }),
+  requestDeleteComment: (payload) => ({
+    type: types.REQUEST_DELETE_COMMENT,
+    payload,
+  }),
+  requestAddReply: (payload) => ({ type: types.REQUEST_ADD_REPLY, payload }),
+  requestDeleteReply: (payload) => ({
+    type: types.REQUEST_DELETE_REPLY,
+    payload,
+  }),
+
   requestLike: (payload) => ({ type: types.REQUEST_LIKE, payload }),
   addlike: (userId, commentId) => ({ type: types.ADD_LIKE, commentId, userId }),
 
-  setSortKey: (commentSortKey) => ({type: types.SET_SORT_KEY_COMMENTS, commentSortKey}),
+  setSortKey: (commentSortKey) => ({
+    type: types.SET_SORT_KEY_COMMENTS,
+    commentSortKey,
+  }),
   setError: (error) => ({ type: types.SET_ERROR, error }),
 };
 
@@ -121,15 +142,19 @@ const reducer = createReducer(INITIAL_STATE, {
   },
 
   [types.ADD_LIKE]: (state, action) => {
-    const index = state.comments.findIndex((item) => item._id === action.commentId);
+    const index = state.comments.findIndex(
+      (item) => item._id === action.commentId
+    );
     if (index >= 0) {
       console.log(`index : ${index}`);
-      const likeIndex = state.comments[index].like.findIndex((item)=> item === action.userId);
+      const likeIndex = state.comments[index].like.findIndex(
+        (item) => item === action.userId
+      );
       console.log(`likeIndex : ${likeIndex}`);
-      if (likeIndex >= 0 ) {
+      if (likeIndex >= 0) {
         state.comments[index].like.splice(likeIndex, 1);
       }
-      if (likeIndex < 0)  {
+      if (likeIndex < 0) {
         state.comments[index].like.push(action.userId);
       }
     }
