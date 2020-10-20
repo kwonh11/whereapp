@@ -4,6 +4,7 @@ import userSaga from "./user";
 import locationSaga from "./location";
 import homeSaga from "./home";
 import detailSaga from "./detail";
+import chatSaga from "./chat";
 
 export default function* rootSaga() {
   yield all([
@@ -11,5 +12,6 @@ export default function* rootSaga() {
     fork(locationSaga),
     fork(homeSaga),
     fork(detailSaga),
+    fork(chatSaga),
   ]);
 }
