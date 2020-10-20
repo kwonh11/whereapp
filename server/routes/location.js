@@ -100,7 +100,7 @@ router.get("/best/:region", async (req, res) => {
   const { region } = req.params;
   await axios
     .get(
-      `http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchFestival?ServiceKey=${process.env.TOUR_KEY}&areaCode=${region}&numOfRows=20&pageNo=1&arrange=Q&MobileOS=ETC&MobileApp=Where`
+      `http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchFestival?ServiceKey=${process.env.TOUR_KEY}&areaCode=${region}&numOfRows=30&pageNo=1&arrange=Q&MobileOS=ETC&MobileApp=Where`
     )
     .then((result) => {
       const placeList = result.data.response.body.items.item;
