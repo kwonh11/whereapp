@@ -1,39 +1,39 @@
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  Paper,
-  InputBase,
-  IconButton,
-  Divider,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  ClickAwayListener,
-  TextField,
-} from "@material-ui/core";
+import { Paper, InputBase, IconButton, Divider } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import SearchIcon from "@material-ui/icons/Search";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import device from "../../common/device";
 
 const Container = styled.div`
   position: relative;
   width: 400px;
   height: 50px;
+
   & form {
     width: 100%;
     height: 100%;
+    display: flex;
+    padding: 2px 4px;
+    align-items: center;
+  }
+
+  @media ${device.tablet} {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    & form {
+      border: none;
+      border-radius: 0px;
+      box-shadow: 0 -2px 4px 0 rgba(33, 37, 41, 0.08);
+    }
   }
 `;
 
 const useStyles = makeStyles({
-  root: {
-    padding: "2px 4px",
-    display: "flex",
-    alignItems: "center",
-    width: 400,
-  },
   input: {
     marginLeft: 8,
     flex: 1,
@@ -64,10 +64,9 @@ export default function Search({
       renderInput={(params) => (
         <Container>
           <Paper
+            variant="outlined"
             ref={params.InputProps.ref}
             component="form"
-            className={classes.root}
-            elevation={3}
           >
             <Link to="/place">
               <IconButton

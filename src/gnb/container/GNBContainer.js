@@ -8,7 +8,7 @@ import SearchContainer from "./SearchContainer";
 const Container = styled.nav`
   height: 70px;
   width: 100vw;
-  box-shadow: rgb(238, 238, 238) 0px 1px 0px 0px;
+  box-shadow: 0 2px 4px 0 hsla(0, 0%, 80.8%, 0.5);
   background: #fff;
   position: fixed;
   left: 0;
