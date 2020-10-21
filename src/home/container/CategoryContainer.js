@@ -5,13 +5,23 @@ import CATEGORY from "../../common/categoryCode";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { actions as placeActions } from "../../common/reducer/place";
+import device from "../../common/device";
 
 const Container = styled.div`
-  width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 30px;
-  margin-left: 30px;
+  margin: 0 auto;
+  @media ${device.laptop} {
+    gap: 50px;
+    grid-template-columns: 1fr 1fr;
+  }
+  @media ${device.tablet} {
+    gap: 15px;
+  }
+  @media ${device.mobileL} {
+    grid-template-columns: 1fr;
+  } ;
 `;
 const Rise = styled.div`
   opacity: ${(props) => (props.rise === "1" ? 1 : 0)};
@@ -24,10 +34,13 @@ export default function CategoryContainer(props) {
   const [rise, setRise] = React.useState("0");
 
   const dispatch = useDispatch();
-  const handleClickCategory = React.useCallback((e) => {
-    const categoryCode = Number(e.currentTarget.dataset.categoryCode);
-    dispatch(placeActions.setPlaceListCategoryCode(categoryCode));
-  }, [dispatch]);
+  const handleClickCategory = React.useCallback(
+    (e) => {
+      const categoryCode = Number(e.currentTarget.dataset.categoryCode);
+      dispatch(placeActions.setPlaceListCategoryCode(categoryCode));
+    },
+    [dispatch]
+  );
 
   React.useEffect(() => {
     let observer;
@@ -65,5 +78,5 @@ export default function CategoryContainer(props) {
         </Rise>
       ))}
     </Container>
-  )
-};
+  );
+}

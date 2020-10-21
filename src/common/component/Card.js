@@ -21,9 +21,9 @@ import defaultImage from "../../images/defaultImage.png";
 import { useDispatch, useSelector } from "react-redux";
 import { actions } from "../reducer/detail";
 import { actions as userActions } from "../reducer/user";
+import device from "../../common/device";
 
 const StyledCard = styled(Card)`
-  width: 480px;
   height: 500px;
   margin: 0 7px;
   min-width: 480px;
@@ -43,8 +43,9 @@ const StyledCard = styled(Card)`
     width: 100%;
     align-items: center;
   }
-  & .MuiCardHeader-content .MuiCardHeader-title {
-    max-width: 330px;
+  @media ${device.tablet} {
+    min-width: 350px;
+    height: 460px;
   }
 `;
 
@@ -108,6 +109,7 @@ const Badge = styled.span`
   padding: 4px;
   margin: 0 3px;
   color: ${(props) => (props.color === "red" ? "red" : "green")};
+  word-break: keep-all;
 `;
 const HeartBtn = styled(IconButton)`
   ${(props) =>
@@ -141,18 +143,30 @@ export default function PlaceCard(props) {
   const { hearts, isLoggedIn } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
-  const setIds = React.useCallback((contentTypeId, contentId) => {
-    dispatch(actions.setIds({contentTypeId, contentId}));
-  }, [dispatch]);
-  const setPlace = React.useCallback((place) => {
-    dispatch(actions.setPlace({
-        ...place,
-        isClose: place.dist <= 1000
-    }));
-  }, [dispatch]);
+  const setIds = React.useCallback(
+    (contentTypeId, contentId) => {
+      dispatch(actions.setIds({ contentTypeId, contentId }));
+    },
+    [dispatch]
+  );
+  const setPlace = React.useCallback(
+    (place) => {
+      dispatch(
+        actions.setPlace({
+          ...place,
+          isClose: place.dist <= 1000,
+        })
+      );
+    },
+    [dispatch]
+  );
 
-  const isHeart = React.useMemo(() => hearts.some(heart => parseInt(heart.contentid) === parseInt(contentid)), [contentid, hearts]);
-  
+  const isHeart = React.useMemo(
+    () =>
+      hearts.some((heart) => parseInt(heart.contentid) === parseInt(contentid)),
+    [contentid, hearts]
+  );
+
   const handleClickCard = (contentTypeId, contentId, place) => {
     setIds(contentTypeId, contentId);
     setPlace(place);
@@ -162,6 +176,8 @@ export default function PlaceCard(props) {
       dispatch(userActions.setHeartsRequest(place));
     }
   };
+  const abbreviationTitle =
+    title.length >= 40 ? title.slice(0, 40) + "..." : title;
 
   return (
     <StyledCard>
@@ -169,15 +185,15 @@ export default function PlaceCard(props) {
         <CardMedia
           className={classes.media}
           image={firstimage || defaultImage}
-          title={title}
+          title={abbreviationTitle}
           onClick={() => handleClickCard(contenttypeid, contentid, place)}
         />
       </Link>
       <CardHeader
         className={classes.small}
-        title={title.length >= 33 ? title.slice(0,33) + "..." : title}
-        subheader={
+        title={
           <>
+            {abbreviationTitle}
             {isPopular && <Badge color="red"> 인기 </Badge>}
             {isOnline ? (
               <Badge color="green"> 온라인 </Badge>

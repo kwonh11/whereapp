@@ -1,8 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
-import styled from 'styled-components';
+import styled from "styled-components";
 import Slider from "../component/Slider";
 import { actions } from "../../common/reducer/home";
 import Skeleton from "@material-ui/lab/Skeleton";
+import device from "../../common/device";
 
 const SkeletonContainer = styled.div`
   width: 100%;
@@ -16,28 +17,47 @@ const SkeletonContainer = styled.div`
   padding-bottom: 150px;
   background-color: #f1f1f1;
 `;
-
+const SkeletonCardWrapper = styled.div`
+  margin: 0 7px;
+  @media ${device.tablet} {
+    & .MuiSkeleton-rect {
+      width: 350px !important;
+      height: 231px !important;
+    }
+  }
+`;
 function SkeletonCard() {
   return (
-    <div style={{margin: "0 7px"}}>
+    <SkeletonCardWrapper>
       <Skeleton variant="rect" width={480} height={330}></Skeleton>
       <Skeleton variant="text" width={300} height={50}></Skeleton>
-      <Skeleton variant="text" width={220} height={15} style={{marginTop: "20px"}}></Skeleton>
+      <Skeleton
+        variant="text"
+        width={220}
+        height={15}
+        style={{ marginTop: "20px" }}
+      ></Skeleton>
       <Skeleton variant="text" width={90} height={15}></Skeleton>
       <Skeleton variant="text" height={60}></Skeleton>
-    </div>
-  )
+    </SkeletonCardWrapper>
+  );
 }
 
 export default function SliderContainer() {
-
-  const { bestPlaceList, isLoading, regionCode } = useSelector(state => state.home);
-  const { origin, isHandledAddress } = useSelector(state => state.location);
+  const { bestPlaceList, isLoading, regionCode } = useSelector(
+    (state) => state.home
+  );
+  const { origin, isHandledAddress } = useSelector((state) => state.location);
 
   const dispatch = useDispatch();
-  const requestBestPlaceList = React.useCallback((regionCode) => {
-    dispatch(actions.requestBestPlaceList({regionCode, isHandledAddress, origin}));
-  }, [dispatch]);
+  const requestBestPlaceList = React.useCallback(
+    (regionCode) => {
+      dispatch(
+        actions.requestBestPlaceList({ regionCode, isHandledAddress, origin })
+      );
+    },
+    [dispatch]
+  );
 
   React.useEffect(() => {
     requestBestPlaceList(regionCode);
@@ -45,13 +65,14 @@ export default function SliderContainer() {
 
   if (isLoading) {
     return (
-          <SkeletonContainer>
-            <SkeletonCard />
-            <SkeletonCard />
-            <SkeletonCard />
-            <SkeletonCard />
-          </SkeletonContainer>
-    )
+      <SkeletonContainer>
+        <SkeletonCard />
+        <SkeletonCard />
+        <SkeletonCard />
+        <SkeletonCard />
+        <SkeletonCard />
+      </SkeletonContainer>
+    );
   }
-  return <Slider bestPlaceList={bestPlaceList}/>;
-};
+  return <Slider bestPlaceList={bestPlaceList} />;
+}
