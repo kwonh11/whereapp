@@ -21,6 +21,7 @@ import defaultImage from "../../images/defaultImage.png";
 import { useDispatch, useSelector } from "react-redux";
 import { actions } from "../reducer/detail";
 import { actions as userActions } from "../reducer/user";
+import device from "../device";
 
 const StyledCard = styled(Card)`
   width: 480px;
@@ -28,6 +29,7 @@ const StyledCard = styled(Card)`
   margin: 0 7px;
   min-width: 480px;
   transition: all 0.7s ease-out;
+  position: relative;
 
   &:hover {
     box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1), 0px 2px 3px rgba(0, 0, 0, 0.12),
@@ -52,14 +54,22 @@ const BottomIconsWrap = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: absolute;
+  bottom: 6px;
 `;
 const MarksWrap = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   margin-right: 10px;
+
+  width: 100%;
   & div {
     margin: 0 4px;
+  }
+
+  @media ${device.tablet} {
+    margin: 0;
   }
 `;
 const useStyles = makeStyles((theme) => ({
@@ -141,18 +151,30 @@ export default function PlaceCard(props) {
   const { hearts, isLoggedIn } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
-  const setIds = React.useCallback((contentTypeId, contentId) => {
-    dispatch(actions.setIds({contentTypeId, contentId}));
-  }, [dispatch]);
-  const setPlace = React.useCallback((place) => {
-    dispatch(actions.setPlace({
-        ...place,
-        isClose: place.dist <= 1000
-    }));
-  }, [dispatch]);
+  const setIds = React.useCallback(
+    (contentTypeId, contentId) => {
+      dispatch(actions.setIds({ contentTypeId, contentId }));
+    },
+    [dispatch]
+  );
+  const setPlace = React.useCallback(
+    (place) => {
+      dispatch(
+        actions.setPlace({
+          ...place,
+          isClose: place.dist <= 1000,
+        })
+      );
+    },
+    [dispatch]
+  );
 
-  const isHeart = React.useMemo(() => hearts.some(heart => parseInt(heart.contentid) === parseInt(contentid)), [contentid, hearts]);
-  
+  const isHeart = React.useMemo(
+    () =>
+      hearts.some((heart) => parseInt(heart.contentid) === parseInt(contentid)),
+    [contentid, hearts]
+  );
+
   const handleClickCard = (contentTypeId, contentId, place) => {
     setIds(contentTypeId, contentId);
     setPlace(place);
@@ -175,7 +197,7 @@ export default function PlaceCard(props) {
       </Link>
       <CardHeader
         className={classes.small}
-        title={title.length >= 33 ? title.slice(0,33) + "..." : title}
+        title={title.length >= 33 ? title.slice(0, 33) + "..." : title}
         subheader={
           <>
             {isPopular && <Badge color="red"> 인기 </Badge>}

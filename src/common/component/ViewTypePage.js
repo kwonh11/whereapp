@@ -13,6 +13,7 @@ import { getCategory } from "../categoryCode";
 import { blue, red } from "@material-ui/core/colors";
 import { useDispatch } from "react-redux";
 import { actions } from "../reducer/detail";
+import device from "../../common/device";
 
 const useStyles = makeStyles({
   list: {
@@ -65,14 +66,24 @@ const Badge = styled.span`
   padding: 4px;
   margin: 0 3px;
   color: ${(props) => (props.color === "red" ? "red" : "green")};
+
+  @media ${device.tablet} {
+    padding: 2px;
+    border-width: 1px;
+    font-weight: normal;
+    font-size: 10px;
+  }
 `;
 
 const IconWrap = styled.div`
   display: flex;
   & .MuiAvatar-root {
     margin-right: 10px;
-    & + & {
-      margin-right: 10px;
+    @media ${device.tablet} {
+      font-weight: normal;
+      width: 34px;
+      height: 34px;
+      font-size: 10px;
     }
   }
 `;
@@ -82,6 +93,53 @@ const TitleWrap = styled.div`
   align-items: center;
   width: 100%;
   padding-right: 10px;
+  @media ${device.tablet} {
+    & .MuiListItemText-root span.MuiTypography-root {
+      font-size: 12px;
+      font-weight: bold;
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 12px;
+      width: 100%;
+    }
+  }
+`;
+
+const StyledList = styled(List)`
+  gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+
+  @media ${device.laptop} {
+    grid-template-columns: none;
+  }
+
+  @media ${device.tablet} {
+    & .MuiListItemText-root span,
+    p {
+      font-size: 10px;
+    }
+    & li a img {
+      width: 150px;
+      height: 100px;
+      margin-right: 8px;
+    }
+  }
+`;
+
+const DescWrap = styled.div`
+  @media ${device.laptop} {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  @media ${device.tablet} {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 function ListView({ data }) {
@@ -112,7 +170,7 @@ function ListView({ data }) {
   };
 
   return (
-    <List className={classes.list}>
+    <StyledList>
       {data.map((place, idx) => {
         const { contenttypeid, contentid } = place;
         return (
@@ -128,7 +186,7 @@ function ListView({ data }) {
                 onClick={() => handleClickList(contenttypeid, contentid, place)}
               />
             </Link>
-            <div>
+            <DescWrap>
               <div>
                 <TitleWrap>
                   <ListItemText
@@ -141,9 +199,17 @@ function ListView({ data }) {
                         {place.title}
                       </Typography>
                     }
+                    secondary={
+                      <>
+                        {place.readcount >= 2000 && (
+                          <Badge color="red"> 추천 </Badge>
+                        )}
+                        {place.dist < 1000 && (
+                          <Badge color="green"> 가까움 </Badge>
+                        )}
+                      </>
+                    }
                   />
-                  {place.readcount >= 2000 && <Badge color="red"> 추천 </Badge>}
-                  {place.dist < 1000 && <Badge color="green"> 가까움 </Badge>}
                 </TitleWrap>
                 <ListItemText primary={place.addr1} secondary={place.addr2} />
                 <ListItemText primary={place.tel} />
@@ -159,11 +225,11 @@ function ListView({ data }) {
                   {`${place.dist / 1000}km`}
                 </Avatar>
               </IconWrap>
-            </div>
+            </DescWrap>
           </ListItem>
         );
       })}
-    </List>
+    </StyledList>
   );
 }
 function CardView({ data }) {
@@ -182,12 +248,23 @@ function CardView({ data }) {
 }
 
 const ContentsContainer = styled.div`
+  padding: 0 10px;
   ${(props) =>
     props.view === "card" &&
     css`
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 20px;
+
+      @media ${device.laptop} {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+
+      @media ${device.tablet} {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+      }
     `}
   ${(props) =>
     props.view === "list" &&
@@ -208,11 +285,65 @@ const ContentsContainer = styled.div`
     }
     width: 100%;
     min-width: 300px;
-    width: 310px;
     height: 350px;
     margin: 0;
     transition: opacity 0.4s ease-out;
     opacity: ${(props) => (props.isLoading ? 0.3 : 1)};
+
+    @media ${device.laptop} {
+      min-width: 246px;
+      height: 288px;
+    }
+
+    @media ${device.tablet} {
+      * {
+        font-size: 12px;
+      }
+      min-width: 150px;
+      height: 200px;
+
+      & .MuiCardHeader-root {
+        padding: 4px;
+
+        & .MuiCardHeader-content {
+          & span {
+            font-size: 12px;
+          }
+        }
+
+        & .MuiCardHeader-subheader span {
+          font-size: 10px;
+          font-weight: normal;
+          border-width: 1px;
+          padding: 2px;
+          margin-right: 0;
+        }
+      }
+
+      & .MuiCardContent-root {
+        padding: 0px 4px;
+        & p {
+          font-size: 10px;
+        }
+      }
+
+      & .MuiCardActions-root {
+        padding: 4px;
+        & .MuiButtonBase-root {
+          padding: 0 10px 0 0;
+          & span svg {
+            font-size: 18px;
+          }
+        }
+      }
+
+      & .MuiAvatar-root {
+        height: 30px;
+        width: 30px;
+        font-size: 10px;
+        font-weight: normal;
+      }
+    }
   }
 `;
 
