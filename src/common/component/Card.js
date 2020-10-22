@@ -21,13 +21,14 @@ import defaultImage from "../../images/defaultImage.png";
 import { useDispatch, useSelector } from "react-redux";
 import { actions } from "../reducer/detail";
 import { actions as userActions } from "../reducer/user";
-import device from "../../common/device";
+import device from "../device";
 
 const StyledCard = styled(Card)`
   height: 500px;
   margin: 0 7px;
   min-width: 480px;
   transition: all 0.7s ease-out;
+  position: relative;
 
   &:hover {
     box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1), 0px 2px 3px rgba(0, 0, 0, 0.12),
@@ -53,14 +54,22 @@ const BottomIconsWrap = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: absolute;
+  bottom: 6px;
 `;
 const MarksWrap = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   margin-right: 10px;
+
+  width: 100%;
   & div {
     margin: 0 4px;
+  }
+
+  @media ${device.tablet} {
+    margin: 0;
   }
 `;
 const useStyles = makeStyles((theme) => ({

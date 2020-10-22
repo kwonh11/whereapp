@@ -1,43 +1,63 @@
 import createReducer from "../createReducer";
 
 export const types = {
-  SET_SOCKET_REQUEST: "chat/SET_SOCKET_REQUEST",
-  SET_SOCKET_SUCCESS: "chat/SET_SOCKET_SUCCESS",
-  SET_SOCKET_ERROR: "chat/SET_SOCKET_ERROR",
+  WRITE_CHAT_REQUEST: "chat/WRITE_CHAT_REQUEST",
+  WRITE_CHAT_SUCCESS: "chat/WRITE_CHAT_SUCCESS",
+  WRITE_CHAT_ERROR: "chat/WRITE_CHAT_ERROR",
 
-  SET_USER_REQUEST: "chat/SET_USER_REQUEST",
-  SET_USER_SUCCESS: "chat/SET_USER_SUCCESS",
-  SET_USER_ERROR: "chat/SET_USER_ERROR",
+  SUBMIT_CHAT_REQUEST: "chat/SUBMIT_CHAT_REQUEST",
+  SUBMIT_CHAT_SUCCESS: "chat/SUBMIT_CHAT_SUCCESS",
+  SUBMIT_CHAT_ERROR: "chat/SUBMIT_CHAT_ERROR",
+
+  READ_CHAT_REQUEST: "chat/READ_CHAT_REQUEST",
+  READ_CHAT_SUCCESS: "chat/READ_CHAT_SUCCESS",
+  READ_CHAT_ERROR: "chat/READ_CHAT_ERROR",
+
+  SET_CONNECT_REQUEST: "chat/SET_CONNECT_REQUEST",
+  SET_CONNECT_SUCCESS: "chat/SET_CONNECT_SUCCESS",
+  SET_CONNECT_ERROR: "chat/SET_CONNECT_ERROR",
+
+  SET_DISCONNECT_REQUEST: "chat/SET_DISCONNECT_REQUEST",
+  SET_DISCONNECT_SUCCESS: "chat/SET_DISCONNECT_SUCCESS",
+  SET_DISCONNECT_ERROR: "chat/SET_DISCONNECT_ERROR",
 };
 
 export const actions = {
-  setUserRequest: (payload) => ({ type: types.SET_USER_REQUEST, payload }),
-  setUserSuccess: (payload) => ({ type: types.SET_USER_SUCCESS, payload }),
-  setUserError: (payload) => ({ type: types.SET_USER_ERROR, payload }),
+  setConnectRequest: () => ({ type: types.SET_CONNECT_REQUEST }),
+  setConnectSuccess: (payload) => ({
+    type: types.SET_CONNECT_SUCCESS,
+    payload,
+  }),
+  setConnectError: (payload) => ({ type: types.SET_CONNECT_ERROR, payload }),
+
+  submitChatRequest: (payload) => ({
+    type: types.SUBMIT_CHAT_REQUEST,
+    payload,
+  }),
+  submitChatSuccess: (payload) => ({
+    type: types.SUBMIT_CHAT_SUCCESS,
+    payload,
+  }),
+  submitChatError: (payload) => ({ type: types.SUBMIT_CHAT_ERROR, payload }),
 };
 
 const INITIAL_STATE = {
-  chat: [],
+  chatList: [],
   user: null,
+  error: null,
 };
 
 const reducer = createReducer(INITIAL_STATE, {
-  [types.LOGIN_IN_SUCCESS]: (state, action) => {
-    state.isLoggedIn = true;
-    state.info = action.payload.info;
-    state.comments = action.payload.comments;
-    state.hearts = action.payload.hearts;
+  [types.SET_CONNECT_SUCCESS]: (state, action) => {
+    state.chatList = action.payload.chatList;
+    state.user = action.payload.user;
   },
-
-  [types.UPLOAD_IMAGE_SUCCESS]: (state, action) => {
-    state.info.image = action.image;
-  },
-
-  [types.SET_HEARTS_SUCCESS]: (state, action) => {
-    state.hearts = action.payload;
-  },
-  [types.SET_HEARTS_ERROR]: (state, action) => {
+  [types.SET_CONNECT_ERROR]: (state, action) => {
     state.error = action.payload;
+  },
+  [types.SUBMIT_CHAT_SUCCESS]: (state, action) => {
+    state.chatList = action.payload.chatList;
+    state.user = action.payload.user;
   },
 });
 
