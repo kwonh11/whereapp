@@ -6,6 +6,7 @@ import AttachFileIcon from "@material-ui/icons/AttachFile";
 import CloseIcon from "@material-ui/icons/Close";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 import styled, { css } from "styled-components";
+import device from "../../common/device";
 
 const useStyles = makeStyles({
   paper: {
@@ -107,8 +108,18 @@ const ChatWrap = styled.ul`
     }
   }
 `;
+const StyledPaper = styled(Paper)`
+  @media ${device.mobileL} {
+    &.makeStyles-paper-9 {
+      right: 0px;
+      bottom: 0px;
+      width: 100%;
+      height: 82vh;
+    }
+  } ;
+`;
 
-export default function Chat({
+function Chat({
   input,
   chat,
   visual,
@@ -116,19 +127,20 @@ export default function Chat({
   handleChangeInput,
   handleClickSubmit,
   user,
+  listRef
 }) {
   const classes = useStyles();
 
   return visual ? (
     <Zoom in={visual}>
-      <Paper elevation={3} className={classes.paper}>
+      <StyledPaper elevation={3} className={classes.paper}>
         <div className={classes.header}>
           <span>{`참여인원 : ${chat.length}`}</span>
           <IconButton onClick={handleClick}>
             <CloseIcon />
           </IconButton>
         </div>
-        <ChatWrap className={classes.contents}>
+        <ChatWrap className={classes.contents} ref={listRef}>
           {chat.map((item, idx) => {
             if (item.user === "system") {
               return (
@@ -151,7 +163,7 @@ export default function Chat({
             }
           })}
         </ChatWrap>
-        <form className={classes.form}>
+        <form className={classes.form} onSubmit={handleClickSubmit}>
           <IconButton>
             <AttachFileIcon />
           </IconButton>
@@ -165,7 +177,7 @@ export default function Chat({
             <SendIcon />
           </IconButton>
         </form>
-      </Paper>
+      </StyledPaper>
     </Zoom>
   ) : (
     <ChatBtn onClick={handleClick} className={classes.iconButton}>
@@ -173,3 +185,5 @@ export default function Chat({
     </ChatBtn>
   );
 }
+
+export default React.forwardRef(Chat);

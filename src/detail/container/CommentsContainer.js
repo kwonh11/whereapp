@@ -137,7 +137,7 @@ export default function CommentsContainer(props) {
         sortKey={sortKey}
         comments={comments}
         contentId={contentId}
-        commenter={user}
+        loginUser={user}
         sendable={sendable}
       />
       <ErrorSnack

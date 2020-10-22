@@ -1,7 +1,5 @@
 import styled from "styled-components";
 import { Avatar, Divider } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { blue, green, red } from "@material-ui/core/colors";
 import device from "../../common/device";
 
 const HeaderContainer = styled.div`
@@ -34,6 +32,7 @@ const Image = styled.img`
 `;
 const TitleContainer = styled.div`
   height: 100%;
+  width: 100%;
   padding: 4px;
   display: flex;
   justify-content: center;
@@ -49,7 +48,7 @@ const TitleWrap = styled.div`
   align-items: center;
   color: #333;
   @media ${device.tablet} {
-    font-size: 2rem;
+    font-size: 1.6rem;
   }
 `;
 const DateWrap = styled.div`
@@ -82,6 +81,9 @@ const Badge = styled.span`
   color: #fff;
   margin-top: 14px;
   margin-right: 5px;
+  @media ${device.tablet} {
+    font-size: 10px;
+  } ;
 `;
 
 const ShortDivider = styled(Divider)`
@@ -106,6 +108,9 @@ const CategoryWrap = styled.div`
   font-size: 1.2rem;
   font-weight: bold;
   color: #777;
+  @media ${device.tablet} {
+    font-size: 1rem;
+  }
 `;
 const InfoWrap = styled.div`
   height: 30px;
@@ -117,48 +122,43 @@ const InfoWrap = styled.div`
   font-size: 1.2rem;
   font-weight: bold;
   @media ${device.tablet} {
-    font-size: 0.9rem;
+    font-size: 10px;
+  }
+`;
+const StyledAvatar = styled(Avatar)`
+  &.MuiAvatar-root {
+    position: absolute;
+    top: 0;
+    width: 70px;
+    height: 70px;
+    margin: 20px;
+    font-size: 1rem;
+    color: white;
+    opacity: 0.8;
+    background-color: ${(props) =>
+      props.bgColor === "blue"
+        ? "#1565c0"
+        : props.bgColor === "red"
+        ? "#b71c1c"
+        : "#1b5e20"};
+    z-index: 500;
+
+    @media ${device.laptop} {
+      width: 60px;
+      height: 60px;
+      margin: 15px;
+      font-size: 13px;
+    }
+    @media ${device.tablet} {
+      width: 45px;
+      height: 45px;
+      margin: 10px;
+      font-size: 10px;
+    }
   }
 `;
 
-const useStyles = makeStyles((theme) => ({
-  blue: {
-    position: "absolute",
-    top: "0",
-    width: "45px",
-    height: "45px",
-    margin: "10px",
-    fontSize: "10px",
-    color: "white",
-    backgroundColor: blue[800],
-    zIndex: 500,
-  },
-  red: {
-    position: "absolute",
-    top: "0",
-    width: "45px",
-    height: "45px",
-    margin: "10px",
-    fontSize: "10px",
-    color: "white",
-    backgroundColor: red[900],
-    zIndex: 500,
-  },
-  green: {
-    position: "absolute",
-    top: "0",
-    width: "45px",
-    height: "45px",
-    margin: "10px",
-    fontSize: "10px",
-    color: "white",
-    backgroundColor: green[900],
-    zIndex: 500,
-  },
-}));
-
 export default function Detail(props) {
-  const classes = useStyles();
   const { place, category } = props;
   const {
     firstimage,
@@ -195,13 +195,9 @@ export default function Detail(props) {
       </HeaderContainer>
 
       <ImageContainer>
-        <Avatar
-          className={
-            isOnline ? classes.green : isClose ? classes.blue : classes.red
-          }
-        >
+        <StyledAvatar bgColor={isOnline ? "green" : isClose ? "blue" : "red"}>
           {isOnline ? "Online" : Math.ceil(dist / 100) / 10 + "KM"}
-        </Avatar>
+        </StyledAvatar>
         <Image src={firstimage} />
       </ImageContainer>
     </React.Fragment>

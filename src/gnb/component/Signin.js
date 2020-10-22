@@ -3,6 +3,7 @@ import styled from "styled-components";
 import googleLoginImage from "../../images/google_login_button.png";
 import kakaoLoginImage from "../../images/kakao_login_button.png";
 import smallLogo from "../../images/smallLogo.png";
+import device from "../../common/device";
 
 const SignInContainer = styled.div`
   width: 100%;
@@ -25,6 +26,10 @@ const StyledButton = styled(Button)`
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
+  @media ${device.mobileL} {
+    width: 300px;
+    height: 70px;
+  }
 `;
 const TitleContainer = styled.div`
   width: 100%;
@@ -36,6 +41,9 @@ const TitleContainer = styled.div`
   color: #676767;
   font-weight: bold;
   margin-bottom: 30px;
+  @media ${device.mobileL} {
+    font-size: 20px;
+  }
 `;
 const ImageWrapper = styled.div`
   width: 50px;
@@ -49,7 +57,9 @@ const ImageWrapper = styled.div`
 export default function SignIn() {
   return (
     <SignInContainer>
-      <TitleContainer><ImageWrapper image={smallLogo}/> 다음 계정으로 로그인</TitleContainer>
+      <TitleContainer>
+        <ImageWrapper image={smallLogo} /> 다음 계정으로 로그인
+      </TitleContainer>
       <a href="/auth/google">
         <StyledButton image={googleLoginImage} />
       </a>
