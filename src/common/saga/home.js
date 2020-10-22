@@ -5,7 +5,6 @@ import { actions, types } from "../reducer/home";
 import { actions as locationActions } from "../reducer/location";
 
 export function* fetchBestList(action) {
-  console.log(action);
   const { regionCode, isHandledAddress, origin } = action.payload;
   yield put(actions.setLoading(true));
   yield put(actions.setError(""));

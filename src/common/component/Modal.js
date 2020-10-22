@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import device from "../../common/device";
 
 const ModalContainer = styled.div`
   position: fixed;
@@ -22,9 +23,12 @@ const ModalBox = styled.div`
   align-items: center;
   padding: 15px;
   box-shadow: 0px 6px 13px -5px rgba(133, 133, 133, 1);
-  width: 500px;
+  min-width: 480px;
   height: 400px;
   border-radius: 10px;
+  @media ${device.mobileL} {
+    min-width: 100%;
+  }
 `;
 const ExitWrap = styled.div`
   display: flex;

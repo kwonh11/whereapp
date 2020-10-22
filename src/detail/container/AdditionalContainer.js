@@ -11,6 +11,7 @@ import Map from "../component/Map";
 import { useSelector, useDispatch } from "react-redux";
 import { actions as userActions } from "../../common/reducer/user";
 import { types, actions } from "../../common/reducer/detail";
+import device from "../../common/device";
 
 const MapContainer = styled.div`
   padding: 50px 0;
@@ -19,11 +20,12 @@ const MapContainer = styled.div`
   align-items: center;
   width: 100%;
   height: 600px;
+  @media ${device.tablet} {
+    height: 400px;
+  }
 `;
 const ActionsWrap = styled.div`
   width: 100%;
-  margin-top: 50px;
-  margin-right: 50px;
   display: flex;
   justify-content: center;
   align-items: center;

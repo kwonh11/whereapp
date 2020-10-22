@@ -1,8 +1,6 @@
 import styled from "styled-components";
 import { Avatar, Divider } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { blue, green, red } from "@material-ui/core/colors";
-
+import device from "../../common/device";
 
 const HeaderContainer = styled.div`
   display: flex;
@@ -10,20 +8,20 @@ const HeaderContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 40vh;
-  position: absolute;
-  top: 0;
+  height: 250px;
+  margin-top: 50px;
   z-index: 1;
 `;
 const ImageContainer = styled.div`
+  width: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: baseline;
-  margin-top: 30vh;
-  width: 1000px;
-  box-shadow: 0 13px 27px -5px rgba(50,50,93,0.25), 0 8px 16px -8px rgba(0,0,0,0.3), 0 -6px 16px -6px rgba(0,0,0,0.025);
+  margin-top: 0;
+  box-shadow: 0 13px 27px -5px rgba(50, 50, 93, 0.25),
+    0 8px 16px -8px rgba(0, 0, 0, 0.3), 0 -6px 16px -6px rgba(0, 0, 0, 0.025);
   z-index: 100;
 `;
 const Image = styled.img`
@@ -33,8 +31,8 @@ const Image = styled.img`
   border-radius: 5px;
 `;
 const TitleContainer = styled.div`
-  width: 1000px;
   height: 100%;
+  width: 100%;
   padding: 4px;
   display: flex;
   justify-content: center;
@@ -49,6 +47,9 @@ const TitleWrap = styled.div`
   justify-content: center;
   align-items: center;
   color: #333;
+  @media ${device.tablet} {
+    font-size: 1.6rem;
+  }
 `;
 const DateWrap = styled.div`
   display: flex;
@@ -76,27 +77,30 @@ const Badge = styled.span`
   font-weight: bold;
   border-radius: 15px;
   padding: 5px;
-  background-color: ${props => props.color};
+  background-color: ${(props) => props.color};
   color: #fff;
   margin-top: 14px;
   margin-right: 5px;
+  @media ${device.tablet} {
+    font-size: 10px;
+  } ;
 `;
 
 const ShortDivider = styled(Divider)`
   border: 2px;
-  width: 1000px;
+  width: 100%;
+  margin: 0 50px;
   margin: 10px;
 `;
 const InfoContainer = styled.div`
   width: 100%;
-  padding: 50px 10px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 `;
 const CategoryWrap = styled.div`
-display: flex;
+  display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -104,6 +108,9 @@ display: flex;
   font-size: 1.2rem;
   font-weight: bold;
   color: #777;
+  @media ${device.tablet} {
+    font-size: 1rem;
+  }
 `;
 const InfoWrap = styled.div`
   height: 30px;
@@ -114,70 +121,70 @@ const InfoWrap = styled.div`
   align-items: center;
   font-size: 1.2rem;
   font-weight: bold;
+  @media ${device.tablet} {
+    font-size: 10px;
+  }
+`;
+const StyledAvatar = styled(Avatar)`
+  &.MuiAvatar-root {
+    position: absolute;
+    top: 0;
+    width: 70px;
+    height: 70px;
+    margin: 20px;
+    font-size: 1rem;
+    color: white;
+    opacity: 0.8;
+    background-color: ${(props) =>
+      props.bgColor === "blue"
+        ? "#1565c0"
+        : props.bgColor === "red"
+        ? "#b71c1c"
+        : "#1b5e20"};
+    z-index: 500;
+
+    @media ${device.laptop} {
+      width: 60px;
+      height: 60px;
+      margin: 15px;
+      font-size: 13px;
+    }
+    @media ${device.tablet} {
+      width: 45px;
+      height: 45px;
+      margin: 10px;
+      font-size: 10px;
+    }
+  }
 `;
 
-const useStyles = makeStyles((theme) => ({
-  blue: {
-    position: "absolute",
-    top: "0",
-    width: "70px",
-    height: "70px",
-    margin: "20px",
-    fontSize: "large",
-    fontWeight: "bold",
-    color: "white",
-    backgroundColor: blue[800],
-    zIndex:500,
-  },
-  red: {
-    position: "absolute",
-    top: "0",
-    width: "70px",
-    height: "70px",
-    margin: "20px",
-    fontSize: "large",
-    fontWeight: "bold",
-    color: "white",
-    backgroundColor: red[900],
-    zIndex:500,
-  },
-  green: {
-    position: "absolute",
-    top: "0",
-    width: "70px",
-    height: "70px",
-    margin: "20px",
-    fontSize: "large",
-    fontWeight: "bold",
-    color: "white",
-    backgroundColor: green[900],
-    zIndex:500,
-  },
-}));
-
-
-
-export default function Detail( props ) {
-  const classes = useStyles();
-  const {place, category} = props;
+export default function Detail(props) {
+  const { place, category } = props;
   const {
-    firstimage, title, date, addr1, tel, dist, readcount, isClose, isOnline, isPopular
+    firstimage,
+    title,
+    date,
+    addr1,
+    tel,
+    dist,
+    readcount,
+    isClose,
+    isOnline,
+    isPopular,
   } = place;
 
   return (
     <React.Fragment>
       <HeaderContainer>
         <TitleContainer>
-          <CategoryWrap>
-            {category}
-          </CategoryWrap>
+          <CategoryWrap>{category}</CategoryWrap>
           <TitleWrap> {title} </TitleWrap>
           <BadgeWrap>
             <DateWrap> {date} </DateWrap>
             {/* {additionalInfo.isInProgress && <Badge color="blue"> 진행중 </Badge> } */}
-            {isPopular && <Badge color="red"> 인기 </Badge> }
-            {isClose && !isOnline && <Badge color="blue"> 가까움 </Badge> }
-            {isOnline && <Badge color="green"> 온라인 </Badge> }
+            {isPopular && <Badge color="red"> 인기 </Badge>}
+            {isClose && !isOnline && <Badge color="blue"> 가까움 </Badge>}
+            {isOnline && <Badge color="green"> 온라인 </Badge>}
           </BadgeWrap>
           <ShortDivider />
           <InfoContainer>
@@ -188,12 +195,11 @@ export default function Detail( props ) {
       </HeaderContainer>
 
       <ImageContainer>
-        <Avatar className={isOnline? classes.green : isClose ? classes.blue : classes.red}>
-          { isOnline? "Online" : Math.ceil(dist/100)/10 +"KM"}
-        </Avatar>
+        <StyledAvatar bgColor={isOnline ? "green" : isClose ? "blue" : "red"}>
+          {isOnline ? "Online" : Math.ceil(dist / 100) / 10 + "KM"}
+        </StyledAvatar>
         <Image src={firstimage} />
       </ImageContainer>
     </React.Fragment>
   );
-};
-
+}
