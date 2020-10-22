@@ -249,6 +249,7 @@ function CardView({ data }) {
 
 const ContentsContainer = styled.div`
   padding: 0 10px;
+  width: 100%;
   ${(props) =>
     props.view === "card" &&
     css`
