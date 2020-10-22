@@ -235,50 +235,50 @@ export default function Comments(props) {
       ) : comments.length === 0 ? (
         <Empty description="등록된 댓글이 없습니다." />
       ) : (
-        comments.map((comment, i) => {
-          const {
-            commenter,
-            content,
-            createAt,
-            like,
-            reply,
-            nick,
-            _id,
-          } = comment;
-          const contentWithLine = content ? content.split(/\r\n|\r|\n/) : [];
-          const isLiked = like.includes(commenter);
-          return (
-            <React.Fragment key={_id}>
-              <FilterWrap>
-                <ByRegisteredButton
-                  sort={sortKey}
-                  data-key="registered"
-                  onClick={handleClickSort}
-                >
-                  {" "}
-                  등록순{" "}
-                </ByRegisteredButton>
-                |
-                <ByRecentButton
-                  sort={sortKey}
-                  data-key="recent"
-                  onClick={handleClickSort}
-                >
-                  {" "}
-                  최신순{" "}
-                </ByRecentButton>
-                |
-                <ByLikeButton
-                  sort={sortKey}
-                  data-key="like"
-                  onClick={handleClickSort}
-                >
-                  {" "}
-                  좋아요순{" "}
-                </ByLikeButton>
-              </FilterWrap>
+        <React.Fragment key={_id}>
+          <FilterWrap>
+            <ByRegisteredButton
+              sort={sortKey}
+              data-key="registered"
+              onClick={handleClickSort}
+            >
+              {" "}
+              등록순{" "}
+            </ByRegisteredButton>
+            |
+            <ByRecentButton
+              sort={sortKey}
+              data-key="recent"
+              onClick={handleClickSort}
+            >
+              {" "}
+              최신순{" "}
+            </ByRecentButton>
+            |
+            <ByLikeButton
+              sort={sortKey}
+              data-key="like"
+              onClick={handleClickSort}
+            >
+              {" "}
+              좋아요순{" "}
+            </ByLikeButton>
+          </FilterWrap>
 
-              <Container key={i} replyOn={replyOn === _id ? "on" : ""}>
+          {comments.map((comment, i) => {
+            const {
+              commenter,
+              content,
+              createAt,
+              like,
+              reply,
+              nick,
+              _id,
+            } = comment;
+            const contentWithLine = content ? content.split(/\r\n|\r|\n/) : [];
+            const isLiked = like.includes(commenter);
+            return (
+              <Container key={_id} replyOn={replyOn === _id ? "on" : ""}>
                 <CommenterWrap>
                   <ProfileWrap>
                     <Avatar />
@@ -387,9 +387,9 @@ export default function Comments(props) {
                   deleteReply={deleteReply}
                 />
               </Container>
-            </React.Fragment>
-          );
-        })
+            );
+          })}
+        </React.Fragment>
       )}
     </CommentContainer>
   );
