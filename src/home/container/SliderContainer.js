@@ -21,7 +21,7 @@ const SkeletonCardWrapper = styled.div`
   margin: 0 7px;
   @media ${device.tablet} {
     & .MuiSkeleton-rect {
-      width: 350px !important;
+      width: 300px !important;
       height: 231px !important;
     }
   }

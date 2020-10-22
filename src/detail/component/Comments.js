@@ -4,8 +4,8 @@ import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import { MoreVert } from "@material-ui/icons";
 import { IconButton } from "@material-ui/core";
 import Fade from "@material-ui/core/Fade";
-import 'antd/dist/antd.css';
-import { Empty } from 'antd';
+import "antd/dist/antd.css";
+import { Empty } from "antd";
 import Loading from "../../common/component/Loading";
 import CommentsInput from "./CommentsInput";
 import getDateString from "../../common/getDateString";
@@ -25,6 +25,9 @@ const CommentContainer = styled.div`
   width: 100%;
   padding: 20px 10px;
   margin: 20px 20px 100px 20px;
+  @media ${device.tablet} {
+    padding: 5px;
+  } ;
 `;
 const Container = styled.div`
   width: 100%;
@@ -34,6 +37,9 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   transition: all 0.2s ease-out;
+  @media ${device.tablet} {
+    padding: 5px;
+  } ;
 `;
 const ContentWrap = styled.div`
   width: 100%;
@@ -41,7 +47,10 @@ const ContentWrap = styled.div`
   font-size: 0.9rem;
   padding: 20px;
   margin-bottom: 10px;
-  border-radius: 7px;
+  @media ${device.tablet} {
+    padding: 10px;
+    font-size: 12px;
+  } ;
 `;
 const InfoWrap = styled.div`
   display: flex;
@@ -55,6 +64,11 @@ const DateWrap = styled.div`
   width: 120px;
   height: 30px;
   align-self: flex-end;
+  @media ${device.tablet} {
+    font-size: 10px;
+    height: 15px;
+    text-align: center;
+  } ;
 `;
 const FilterWrap = styled.div`
   width: 100%;
@@ -75,6 +89,9 @@ const CommenterWrap = styled.div`
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
+  @media ${device.tablet} {
+    margin: 15px 0;
+  } ;
 `;
 const ByRegisteredButton = styled(Button)`
   margin: 0 5px;
@@ -83,6 +100,11 @@ const ByRegisteredButton = styled(Button)`
     font-weight: ${(props) => (props.sort === "registered" ? "bold" : "unset")};
     color: ${(props) => (props.sort === "registered" ? "#2c0097" : "darkgray")};
   }
+  @media ${device.tablet} {
+    & .MuiButton-label {
+      font-size: 14px;
+    }
+  } ;
 `;
 const ByRecentButton = styled(Button)`
   margin: 0 5px;
@@ -90,6 +112,11 @@ const ByRecentButton = styled(Button)`
     font-size: 1.1rem;
     font-weight: ${(props) => (props.sort === "recent" ? "bold" : "unset")};
     color: ${(props) => (props.sort === "recent" ? "#2c0097" : "darkgray")};
+  }
+  @media ${device.tablet} {
+    & .MuiButton-label {
+      font-size: 14px;
+    }
   }
 `;
 const ByLikeButton = styled(Button)`
@@ -99,14 +126,31 @@ const ByLikeButton = styled(Button)`
     font-weight: ${(props) => (props.sort === "like" ? "bold" : "unset")};
     color: ${(props) => (props.sort === "like" ? "#2c0097" : "darkgray")};
   }
+  @media ${device.tablet} {
+    & .MuiButton-label {
+      font-size: 14px;
+    }
+  } ;
 `;
 const Nick = styled.span`
   margin-left: 10px;
+  @media ${device.tablet} {
+    margin-left: 5px;
+    font-size: 15px;
+  } ;
 `;
 const ButtonWrap = styled.div`
-  @media ${device.mobileL} {
-    padding: 1px 2px;
-  }
+  @media ${device.tablet} {
+    & .MuiButton-outlined {
+      padding: 2px 4px;
+    }
+    & .MuiSvgIcon-root {
+      font-size: 15px;
+    }
+    & .MuiButton-label {
+      font-size: 12px;
+    }
+  } ;
 `;
 
 export default function Comments(props) {
@@ -188,12 +232,9 @@ export default function Comments(props) {
         <LoadingContainer>
           <Loading />
         </LoadingContainer>
-      ) : 
-      comments.length === 0 ? 
-      (
-        <Empty description="등록된 댓글이 없습니다."/>
-      )
-      :(
+      ) : comments.length === 0 ? (
+        <Empty description="등록된 댓글이 없습니다." />
+      ) : (
         comments.map((comment, i) => {
           const {
             commenter,
@@ -208,140 +249,144 @@ export default function Comments(props) {
           const isLiked = like.includes(commenter);
           return (
             <>
-            <FilterWrap>
-              <ByRegisteredButton
-                sort={sortKey}
-                data-key="registered"
-                onClick={handleClickSort}
-              >
-                {" "}
-                등록순{" "}
-              </ByRegisteredButton>
-              |
-              <ByRecentButton
-                sort={sortKey}
-                data-key="recent"
-                onClick={handleClickSort}
-              >
-                {" "}
-                최신순{" "}
-              </ByRecentButton>
-              |
-              <ByLikeButton sort={sortKey} data-key="like" onClick={handleClickSort}>
-                {" "}
-                좋아요순{" "}
-              </ByLikeButton>
-            </FilterWrap>
-            
-            <Container key={i} replyOn={replyOn === _id ? "on" : ""}>
-              <CommenterWrap>
-                <ProfileWrap>
-                  <Avatar />
-                  <Nick>{nick}</Nick>
-                </ProfileWrap>
-                {
-                  // 내가 쓴 글일 경우 옵션버튼 노출
-                  loginUser === commenter && (
-                    <IconButton
-                      aria-controls="fade-menu"
-                      aria-haspopup="true"
-                      data-id={_id}
-                      data-content={content}
-                      onClick={handleClickMenu}
-                    >
-                      <MoreVert />
-                    </IconButton>
-                  )
-                }
-                <Menu
-                  id="fade-menu"
-                  anchorEl={anchorEl}
-                  keepMounted
-                  open={open}
-                  onClose={handleCloseMenu}
-                  TransitionComponent={Fade}
-                  elevation={1}
+              <FilterWrap>
+                <ByRegisteredButton
+                  sort={sortKey}
+                  data-key="registered"
+                  onClick={handleClickSort}
                 >
-                  <MenuItem onClick={handleClickDelete}> 삭제하기 </MenuItem>
-                  <MenuItem onClick={handleClickModifyButton}>
-                    {" "}
-                    수정하기{" "}
-                  </MenuItem>
-                </Menu>
-              </CommenterWrap>
-              {modifyOn === _id ? (
-                <ContentWrap>
-                  <TextField
-                    id="outlined-multiline-static"
-                    label="수정하기"
-                    fullWidth
-                    multiline
-                    rowsMax={5}
-                    rows={contentWithLine.length}
-                    variant="outlined"
-                    onChange={handleChangeModifyingInput}
-                    value={modifyingInput}
+                  {" "}
+                  등록순{" "}
+                </ByRegisteredButton>
+                |
+                <ByRecentButton
+                  sort={sortKey}
+                  data-key="recent"
+                  onClick={handleClickSort}
+                >
+                  {" "}
+                  최신순{" "}
+                </ByRecentButton>
+                |
+                <ByLikeButton
+                  sort={sortKey}
+                  data-key="like"
+                  onClick={handleClickSort}
+                >
+                  {" "}
+                  좋아요순{" "}
+                </ByLikeButton>
+              </FilterWrap>
+
+              <Container key={i} replyOn={replyOn === _id ? "on" : ""}>
+                <CommenterWrap>
+                  <ProfileWrap>
+                    <Avatar />
+                    <Nick>{nick}</Nick>
+                  </ProfileWrap>
+                  {
+                    // 내가 쓴 글일 경우 옵션버튼 노출
+                    loginUser === commenter && (
+                      <IconButton
+                        aria-controls="fade-menu"
+                        aria-haspopup="true"
+                        data-id={_id}
+                        data-content={content}
+                        onClick={handleClickMenu}
+                      >
+                        <MoreVert />
+                      </IconButton>
+                    )
+                  }
+                  <Menu
+                    id="fade-menu"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={open}
+                    onClose={handleCloseMenu}
+                    TransitionComponent={Fade}
+                    elevation={1}
+                  >
+                    <MenuItem onClick={handleClickDelete}> 삭제하기 </MenuItem>
+                    <MenuItem onClick={handleClickModifyButton}>
+                      {" "}
+                      수정하기{" "}
+                    </MenuItem>
+                  </Menu>
+                </CommenterWrap>
+                {modifyOn === _id ? (
+                  <ContentWrap>
+                    <TextField
+                      id="outlined-multiline-static"
+                      label="수정하기"
+                      fullWidth
+                      multiline
+                      rowsMax={5}
+                      rows={contentWithLine.length}
+                      variant="outlined"
+                      onChange={handleChangeModifyingInput}
+                      value={modifyingInput}
+                    />
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      data-id={_id}
+                      onClick={handleSubmitModify}
+                      style={{ margin: "10px 0 0 auto", display: "flex" }}
+                    >
+                      수정완료
+                    </Button>
+                  </ContentWrap>
+                ) : (
+                  <ContentWrap>
+                    {contentWithLine
+                      ? contentWithLine.map((line, i) => (
+                          <React.Fragment key={i}>
+                            {line} <br />
+                          </React.Fragment>
+                        ))
+                      : content}
+                  </ContentWrap>
+                )}
+                <InfoWrap>
+                  <DateWrap>{getDateString(createAt)}</DateWrap>
+                  <ButtonWrap data-id={_id}>
+                    <Button
+                      variant="outlined"
+                      color={isLiked ? "primary" : "default"}
+                      onClick={handleClickLike}
+                    >
+                      {like.length} &nbsp;
+                      <ThumbUpIcon color={isLiked ? "primary" : "action"} />
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="default"
+                      onClick={handleClickReply}
+                    >
+                      댓글달기
+                    </Button>
+                  </ButtonWrap>
+                </InfoWrap>
+                {replyOn === _id && (
+                  <CommentsInput
+                    setSnack={setSnack}
+                    isReply={true}
+                    commentId={_id}
+                    addReply={addReply}
+                    contentId={contentId}
+                    commenter={commenter}
+                    sendable={sendable}
+                    setSendable={setSendable}
                   />
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    data-id={_id}
-                    onClick={handleSubmitModify}
-                    style={{ margin: "10px 0 0 auto", display: "flex" }}
-                  >
-                    수정완료
-                  </Button>
-                </ContentWrap>
-              ) : (
-                <ContentWrap>
-                  {contentWithLine
-                    ? contentWithLine.map((line, i) => (
-                        <React.Fragment key={i}>
-                          {line} <br />
-                        </React.Fragment>
-                      ))
-                    : content}
-                </ContentWrap>
-              )}
-              <InfoWrap>
-                <DateWrap>{getDateString(createAt)}</DateWrap>
-                <ButtonWrap data-id={_id}>
-                  <Button
-                    variant="outlined"
-                    color={isLiked ? "primary" : "default"}
-                    onClick={handleClickLike}
-                  >
-                    {like.length} &nbsp;
-                    <ThumbUpIcon color={isLiked ? "primary" : "action"} />
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="default"
-                    onClick={handleClickReply}
-                  >
-                    댓글달기
-                  </Button>
-                </ButtonWrap>
-              </InfoWrap>
-              {replyOn === _id && (
-                <CommentsInput
-                  setSnack={setSnack}
-                  isReply={true}
-                  commentId={_id}
-                  addReply={addReply}
-                  contentId={contentId}
+                )}
+                <Reply
+                  reply={reply}
                   commenter={commenter}
-                  sendable={sendable}
-                  setSendable={setSendable}
+                  commentId={_id}
+                  deleteReply={deleteReply}
                 />
-              )}
-              <Reply
-                reply={reply}
-                commenter={commenter}
-                commentId={_id}
-                deleteReply={deleteReply}
-              />
-            </Container>
+              </Container>
             </>
           );
         })
