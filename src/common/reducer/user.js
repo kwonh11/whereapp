@@ -1,9 +1,9 @@
 import createReducer from "../createReducer";
 
 export const types = {
-  LOGIN_IN_REQUEST: "user/LOGIN_IN_REQUEST",
-  LOGIN_IN_SUCCESS: "user/LOGIN_IN_SUCCESS",
-  LOGIN_IN_ERROR: "user/LOGIN_IN_ERROR",
+  LOGIN_REQUEST: "user/LOGIN_REQUEST",
+  LOGIN_SUCCESS: "user/LOGIN_SUCCESS",
+  LOGIN_ERROR: "user/LOGIN_ERROR",
 
   UPLOAD_IMAGE_REQUEST: "user/UPLOAD_IMAGE_REQUEST",
   UPLOAD_IMAGE_SUCCESS: "user/UPLOAD_IMAGE_SUCCESS",
@@ -21,9 +21,9 @@ export const types = {
 };
 
 export const actions = {
-  loginInRequest: () => ({ type: types.LOGIN_IN_REQUEST }),
-  loginInSuccess: (payload) => ({ type: types.LOGIN_IN_SUCCESS, payload }),
-  loginInError: (error) => ({ type: types.LOGIN_IN_ERROR, error }),
+  loginRequest: () => ({ type: types.LOGIN_REQUEST }),
+  loginSuccess: (payload) => ({ type: types.LOGIN_SUCCESS, payload }),
+  loginError: (error) => ({ type: types.LOGIN_ERROR, error }),
 
   uploadImageRequest: (image) => ({ type: types.UPLOAD_IMAGE_REQUEST, image }),
   uploadImageSuccess: (image) => ({ type: types.UPLOAD_IMAGE_SUCCESS, image }),
@@ -45,9 +45,7 @@ export const actions = {
 
 const INITIAL_STATE = {
   isLoggedIn: false,
-  info: {
-    _id: "",
-  },
+  info: {},
   hearts: [],
   comments: [],
   error: null,
@@ -55,7 +53,7 @@ const INITIAL_STATE = {
 };
 
 const reducer = createReducer(INITIAL_STATE, {
-  [types.LOGIN_IN_SUCCESS]: (state, action) => {
+  [types.LOGIN_SUCCESS]: (state, action) => {
     state.isLoggedIn = true;
     state.info = action.payload.info;
     state.comments = action.payload.comments;
