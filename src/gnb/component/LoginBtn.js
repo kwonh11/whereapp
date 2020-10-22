@@ -83,6 +83,7 @@ export default function Login({
   infoModal,
   user,
   isLoggedIn,
+  handleClickLogout,
 }) {
   return (
     <>

@@ -128,6 +128,9 @@ export default function Chat({
   handleClickSubmit,
   user,
 }) {
+  console.log("==========Chat");
+  console.log(chat);
+
   const classes = useStyles();
 
   return visual ? (

@@ -114,3 +114,11 @@ export function callAutoComplete(address) {
     },
   });
 }
+
+export function callApiGetChat() {
+  return axios.get("/chat");
+}
+
+export function callApiPostChat(input) {
+  return axios.post("/chat", { input });
+}

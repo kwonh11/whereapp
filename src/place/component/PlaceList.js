@@ -4,7 +4,7 @@ import ViewTypePage from "../../common/component/ViewTypePage";
 import { AppBar, Tabs, Tab } from "@material-ui/core";
 import styled from "styled-components";
 import { Skeleton } from "@material-ui/lab";
-import CATEGORY from '../../common/categoryCode';
+import CATEGORY from "../../common/categoryCode";
 
 const FilterWrap = styled.div`
   display: flex;
@@ -38,10 +38,8 @@ const ContentsContainer = styled.div`
   }
 `;
 
-const StyledTab = styled(Tab)`
-  &.MuiTab-root {
-    min-width: auto;
-  }
+const StyledTabs = styled(Tabs)`
+  display: flex;
 `;
 
 const SkeletonCard = () => (
@@ -62,54 +60,54 @@ export default function PlaceList({
   viewType,
 }) {
   const [tab, setTab] = React.useState(0);
-  React.useEffect(()=>{
-    const index = CATEGORY.findIndex(item => item.id === categoryCode) + 1;
-    setTab(index >= 1 ? index: 0);
-  } ,[]);
+  React.useEffect(() => {
+    const index = CATEGORY.findIndex((item) => item.id === categoryCode) + 1;
+    setTab(index >= 1 ? index : 0);
+  }, []);
 
   const handleClickTab = (tab, categoryId) => {
     setTab(tab);
     handleSelectTab(categoryId);
   };
-  
+
   return (
     <>
       <AppBar position="static">
-        <Tabs value={tab}>
-          <StyledTab label="전체" onClick={() => handleClickTab(0, "")}/>
+        <StyledTabs value={tab} variant="scrollable">
+          <Tab label="전체" onClick={() => handleClickTab(0, "")} />
           {CATEGORY.map((item, idx) => (
-            <StyledTab
-              key={idx+1}
+            <Tab
+              key={idx + 1}
               label={item.name}
               onClick={() => {
-                handleClickTab(idx+1, item.id);
+                handleClickTab(idx + 1, item.id);
               }}
             />
           ))}
-        </Tabs>
+        </StyledTabs>
       </AppBar>
       <FilterWrap>
-        <ViewTypeBtn setPlaceViewType={setPlaceViewType} viewType={viewType}/>
+        <ViewTypeBtn setPlaceViewType={setPlaceViewType} viewType={viewType} />
         <ViewSelectFilter />
       </FilterWrap>
-      {
-        isLoading?
-        (
-          <ContentsContainer>
-            <SkeletonCard />
-            <SkeletonCard />
-            <SkeletonCard />
-            <SkeletonCard />
-            <SkeletonCard />
-            <SkeletonCard />
-            <SkeletonCard />
-            <SkeletonCard />
-          </ContentsContainer>
-        ):
-        (
-          <ViewTypePage data={placeList} viewType={viewType} isLoading={isLoading}/>
-        )
-      }
+      {isLoading ? (
+        <ContentsContainer>
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
+        </ContentsContainer>
+      ) : (
+        <ViewTypePage
+          data={placeList}
+          viewType={viewType}
+          isLoading={isLoading}
+        />
+      )}
     </>
   );
 }

@@ -14,12 +14,20 @@ module.exports = (server, app, sessionMiddleware) => {
     console.log("-----클라이언트 접속 ");
 
     const req = socket.request;
-    socket.on("join", function (data) {
-      socket.emit("chat", {
-        user: "system",
-        chat: `${req.session.color}님이 입장하셨습니다.`,
-      });
+
+    socket.emit("join", {
+      user: "system",
+      chat: `${req.session.color}님이 입장하셨습니다.`,
     });
+
+    // socket.on("join", function (data) {
+    //   console.log("-----join ");
+
+    //   socket.emit("chat", {
+    //     user: "system",
+    //     chat: `${req.session.color}님이 입장하셨습니다.`,
+    //   });
+    // });
 
     socket.on("disconnect", () => {
       console.log("-----클라이언트 접속 해제");

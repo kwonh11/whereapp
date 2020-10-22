@@ -8,7 +8,11 @@ const Chat = require("../schemas/chat");
 const router = express.Router();
 
 router.post("/", async (req, res) => {
+  console.log("========post");
   const { input } = req.body;
+  console.log(req.body);
+
+  console.log(input);
 
   try {
     const chat = await Chat.create({
@@ -24,9 +28,9 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const chats = await Chat.find({}).sort("createdAt");
+  const chatList = await Chat.find({}).sort("createdAt");
 
-  res.json({ chats, user: req.session.color });
+  res.json({ chatList, user: req.session.color });
 });
 
 module.exports = router;

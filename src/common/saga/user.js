@@ -20,10 +20,10 @@ function* logIn() {
         comments: comments.data,
         hearts: hearts.data,
       };
-      yield put(actions.loginInSuccess(payload));
+      yield put(actions.loginSuccess(payload));
     }
   } catch (error) {
-    yield put(actions.loginInError(error));
+    yield put(actions.loginError(error));
   }
 }
 
@@ -57,7 +57,7 @@ function* setComments() {
 }
 
 export default function* watcher() {
-  yield takeLatest(types.LOGIN_IN_REQUEST, logIn);
+  yield takeLatest(types.LOGIN_REQUEST, logIn);
   yield takeLatest(types.UPLOAD_IMAGE_REQUEST, uploadImage);
   yield takeLatest(types.SET_HEARTS_REQUEST, setHearts);
   yield takeLatest(types.SET_COMMENTS_REQUEST, setComments);
