@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Autocomplete } from "@material-ui/lab";
-import regions, { getRegionName } from "../../common/RegionCodes";
+import regions from "../../common/RegionCodes";
 import { TextField } from "@material-ui/core";
 import device from "../../common/device";
 
@@ -28,10 +28,14 @@ const LocationInfoWrap = styled.div`
   height: 80px;
   padding: 0 40px;
   word-break: keep-all;
+  text-align: center;
+  @media ${device.mobileL} {
+    font-size: 14px;
+  }
 `;
 
 const comboStyle = {
-  width: 200,
+  width: 150,
 };
 
 export default function Information(props) {
