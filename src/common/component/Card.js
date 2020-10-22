@@ -44,8 +44,8 @@ const StyledCard = styled(Card)`
     align-items: center;
   }
   @media ${device.tablet} {
-    min-width: 350px;
-    height: 460px;
+    min-width: 300px;
+    height: 440px;
   }
 `;
 
