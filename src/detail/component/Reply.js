@@ -74,7 +74,7 @@ const Nick = styled.span`
 `;
 
 export default function Reply(props) {
-  const { commenter: loginUser, reply, commentId, deleteReply } = props;
+  const { loginUser, reply, commentId, deleteReply } = props;
 
   const handleDeleteReply = (e) => {
     const { replyId } = e.currentTarget.dataset;

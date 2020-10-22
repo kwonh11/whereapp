@@ -161,7 +161,7 @@ export default function Comments(props) {
     contentId,
     addReply,
     addLike,
-    commenter: loginUser,
+    loginUser,
     deleteReply,
     sendable,
     setSendable,
@@ -248,7 +248,7 @@ export default function Comments(props) {
           const contentWithLine = content ? content.split(/\r\n|\r|\n/) : [];
           const isLiked = like.includes(commenter);
           return (
-            <>
+            <React.Fragment key={_id}>
               <FilterWrap>
                 <ByRegisteredButton
                   sort={sortKey}
@@ -382,12 +382,12 @@ export default function Comments(props) {
                 )}
                 <Reply
                   reply={reply}
-                  commenter={commenter}
+                  loginUser={loginUser}
                   commentId={_id}
                   deleteReply={deleteReply}
                 />
               </Container>
-            </>
+            </React.Fragment>
           );
         })
       )}
