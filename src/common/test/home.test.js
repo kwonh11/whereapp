@@ -20,9 +20,17 @@ describe("fetchBestList", () => {
   const action = actions.requestBestPlaceList(payload);
   const { regionCode, isHandledAddress, origin } = action.payload;
   const gen = cloneableGenerator(fetchBestList)({ payload });
+
+  console.log(gen);
+
   it("setLoading과 setError가 잘 작동되는가", () => {
     console.log(gen.next().value);
-    console.log(put(actions.setLoading(true)));
+    console.log(gen.next().value);
+    console.log(gen.next().value);
+    console.log(gen.next().value);
+    console.log(gen.next().value);
+    console.log(gen.next().value);
+    console.log(gen.next().value);
     // expect(gen.next().value).toEqual(put(actions.setLoading(true)));
     // expect(gen.next().value).toEqual(put(actions.setError("")));
   });
@@ -67,4 +75,5 @@ describe("fetchBestList", () => {
       put(actions.setLoading(false))
     );
   });
+
 });
