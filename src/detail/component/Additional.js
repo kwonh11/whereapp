@@ -70,7 +70,7 @@ const StyledChip = styled(Chip)`
     }
   }
   @media ${device.mobileL} {
-    height: 20px;
+    height: 20px !important;
   }
 `;
 const ShorterDivider = styled(Divider)`

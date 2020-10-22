@@ -44,7 +44,7 @@ export function* fetchAdditional(action) {
   } catch (err) {
     yield put(actions.setError(err));
   }
-}
+};
 
 export function* addComments(action) {
   let { comment, place } = action.payload;
@@ -55,7 +55,7 @@ export function* addComments(action) {
     comment.place = res.data;
     yield call(callApiAddComment, comment);
 
-    // 성공시b
+    // 성공시
     // 댓글목록 다시 불러오기
     yield put(actions.setLoadingComments(true));
     const comments = yield call(callApiCommentList, place.contentid);
@@ -67,7 +67,7 @@ export function* addComments(action) {
   }
   yield delay(500);
   yield put(actions.setLoadingComments(false));
-}
+};
 
 export function* updateComment(action) {
   const { commentId, content, commenter, contentId } = action.payload;
@@ -84,7 +84,7 @@ export function* updateComment(action) {
   }
   yield delay(500);
   yield put(actions.setLoadingComments(false));
-}
+};
 
 export function* deleteComment(action) {
   const { commentId, commenter, contentId } = action.payload;
@@ -102,7 +102,7 @@ export function* deleteComment(action) {
   }
   yield delay(500);
   yield put(actions.setLoadingComments(false));
-}
+};
 
 export function* addReply(action) {
   const { contentId, commentId, reply } = action.payload;
@@ -118,7 +118,7 @@ export function* addReply(action) {
   }
   yield delay(500);
   yield put(actions.setLoadingComments(false));
-}
+};
 
 export function* deleteReply(action) {
   const { contentId, commentId, replyId, commenter } = action.payload;
@@ -133,7 +133,7 @@ export function* deleteReply(action) {
   }
   yield delay(500);
   yield put(actions.setLoadingComments(false));
-}
+};
 
 export function* addLike(action) {
   const { userId, commentId } = action.payload;
@@ -144,7 +144,7 @@ export function* addLike(action) {
   } catch (err) {
     yield put(actions.setError(err));
   }
-}
+};
 
 export default function* watcher() {
   yield takeLatest(types.REQUEST_ADD_COMMENT, addComments);
@@ -154,4 +154,4 @@ export default function* watcher() {
   yield takeLatest(types.REQUEST_ADD_REPLY, addReply);
   yield takeLatest(types.REQUEST_DELETE_REPLY, deleteReply);
   yield takeLatest(types.REQUEST_LIKE, addLike);
-}
+};

@@ -4,6 +4,8 @@ import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import { MoreVert } from "@material-ui/icons";
 import { IconButton } from "@material-ui/core";
 import Fade from "@material-ui/core/Fade";
+import 'antd/dist/antd.css';
+import { Empty } from 'antd';
 import Loading from "../../common/component/Loading";
 import CommentsInput from "./CommentsInput";
 import getDateString from "../../common/getDateString";
@@ -22,7 +24,7 @@ const CommentContainer = styled.div`
   justify-content: flex-start;
   width: 100%;
   padding: 20px 10px;
-  margin: 20px;
+  margin: 20px 20px 100px 20px;
 `;
 const Container = styled.div`
   width: 100%;
@@ -182,35 +184,16 @@ export default function Comments(props) {
 
   return (
     <CommentContainer>
-      <FilterWrap>
-        <ByRegisteredButton
-          sort={sortKey}
-          data-key="registered"
-          onClick={handleClickSort}
-        >
-          {" "}
-          등록순{" "}
-        </ByRegisteredButton>
-        |
-        <ByRecentButton
-          sort={sortKey}
-          data-key="recent"
-          onClick={handleClickSort}
-        >
-          {" "}
-          최신순{" "}
-        </ByRecentButton>
-        |
-        <ByLikeButton sort={sortKey} data-key="like" onClick={handleClickSort}>
-          {" "}
-          좋아요순{" "}
-        </ByLikeButton>
-      </FilterWrap>
       {isLoadingComments ? (
         <LoadingContainer>
           <Loading />
         </LoadingContainer>
-      ) : (
+      ) : 
+      comments.length === 0 ? 
+      (
+        <Empty description="등록된 댓글이 없습니다."/>
+      )
+      :(
         comments.map((comment, i) => {
           const {
             commenter,
@@ -224,6 +207,32 @@ export default function Comments(props) {
           const contentWithLine = content ? content.split(/\r\n|\r|\n/) : [];
           const isLiked = like.includes(commenter);
           return (
+            <>
+            <FilterWrap>
+              <ByRegisteredButton
+                sort={sortKey}
+                data-key="registered"
+                onClick={handleClickSort}
+              >
+                {" "}
+                등록순{" "}
+              </ByRegisteredButton>
+              |
+              <ByRecentButton
+                sort={sortKey}
+                data-key="recent"
+                onClick={handleClickSort}
+              >
+                {" "}
+                최신순{" "}
+              </ByRecentButton>
+              |
+              <ByLikeButton sort={sortKey} data-key="like" onClick={handleClickSort}>
+                {" "}
+                좋아요순{" "}
+              </ByLikeButton>
+            </FilterWrap>
+            
             <Container key={i} replyOn={replyOn === _id ? "on" : ""}>
               <CommenterWrap>
                 <ProfileWrap>
@@ -333,6 +342,7 @@ export default function Comments(props) {
                 deleteReply={deleteReply}
               />
             </Container>
+            </>
           );
         })
       )}
