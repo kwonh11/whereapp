@@ -1,9 +1,12 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { Button } from "@material-ui/core";
+import { useSelector, useDispatch } from "react-redux";
 import LogoImage from "../../images/logo.png";
 import LoginContainer from "./LoginContainer";
 import SearchContainer from "./SearchContainer";
+import ErrorSnack from "../../common/component/ErrorSnack";
+import { actions } from "../../common/reducer/home";
 
 const Container = styled.nav`
   height: 70px;
@@ -44,6 +47,19 @@ const Logo = styled(Button)`
 `;
 
 export default function GNBContainer() {
+  const dispatch = useDispatch();
+  const { snackOpen, snackContent } = useSelector((state) => state.home);
+
+  const setSnackOpen = React.useCallback(
+    (snackOpen) => {
+      dispatch(actions.setSnackOpen(snackOpen));
+    },
+    [dispatch]
+  );
+
+  const handleCloseSnack = () => {
+    setSnackOpen(false);
+  };
   return (
     <Container>
       <Inner>
@@ -55,6 +71,11 @@ export default function GNBContainer() {
           <LoginContainer />
         </RightItem>
       </Inner>
+      <ErrorSnack
+        snackOpen={snackOpen}
+        snackContent={snackContent}
+        handleCloseSnack={handleCloseSnack}
+      />
     </Container>
   );
 }

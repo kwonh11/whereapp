@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import { Divider, Snackbar } from "@material-ui/core";
+import { Divider } from "@material-ui/core";
 import device from "../../common/device";
 
 const CommentsWrap = styled.div`
@@ -62,21 +62,25 @@ export default function CommentsInput(props) {
     isReply,
     commentId,
     addReply,
-    sendable,
-    setSendable,
-    setSnack,
+    setSnackOpen,
+    setSnackContent,
   } = props;
   const [inputValue, setInputValue] = React.useState("");
 
-  React.useEffect(() => {
-    if (inputValue.length > 300) setSendable(false);
-    if (inputValue.length <= 300) setSendable(true);
-    if (inputValue.length === 0) setSendable(false);
-  }, [inputValue]);
-
   const handleSubmit = () => {
-    if (!commenter || !sendable) {
-      setSnack(true);
+    if (!commenter) {
+      setSnackContent("로그인 후 이용해주세요.");
+      setSnackOpen(true);
+      return;
+    }
+    if (!inputValue) {
+      setSnackContent("1글자 이상 300글자 이하로 작성해주세요.");
+      setSnackOpen(true);
+      return;
+    }
+    if (inputValue.length > 300) {
+      setSnackContent("1글자 이상 300글자 이하로 작성해주세요.");
+      setSnackOpen(true);
       return;
     }
     if (isReply) {
@@ -112,7 +116,7 @@ export default function CommentsInput(props) {
         value={inputValue}
       />
       <InputDatas>
-        <Characters color={sendable ? "gray" : "red"}>
+        <Characters color={inputValue.length <= 300 ? "gray" : "red"}>
           {inputValue.length} / 300
         </Characters>
         <StyledButton

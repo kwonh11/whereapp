@@ -163,9 +163,8 @@ export default function Comments(props) {
     addLike,
     loginUser,
     deleteReply,
-    sendable,
-    setSendable,
-    setSnack,
+    setSnackOpen,
+    setSnackContent,
     isLoadingComments,
     sortKey,
     setSortKey,
@@ -175,12 +174,6 @@ export default function Comments(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [modifyingInput, setModifyingInput] = React.useState("");
   const open = Boolean(anchorEl);
-
-  React.useEffect(() => {
-    if (modifyingInput.length > 300) setSendable(false);
-    if (modifyingInput.length <= 300) setSendable(true);
-    if (modifyingInput.length === 0) setSendable(false);
-  }, [modifyingInput]);
 
   const handleClickSort = (e) => {
     setSortKey(e.currentTarget.dataset.key);
@@ -207,8 +200,19 @@ export default function Comments(props) {
     handleCloseMenu();
   };
   const handleSubmitModify = (e) => {
-    if (!loginUser || !sendable) {
-      setSnack(true);
+    if (!loginUser) {
+      setSnackContent("로그인 후 이용해주세요.");
+      setSnackOpen(true);
+      return;
+    }
+    if (!modifyingInput) {
+      setSnackContent("1글자 이상 300글자 이하로 작성해주세요.");
+      setSnackOpen(true);
+      return;
+    }
+    if (modifyingInput.length > 300) {
+      setSnackContent("1글자 이상 300글자 이하로 작성해주세요.");
+      setSnackOpen(true);
       return;
     }
     updateComment(e.currentTarget.dataset.id, modifyingInput);
@@ -220,7 +224,8 @@ export default function Comments(props) {
   };
   const handleClickLike = (e) => {
     if (!loginUser) {
-      setSnack(true);
+      setSnackContent("로그인 후 이용해주세요.");
+      setSnackOpen(true);
       return;
     }
     addLike(e.currentTarget.parentElement.dataset.id);
@@ -370,14 +375,13 @@ export default function Comments(props) {
                 </InfoWrap>
                 {replyOn === _id && (
                   <CommentsInput
-                    setSnack={setSnack}
+                    setSnackOpen={setSnackOpen}
+                    setSnackContent={setSnackContent}
                     isReply={true}
                     commentId={_id}
                     addReply={addReply}
                     contentId={contentId}
                     commenter={commenter}
-                    sendable={sendable}
-                    setSendable={setSendable}
                   />
                 )}
                 <Reply

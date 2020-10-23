@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import Chat from "../component/Chat";
 import io from "socket.io-client";
 import axios from "axios";
@@ -25,22 +25,31 @@ export default function ChatContainer() {
   // const [chat, setChat] = useState([]);
   // const [user, setUser] = useState("");
 
+  const listRef = React.useRef();
+
   useEffect(() => {
-    console.log("useEffect");
-    console.log(chatList);
-    // initChat();
+    initChat();
+  }, []);
+  useLayoutEffect(() => {
+    fixScroll();
   }, [chatList]);
 
+  // 스크롤 하단 고정
+  const fixScroll = () => {
+    const elem = listRef.current;
+    if (elem) elem.scrollTop = elem.scrollHeight;
+  };
   //채팅방 초기화
   const initChat = async () => {
     const res = await axios.get("/chat");
     // setUser(res.data.user);
 
-    const newChatList = [...chat, ...res.data.chats];
+    const newChatList = [...chatList, ...res.data.chats];
     // setChat(newChatList);
   };
 
   const handleClick = () => {
+    fixScroll();
     if (!visual) {
       console.log("actions.setConnectRequest()");
       // socket.emit("join");
@@ -51,6 +60,7 @@ export default function ChatContainer() {
 
   const handleClickSubmit = () => {
     input && dispatch(actions.submitChatRequest(input));
+    e.preventDefault();
     setInput("");
 
     // axios.post("/chat", { input });
@@ -69,6 +79,7 @@ export default function ChatContainer() {
       chat={chatList}
       input={input}
       user={user}
+      listRef={listRef}
     />
   );
 }

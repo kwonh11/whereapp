@@ -119,7 +119,7 @@ const StyledPaper = styled(Paper)`
   } ;
 `;
 
-export default function Chat({
+function Chat({
   input,
   chat,
   visual,
@@ -127,6 +127,7 @@ export default function Chat({
   handleChangeInput,
   handleClickSubmit,
   user,
+  listRef,
 }) {
   console.log("==========Chat");
   console.log(chat);
@@ -142,7 +143,7 @@ export default function Chat({
             <CloseIcon />
           </IconButton>
         </div>
-        <ChatWrap className={classes.contents}>
+        <ChatWrap className={classes.contents} ref={listRef}>
           {chat.map((item, idx) => {
             if (item.user === "system") {
               return (
@@ -165,7 +166,7 @@ export default function Chat({
             }
           })}
         </ChatWrap>
-        <form className={classes.form}>
+        <form className={classes.form} onSubmit={handleClickSubmit}>
           <IconButton>
             <AttachFileIcon />
           </IconButton>
@@ -187,3 +188,5 @@ export default function Chat({
     </ChatBtn>
   );
 }
+
+export default React.forwardRef(Chat);
