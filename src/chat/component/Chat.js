@@ -121,7 +121,7 @@ const StyledPaper = styled(Paper)`
 
 function Chat({
   input,
-  chat,
+  chatList,
   visual,
   handleClick,
   handleChangeInput,
@@ -129,22 +129,19 @@ function Chat({
   user,
   listRef,
 }) {
-  console.log("==========Chat");
-  console.log(chat);
-
   const classes = useStyles();
 
   return visual ? (
     <Zoom in={visual}>
       <StyledPaper elevation={3} className={classes.paper}>
         <div className={classes.header}>
-          <span>{`참여인원 : ${chat.length}`}</span>
+          <span>{`참여인원 :  `}</span>
           <IconButton onClick={handleClick}>
             <CloseIcon />
           </IconButton>
         </div>
         <ChatWrap className={classes.contents} ref={listRef}>
-          {chat.map((item, idx) => {
+          {chatList.map((item, idx) => {
             if (item.user === "system") {
               return (
                 <li className={item.user} key={idx}>
