@@ -22,6 +22,7 @@ import { callApiGetChat, callApiPostChat } from "../api";
 //   });
 // }
 
+// 팩토리 함수
 function createSocketChannel(eventType) {
   console.log("--------createSocketChannel");
   console.log(eventType);

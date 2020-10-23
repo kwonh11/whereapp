@@ -235,7 +235,7 @@ export default function Comments(props) {
       ) : comments.length === 0 ? (
         <Empty description="등록된 댓글이 없습니다." />
       ) : (
-        <React.Fragment key={_id}>
+        <React.Fragment>
           <FilterWrap>
             <ByRegisteredButton
               sort={sortKey}

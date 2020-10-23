@@ -5,7 +5,7 @@ module.exports = (server, app, sessionMiddleware) => {
 
   app.set("io", io);
 
-  //미들웨어 설정
+  // 소켓 미들웨어 설정
   io.use((socket, next) => {
     sessionMiddleware(socket.request, socket.request.res, next);
   });

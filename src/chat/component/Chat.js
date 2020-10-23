@@ -110,11 +110,11 @@ const ChatWrap = styled.ul`
 `;
 const StyledPaper = styled(Paper)`
   @media ${device.mobileL} {
-    &.makeStyles-paper-9 {
-      right: 0px;
-      bottom: 0px;
-      width: 100%;
-      height: 82vh;
+    &.makeStyles-paper-8 {
+      right: 0px !important;
+      bottom: 0px !important;
+      width: 100% !important;
+      height: 100% !important;
     }
   } ;
 `;
