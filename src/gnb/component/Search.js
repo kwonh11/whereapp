@@ -55,7 +55,6 @@ export default function Search({
   handleSelectAddress,
 }) {
   const classes = useStyles();
-  console.log(address);
   return (
     <Autocomplete
       options={predictions}
