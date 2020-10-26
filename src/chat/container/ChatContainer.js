@@ -1,25 +1,27 @@
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useLayoutEffect, useCallback } from "react";
 import Chat from "../component/Chat";
-import socketio from "socket.io-client";
-import axios from "axios";
-import { actions } from "../../common/reducer/chat";
 import { useDispatch, useSelector } from "react-redux";
-
-const io = socketio.connect("http://localhost:8000");
+import { actions } from '../../common/reducer/chat';
+import { message } from "antd";
 
 export default function ChatContainer() {
-  const { chatList, user } = useSelector((state) => state.chat);
-  const dispatch = useDispatch();
-
   const [visual, setVisual] = useState(false);
   const [input, setInput] = useState("");
-
   const listRef = React.useRef();
-
+  
   useLayoutEffect(() => {
     fixScroll();
   }, [chatList]);
+  
+  const { nick, _id: userId } = useSelector((state) => state.user.info);
+  const { chatList } = useSelector((state) => state.chat);
 
+  const dispatch = useDispatch();
+  const handleSubmitMessage = (e) => {
+    e.preventDefault();
+    dispatch(actions.submitMessage({nick, userId, message: input}));
+    setInput("");
+  };
   // 스크롤 하단 고정
   const fixScroll = () => {
     const elem = listRef.current;
@@ -31,12 +33,6 @@ export default function ChatContainer() {
     setVisual(!visual);
   };
 
-  const handleClickSubmit = (e) => {
-    e.preventDefault();
-    io.emit("chatmessage", input);
-    setInput("");
-  };
-
   const handleChangeInput = (e) => {
     setInput(e.target.value);
   };
@@ -46,10 +42,11 @@ export default function ChatContainer() {
       visual={visual}
       handleClick={handleClick}
       handleChangeInput={handleChangeInput}
-      handleClickSubmit={handleClickSubmit}
+      handleClickSubmit={handleSubmitMessage}
       chatList={chatList}
       input={input}
-      user={user}
+      nick={nick}
+      userId={userId}
       listRef={listRef}
     />
   );

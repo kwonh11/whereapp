@@ -3,9 +3,9 @@ module.exports = function (io) {
   io.on("connection", (socket) => {
     console.log("user connected");
     console.log(`socket id : ${socket.id}`);
-    socket.on("chatmessage", (msg) => {
-      console.log(`message : ${msg}`);
-      io.emit("chatmessage", msg);
+    socket.on("chat", (msg) => {
+      console.log(`${msg.nick} : ${msg.message}`);
+      io.emit("chat", msg);
     });
   });
 };

@@ -1,128 +1,51 @@
-import { fork, take, takeEvery, call, put } from "redux-saga/effects";
-import { eventChannel } from "redux-saga";
-import io from "socket.io-client";
-import axios from "axios";
+import { buffers, eventChannel } from "redux-saga";
+import { call, put, take, takeEvery, takeLatest, fork } from "redux-saga/effects";
 import { actions, types } from "../reducer/chat";
-import { callApiGetChat, callApiPostChat } from "../api";
+import socket from "../mySocket";
 
-// function createSocketChannel(socket) {
-//   console.log("--------subscribe");
+const defaultMathcer = () => true;
 
-//   return eventChannel((emit) => {
-//     socket.on("chat", function (data) {
-//       console.log("++++++++++++++ chat");
-//       emit(data);
-//     });
+export function createSocketChannel(eventType, buffer, matcher) {
+  return eventChannel(emit => {
+    const emitter = message => emit(message);
+    socket.on(eventType, emitter);
+    return function unsubscribe() {
+      socket.off(eventType, emitter);
+    }
+  }, buffer || buffers.none(), matcher || defaultMathcer)
+};
 
-//     socket.on("disconnect", function (data) {
-//       console.log("++++++++++++++ disconnect");
-//     });
-
-//     return () => {};
-//   });
-// }
-
-// 팩토리 함수
-function createSocketChannel(eventType) {
-  console.log("--------createSocketChannel");
-  console.log(eventType);
-  const socket = io.connect("http://localhost:8000", {
-    path: "/socket.io",
-  });
-
-  return eventChannel((emit) => {
-    socket.on(eventType, function (data) {
-      console.log(`++++++++++++++ ${eventType}`);
-      // console.log(data);
-      emit(data);
-    });
-
-    socket.on("disconnect", function (data) {
-      console.log("++++++++++++++ disconnect");
-    });
-
-    return () => {};
-  });
-}
-
-function connect() {
-  const socket = io.connect("http://localhost:8000", {
-    path: "/socket.io",
-  });
-
-  return socket;
-}
-
-function* flow() {
-  console.log("--------최초임 제발");
-  try {
-    const channel = yield call(createSocketChannel, "join");
-
-    const payload = yield take(channel);
-
-    const res = yield call(callApiGetChat);
-
-    const newChatList = [...res.data.chatList, payload];
-    console.log({ chatList: newChatList, user: res.data.user });
-    yield put(
-      actions.setConnectSuccess({ chatList: newChatList, user: res.data.user })
-    );
-  } catch (error) {
-    yield put(actions.setConnectError, error);
+export function closeChannel(channel) {
+  if(channel) {
+    channel.close();
   }
 }
 
-function* submit(action) {
-  console.log("-------submit");
-  console.log(action.payload);
-  try {
-    let res = yield call(callApiGetChat);
-    const channel = yield call(createSocketChannel, "chat");
-    yield call(callApiPostChat, action.payload);
-
-    const payload = yield take(channel);
-    console.log("payload");
-
-    console.log(payload);
-    const newChatList = [...res.data.chatList, payload];
-    console.log({ chatList: newChatList, user: res.data.user });
-    yield put(
-      actions.submitChatSuccess({ chatList: newChatList, user: res.data.user })
-    );
-  } catch (error) {
-    yield put(actions.setConnectError, error);
+export function* onMessage(type) {
+  const channel = yield call(createSocketChannel, type, buffers.sliding(1));
+  while(true) {
+    try {
+      const message = yield take(channel);
+      yield put(actions.addMessage(message));
+    } catch(err) {
+      put(actions.setConnectError(err));
+    }
   }
+};
+
+export function* submitMessage(action) {
+  const { nick, userId, message } = action.payload;
+  console.log(nick, userId, message);
+  try {
+    yield socket.emit("chat", {nick, userId, message});
+  } catch(err) {
+    put(actions.setConnectError(err));
+  }
+
 }
 
-// function* flow() {
-//   console.log("--------flow");
-//   try {
-//     const socket = yield call(connect);
-//     const socketChannel = yield call(createSocketChannel, socket);
-//     const res = yield call(callApiGetChat);
-
-//     socket.emit("join");
-
-//     const payload = yield take(socketChannel);
-//     console.log(payload);
-
-//     const newChatList = [...res.data.chatList, payload];
-
-//     yield put(
-//       actions.setConnectSuccess({ chatList: newChatList, user: res.data.user })
-//     );
-
-//     while(true){
-//       const {message} = yield take(channel);
-//       yield put({type: SUBMIT_CHAT_REQUEST, message});
-//     }
-
-//   } catch (error) {
-//     yield put(actions.setConnectError, error);
-//   }
-// }
 
 export default function* watcher() {
-  yield takeEvery(types.SET_CONNECT_REQUEST, flow); //최초
-  yield takeEvery(types.SUBMIT_CHAT_REQUEST, submit);
+  yield fork(onMessage, "chat");
+  yield takeLatest(types.SUBMIT_MESSAGE, submitMessage);
 }

@@ -5,14 +5,14 @@ import SendIcon from "@material-ui/icons/Send";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
 import CloseIcon from "@material-ui/icons/Close";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import device from "../../common/device";
 
 const useStyles = makeStyles({
   paper: {
     zIndex: 9998,
-    width: 360,
-    height: 500,
+    width: 400,
+    height: 600,
     display: "flex",
     flexDirection: "column",
     position: "fixed",
@@ -79,7 +79,7 @@ const ChatWrap = styled.ul`
   }
 
   & li {
-    padding: 20px;
+    padding: 9px;
     border-radius: 30px;
     margin-bottom: 2px;
 
@@ -126,7 +126,8 @@ function Chat({
   handleClick,
   handleChangeInput,
   handleClickSubmit,
-  user,
+  nick,
+  userId,
   listRef,
 }) {
   const classes = useStyles();
@@ -142,22 +143,22 @@ function Chat({
         </div>
         <ChatWrap className={classes.contents} ref={listRef}>
           {chatList.map((item, idx) => {
-            if (item.user === "system") {
+            if (item.nick === "system" && item.userId === "system") {
               return (
-                <li className={item.user} key={idx}>
-                  {item.chat}
+                <li className="system" key={idx}>
+                  {`SYSTEM : ${item.message} `}
                 </li>
               );
-            } else if (item.user === user) {
+            } else if (item.userId === userId) {
               return (
                 <li className="me" key={idx}>
-                  {item.chat}
+                  {`${item.message} `}
                 </li>
               );
             } else {
               return (
                 <li className="you" key={idx}>
-                  {item.chat}
+                  {`${item.nick} : ${item.message} `}
                 </li>
               );
             }
