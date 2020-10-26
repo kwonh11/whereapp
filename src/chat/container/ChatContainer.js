@@ -1,8 +1,8 @@
-import { useState, useLayoutEffect, useCallback } from "react";
+import { useState, useLayoutEffect, useCallback, useEffect } from "react";
 import Chat from "../component/Chat";
 import { useDispatch, useSelector } from "react-redux";
 import { actions } from '../../common/reducer/chat';
-import { message } from "antd";
+import { actions as homeActions } from "../../common/reducer/home";
 
 export default function ChatContainer() {
   const [visual, setVisual] = useState(false);
@@ -12,13 +12,35 @@ export default function ChatContainer() {
   useLayoutEffect(() => {
     fixScroll();
   }, [chatList]);
-  
+  useEffect(() => {
+    if(visual) handleJoinChat();
+  }, [visual]);
+
   const { nick, _id: userId } = useSelector((state) => state.user.info);
+  const { isLoggedIn } = useSelector((state) => state.user);
   const { chatList } = useSelector((state) => state.chat);
 
   const dispatch = useDispatch();
+  
+  const setSnackOpen = React.useCallback(
+    (snackOpen) => {
+      dispatch(homeActions.setSnackOpen(snackOpen));
+    },
+    [dispatch]
+  );
+  const setSnackContent = React.useCallback(
+    (snackContent) => {
+      dispatch(homeActions.setSnackContent(snackContent));
+    },
+    [dispatch]
+  );
+  const handleJoinChat = React.useCallback(() => {
+    dispatch(actions.joinChat(nick));
+  },[dispatch, nick]);
+
   const handleSubmitMessage = (e) => {
     e.preventDefault();
+    if (!input) return;
     dispatch(actions.submitMessage({nick, userId, message: input}));
     setInput("");
   };
@@ -29,6 +51,11 @@ export default function ChatContainer() {
   };
 
   const handleClick = () => {
+    if (!isLoggedIn) {
+      setSnackContent("로그인 후 이용해주세요");
+      setSnackOpen(true);
+      return;
+    };
     fixScroll();
     setVisual(!visual);
   };

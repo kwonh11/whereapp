@@ -118,6 +118,10 @@ const StyledPaper = styled(Paper)`
     }
   } ;
 `;
+const Notice = styled.li`
+  font-weight: bold;
+  color: #024a73;
+`;
 
 function Chat({
   input,
@@ -143,11 +147,11 @@ function Chat({
         </div>
         <ChatWrap className={classes.contents} ref={listRef}>
           {chatList.map((item, idx) => {
-            if (item.nick === "system" && item.userId === "system") {
+            if (item.userId === "system") {
               return (
-                <li className="system" key={idx}>
-                  {`SYSTEM : ${item.message} `}
-                </li>
+                <Notice key={idx}>
+                  {`${item.message} `}
+                </Notice>
               );
             } else if (item.userId === userId) {
               return (

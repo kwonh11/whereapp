@@ -5,7 +5,6 @@ const passport = require("passport");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const http = require("http");
-const socketio = require("socket.io");
 const socket = require("./socket");
 require("dotenv").config();
 
@@ -21,10 +20,6 @@ const app = express();
 connect();
 passportConfig(passport);
 const httpServer = http.createServer(app);
-const io = socketio(httpServer);
-// app.set("io", io);
-socket(io);
-
 const sessionMiddleware = session({
   resave: false,
   saveUninitialized: false,
@@ -34,6 +29,7 @@ const sessionMiddleware = session({
     secure: false,
   },
 });
+socket(httpServer, app, sessionMiddleware);
 
 app.set("port", process.env.PORT || 8000);
 app.use(morgan("dev"));
@@ -60,7 +56,7 @@ app.use((req, res, next) => {
 
 app.use((err, req, res, next) => {
   res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "devlopment" ? err : {};
+  res.locals.error = req.app.get("env") === "development" ? err : {};
   res.status(err.status || 500);
 });
 

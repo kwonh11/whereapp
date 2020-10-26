@@ -35,17 +35,26 @@ export function* onMessage(type) {
 
 export function* submitMessage(action) {
   const { nick, userId, message } = action.payload;
-  console.log(nick, userId, message);
   try {
     yield socket.emit("chat", {nick, userId, message});
   } catch(err) {
     put(actions.setConnectError(err));
   }
+}
 
+export function* joinChat(action) {
+  const nick = action.nick;
+  console.log(nick);
+  try {
+    yield socket.emit("join", {nick : nick});
+  } catch(err) {
+    put(actions.setConnectError(err));
+  }
 }
 
 
 export default function* watcher() {
   yield fork(onMessage, "chat");
   yield takeLatest(types.SUBMIT_MESSAGE, submitMessage);
+  yield takeLatest(types.JOIN_CHAT, joinChat);
 }
