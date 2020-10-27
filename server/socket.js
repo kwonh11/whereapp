@@ -15,22 +15,36 @@ module.exports = (server, app, sessionMiddleware) => {
 
     const req = socket.request;
 
-    socket.emit("join", {
-      user: "system",
-      chat: `${req.session.color}님이 입장하셨습니다.`,
+    socket.on("join", (data) => {
+      io.emit("join", {
+        chat: { text: `${data}님이 입장하셨습니다.` },
+        count: io.engine.clientsCount,
+      });
     });
 
-    // socket.on("join", function (data) {
-    //   console.log("-----join ");
+    socket.on("chat", function (data) {
+      const { nick, image, text } = data;
+      io.emit("chat", {
+        id: req.session.passport.user,
+        nick,
+        image,
+        text,
+      });
+    });
 
-    //   socket.emit("chat", {
-    //     user: "system",
-    //     chat: `${req.session.color}님이 입장하셨습니다.`,
-    //   });
-    // });
+    socket.on("exit", (data) => {
+      io.emit("exit", {
+        chat: { text: `${data}님이 퇴장하셨습니다.` },
+        count: io.engine.clientsCount,
+      });
+    });
 
     socket.on("disconnect", () => {
       console.log("-----클라이언트 접속 해제");
+      io.emit("exit", {
+        chat: { text: `${data}님이 퇴장하셨습니다.` },
+        count: io.engine.clientsCount,
+      });
     });
   });
 };
