@@ -27,7 +27,7 @@ function SearchContainer({ history }) {
 
   const handleChangeAddress = (e) => {
     setInput(e.target.value);
-    if (e.target.value.length >= 3) {
+    if (e.target.value.length >= 2) {
       dispatch(actions.setHandledAddress(false));
       dispatch(actions.predictionsRequest(e.target.value));
     }
