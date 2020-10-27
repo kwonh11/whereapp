@@ -1,6 +1,17 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Paper, InputBase, IconButton, Zoom } from "@material-ui/core";
+import {
+  Paper,
+  InputBase,
+  IconButton,
+  Zoom,
+  Avatar,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemAvatar,
+  Typography,
+} from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
 import CloseIcon from "@material-ui/icons/Close";
@@ -44,6 +55,9 @@ const useStyles = makeStyles({
     width: "80%",
     height: "80%",
   },
+  inline: {
+    display: "inline",
+  },
 });
 
 const ChatBtn = styled(IconButton)`
@@ -62,7 +76,7 @@ const ChatBtn = styled(IconButton)`
   }
 `;
 
-const ChatWrap = styled.ul`
+const StyledList = styled(List)`
   /* list-style: none; */
   margin: 0;
   padding: 0;
@@ -74,36 +88,31 @@ const ChatWrap = styled.ul`
   flex-direction: column;
   align-items: center;
 
-  & .you + & .me {
-    border-bottom-right-radius: 5px;
-  }
-
-  & li {
-    padding: 20px;
-    border-radius: 30px;
-    margin-bottom: 2px;
-
-    /* &.you + &.me {
-      border-bottom-right-radius: 5px;
-    } */
-
-    &.you {
-      background: #eee;
-      align-self: flex-start;
+  & .MuiListItem-root {
+    display: flex;
+    &.me {
+      justify-content: flex-end;
+      & .MuiListItemText-root span:last-child {
+        background: #3f63bf;
+        color: #fff;
+      }
     }
 
-    &.me {
-      align-self: flex-end;
-      background: #3f63bf;
-      color: #fff;
-
-      &.me + &.me {
-        border-top-right-radius: 5px;
-        border-bottom-right-radius: 5px;
+    &.you {
+      justify-content: flex-start;
+      & .MuiListItemText-root span:last-child {
+        background: #eee;
       }
+    }
 
-      &:last-of-type {
-        border-bottom-right-radius: 30px;
+    & .MuiListItemText-root {
+      display: flex;
+      flex-direction: column;
+      flex: none;
+
+      & span:last-child {
+        padding: 0.6rem;
+        border-radius: 1rem;
       }
     }
   }
@@ -121,15 +130,17 @@ const StyledPaper = styled(Paper)`
 
 export default function Chat({
   input,
-  chat,
+  chatList,
   visual,
   handleClick,
   handleChangeInput,
   handleClickSubmit,
   user,
+  count,
+  info,
 }) {
   console.log("==========Chat");
-  console.log(chat);
+  console.log(chatList);
 
   const classes = useStyles();
 
@@ -137,34 +148,48 @@ export default function Chat({
     <Zoom in={visual}>
       <StyledPaper elevation={3} className={classes.paper}>
         <div className={classes.header}>
-          <span>{`참여인원 : ${chat.length}`}</span>
+          <span>{`참여인원 : ${count}`}</span>
           <IconButton onClick={handleClick}>
             <CloseIcon />
           </IconButton>
         </div>
-        <ChatWrap className={classes.contents}>
-          {chat.map((item, idx) => {
-            if (item.user === "system") {
-              return (
-                <li className={item.user} key={idx}>
-                  {item.chat}
-                </li>
-              );
-            } else if (item.user === user) {
-              return (
-                <li className="me" key={idx}>
-                  {item.chat}
-                </li>
-              );
-            } else {
-              return (
-                <li className="you" key={idx}>
-                  {item.chat}
-                </li>
-              );
-            }
-          })}
-        </ChatWrap>
+        <StyledList className={classes.contents}>
+          {chatList.map((item, idx) => (
+            <ListItem
+              alignItems="flex-start"
+              className={item.nick && item.id === info._id ? "me" : "you"}
+            >
+              {item.nick && (
+                <ListItemAvatar>
+                  <Avatar alt={item.nick} src={item.image} />
+                </ListItemAvatar>
+              )}
+              <ListItemText
+                primary={
+                  item.nick && (
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={classes.inline}
+                      color="textPrimary"
+                    >
+                      {item.nick}
+                    </Typography>
+                  )
+                }
+                secondary={
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    color="textPrimary"
+                  >
+                    {item.text}
+                  </Typography>
+                }
+              />
+            </ListItem>
+          ))}
+        </StyledList>
         <form className={classes.form}>
           <IconButton>
             <AttachFileIcon />
