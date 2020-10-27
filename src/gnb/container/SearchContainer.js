@@ -25,10 +25,9 @@ function SearchContainer({ history }) {
     return dispatch(actions.requestAreaBasedList({ origin, isHandledAddress }));
   };
 
-  const handleChangeAddress = (e, value) => {
+  const handleChangeAddress = (e) => {
     setInput(e.target.value);
-    console.log(value);
-    if (value) {
+    if (e.target.value.length >= 3) {
       dispatch(actions.setHandledAddress(false));
       dispatch(actions.predictionsRequest(e.target.value));
     }
