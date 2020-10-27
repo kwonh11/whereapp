@@ -90,12 +90,14 @@ const ChatWrap = styled.ul`
     &.you {
       background: #eee;
       align-self: flex-start;
+      margin-left: 10px;
     }
 
     &.me {
       align-self: flex-end;
       background: #3f63bf;
       color: #fff;
+      margin-right: 10px;
 
       &.me + &.me {
         border-top-right-radius: 5px;
@@ -148,11 +150,7 @@ function Chat({
         <ChatWrap className={classes.contents} ref={listRef}>
           {chatList.map((item, idx) => {
             if (item.userId === "system") {
-              return (
-                <Notice key={idx}>
-                  {`${item.message} `}
-                </Notice>
-              );
+              return <Notice key={idx}>{`${item.message} `}</Notice>;
             } else if (item.userId === userId) {
               return (
                 <li className="me" key={idx}>

@@ -1,57 +1,66 @@
 import { buffers, eventChannel } from "redux-saga";
-import { call, put, take, takeEvery, takeLatest, fork } from "redux-saga/effects";
+import {
+  call,
+  put,
+  take,
+  takeEvery,
+  takeLatest,
+  fork,
+} from "redux-saga/effects";
 import { actions, types } from "../reducer/chat";
 import socket from "../mySocket";
 
 const defaultMathcer = () => true;
 
 export function createSocketChannel(eventType, buffer, matcher) {
-  return eventChannel(emit => {
-    const emitter = message => emit(message);
-    socket.on(eventType, emitter);
-    return function unsubscribe() {
-      socket.off(eventType, emitter);
-    }
-  }, buffer || buffers.none(), matcher || defaultMathcer)
-};
+  return eventChannel(
+    (emit) => {
+      const emitter = (message) => emit(message);
+      socket.on(eventType, emitter);
+      return function unsubscribe() {
+        socket.off(eventType, emitter);
+      };
+    },
+    buffer || buffers.none(),
+    matcher || defaultMathcer
+  );
+}
 
 export function closeChannel(channel) {
-  if(channel) {
+  if (channel) {
     channel.close();
   }
 }
 
 export function* onMessage(type) {
   const channel = yield call(createSocketChannel, type, buffers.sliding(1));
-  while(true) {
+  while (true) {
     try {
       const message = yield take(channel);
       yield put(actions.addMessage(message));
-    } catch(err) {
+    } catch (err) {
       put(actions.setConnectError(err));
     }
   }
-};
+}
 
 export function* submitMessage(action) {
   const { nick, userId, message } = action.payload;
   try {
-    yield socket.emit("chat", {nick, userId, message});
-  } catch(err) {
+    yield socket.emit("chat", { nick, userId, message });
+  } catch (err) {
     put(actions.setConnectError(err));
   }
 }
 
 export function* joinChat(action) {
   const nick = action.nick;
-  console.log(nick);
   try {
-    yield socket.emit("join", {nick : nick});
-  } catch(err) {
+    yield socket.emit("join", { nick: nick });
+  } catch (err) {
     put(actions.setConnectError(err));
   }
 }
-
 
 export default function* watcher() {
   yield fork(onMessage, "chat");
