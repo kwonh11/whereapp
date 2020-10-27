@@ -4,10 +4,10 @@ const path = require("path");
 const passport = require("passport");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
-const http = require("http");
-const socket = require("./socket");
+const ColorHash = require("color-hash");
 require("dotenv").config();
 
+const webSocket = require("./socket");
 const passportConfig = require("./passport");
 const connect = require("./schemas");
 const authRouter = require("./routes/auth");
@@ -15,6 +15,7 @@ const locationRouter = require("./routes/location");
 const placeRouter = require("./routes/place");
 const commentRouter = require("./routes/comment");
 const middlewares = require("./routes/middlewares");
+const http = require("http");
 
 const app = express();
 connect();
@@ -29,9 +30,9 @@ const sessionMiddleware = session({
     secure: false,
   },
 });
-socket(httpServer, app, sessionMiddleware);
 
 app.set("port", process.env.PORT || 8000);
+
 app.use(morgan("dev"));
 app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: false }));
@@ -41,6 +42,14 @@ app.use(sessionMiddleware);
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use((req, res, next) => {
+  const colorHash = new ColorHash();
+  if (!req.session.color) {
+    req.session.color = colorHash.hex(req.sessionID);
+  }
+  next();
+});
 
 app.use("/", express.static(path.join(__dirname, "view")));
 app.use("/auth", authRouter);
@@ -56,10 +65,11 @@ app.use((req, res, next) => {
 
 app.use((err, req, res, next) => {
   res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "development" ? err : {};
+  res.locals.error = req.app.get("env") === "devlopment" ? err : {};
   res.status(err.status || 500);
 });
-
 httpServer.listen(app.get("port"), () => {
   console.log(app.get("port"), "번 대기중!!!");
 });
+
+webSocket(httpServer, app, sessionMiddleware);

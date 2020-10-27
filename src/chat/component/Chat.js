@@ -1,6 +1,17 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Paper, InputBase, IconButton, Zoom } from "@material-ui/core";
+import {
+  Paper,
+  InputBase,
+  IconButton,
+  Zoom,
+  Avatar,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemAvatar,
+  Typography,
+} from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
 import CloseIcon from "@material-ui/icons/Close";
@@ -44,6 +55,9 @@ const useStyles = makeStyles({
     width: "80%",
     height: "80%",
   },
+  inline: {
+    display: "inline",
+  },
 });
 
 const ChatBtn = styled(IconButton)`
@@ -62,7 +76,7 @@ const ChatBtn = styled(IconButton)`
   }
 `;
 
-const ChatWrap = styled.ul`
+const StyledList = styled(List)`
   /* list-style: none; */
   margin: 0;
   padding: 0;
@@ -74,38 +88,38 @@ const ChatWrap = styled.ul`
   flex-direction: column;
   align-items: center;
 
-  & .you + & .me {
-    border-bottom-right-radius: 5px;
-  }
-
-  & li {
-    padding: 9px;
-    border-radius: 30px;
-    margin-bottom: 2px;
-
-    /* &.you + &.me {
-      border-bottom-right-radius: 5px;
-    } */
-
-    &.you {
-      background: #eee;
-      align-self: flex-start;
-      margin-left: 10px;
+  & .MuiListItem-root {
+    display: flex;
+    &.me {
+      justify-content: flex-end;
+      & .MuiListItemText-root span:last-child {
+        background: #3f63bf;
+        color: #fff;
+        padding: 5px 10px;
+      }
     }
 
-    &.me {
-      align-self: flex-end;
-      background: #3f63bf;
-      color: #fff;
-      margin-right: 10px;
-
-      &.me + &.me {
-        border-top-right-radius: 5px;
-        border-bottom-right-radius: 5px;
+    &.you {
+      justify-content: flex-start;
+      & .MuiListItemText-root span:last-child {
+        background: #eee;
       }
+    }
 
-      &:last-of-type {
-        border-bottom-right-radius: 30px;
+    &.system > div {
+      margin: 0 auto;
+      text-align: center;
+      width: 100%;
+    }
+
+    & .MuiListItemText-root {
+      display: flex;
+      flex-direction: column;
+      flex: none;
+
+      & span:last-child {
+        padding: 0.6rem;
+        border-radius: 1rem;
       }
     }
   }
@@ -132,9 +146,10 @@ function Chat({
   handleClick,
   handleChangeInput,
   handleClickSubmit,
-  nick,
-  userId,
   listRef,
+  user,
+  count,
+  info,
 }) {
   const classes = useStyles();
 
@@ -142,30 +157,55 @@ function Chat({
     <Zoom in={visual}>
       <StyledPaper elevation={3} className={classes.paper}>
         <div className={classes.header}>
-          <span>{`참여인원 :  `}</span>
+          <span>{`참여인원 : ${count}`}</span>
           <IconButton onClick={handleClick}>
             <CloseIcon />
           </IconButton>
         </div>
-        <ChatWrap className={classes.contents} ref={listRef}>
-          {chatList.map((item, idx) => {
-            if (item.userId === "system") {
-              return <Notice key={idx}>{`${item.message} `}</Notice>;
-            } else if (item.userId === userId) {
-              return (
-                <li className="me" key={idx}>
-                  {`${item.message} `}
-                </li>
-              );
-            } else {
-              return (
-                <li className="you" key={idx}>
-                  {`${item.nick} : ${item.message} `}
-                </li>
-              );
-            }
-          })}
-        </ChatWrap>
+        <StyledList className={classes.contents} ref={listRef}>
+          {chatList.map((item, idx) => (
+            <ListItem
+              alignItems="flex-start"
+              className={
+                item.nick && item.id === info._id
+                  ? "me"
+                  : !item.id && !item.nick
+                  ? "system"
+                  : "you"
+              }
+              key={idx}
+            >
+              {item.nick && (
+                <ListItemAvatar>
+                  <Avatar alt={item.nick} src={item.image} />
+                </ListItemAvatar>
+              )}
+              <ListItemText
+                primary={
+                  item.nick && (
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={classes.inline}
+                      color="textPrimary"
+                    >
+                      {item.nick}
+                    </Typography>
+                  )
+                }
+                secondary={
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    color="textPrimary"
+                  >
+                    {item.text}
+                  </Typography>
+                }
+              />
+            </ListItem>
+          ))}
+        </StyledList>
         <form className={classes.form} onSubmit={handleClickSubmit}>
           <IconButton>
             <AttachFileIcon />
@@ -189,4 +229,6 @@ function Chat({
   );
 }
 
-export default React.forwardRef(Chat);
+export default React.forwardRef((props, ref) => (
+  <Chat {...props} listRef={ref} />
+));
