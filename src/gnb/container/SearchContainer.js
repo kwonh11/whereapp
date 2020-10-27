@@ -5,8 +5,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { withRouter } from "react-router-dom";
 
 function SearchContainer({ history }) {
-  console.log("SearchContainer");
-
   const dispatch = useDispatch();
   const { address, predictions, origin } = useSelector(
     (state) => state.location
@@ -24,13 +22,12 @@ function SearchContainer({ history }) {
   }, []);
 
   const handleAreaBasedList = () => {
-    dispatch(actions.setHandledAddress(true));
     return dispatch(actions.requestAreaBasedList({ origin, isHandledAddress }));
   };
 
   const handleChangeAddress = (e, value) => {
     setInput(e.target.value);
-
+    console.log(value);
     if (value) {
       dispatch(actions.setHandledAddress(false));
       dispatch(actions.predictionsRequest(e.target.value));

@@ -64,6 +64,7 @@ export function* fetchAreaBasedList(action) {
 export function* fetchAutoComplete(action) {
   try {
     const address = action.payload;
+    console.log(address);
     yield delay(500);
     const res = yield call(callAutoComplete, address);
 

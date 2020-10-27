@@ -6,14 +6,28 @@ export const types = {
   SET_REGION_CODE: "home/SET_REGION_CODE",
   SET_LOADING: "home/SET_LOADING",
   SET_ERROR: "home/SET_ERROR",
+  SET_SNACK_OPEN: "home/SET_SNACK_OPEN",
+  SET_SNACK_CONTENT: "home/SET_SNACK_CONTENT",
 };
 
 export const actions = {
-  requestBestPlaceList: (payload) => ({ type: types.REQUEST_BEST_PLACE_LIST, payload }),
-  setBestPlaceList: (bestPlaceList) => ({ type: types.SET_BEST_PLACE_LIST, bestPlaceList }),
-  setRegionCode: (regionCode) => ({ type: types.SET_REGION_CODE, regionCode}),
+  requestBestPlaceList: (payload) => ({
+    type: types.REQUEST_BEST_PLACE_LIST,
+    payload,
+  }),
+  setBestPlaceList: (bestPlaceList) => ({
+    type: types.SET_BEST_PLACE_LIST,
+    bestPlaceList,
+  }),
+  setRegionCode: (regionCode) => ({ type: types.SET_REGION_CODE, regionCode }),
   setLoading: (isLoading) => ({ type: types.SET_LOADING, isLoading }),
   setError: (error) => ({ type: types.SET_ERROR, error }),
+
+  setSnackOpen: (snackOpen) => ({ type: types.SET_SNACK_OPEN, snackOpen }),
+  setSnackContent: (snackContent) => ({
+    type: types.SET_SNACK_CONTENT,
+    snackContent,
+  }),
 };
 
 const INITIAL_STATE = {
@@ -21,6 +35,8 @@ const INITIAL_STATE = {
   regionCode: "1",
   isLoading: true,
   error: "",
+  snackOpen: false,
+  snackContent: "",
 };
 
 const reducer = createReducer(INITIAL_STATE, {
@@ -35,6 +51,12 @@ const reducer = createReducer(INITIAL_STATE, {
   },
   [types.SET_ERROR]: (state, action) => {
     state.error = action.error;
+  },
+  [types.SET_SNACK_OPEN]: (state, action) => {
+    state.snackOpen = action.snackOpen;
+  },
+  [types.SET_SNACK_CONTENT]: (state, action) => {
+    state.snackContent = action.snackContent;
   },
 });
 

@@ -41,10 +41,6 @@ module.exports = (server, app, sessionMiddleware) => {
 
     socket.on("disconnect", () => {
       console.log("-----클라이언트 접속 해제");
-      io.emit("exit", {
-        chat: { text: `${data}님이 퇴장하셨습니다.` },
-        count: io.engine.clientsCount,
-      });
     });
   });
 };

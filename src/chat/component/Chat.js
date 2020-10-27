@@ -16,14 +16,14 @@ import SendIcon from "@material-ui/icons/Send";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
 import CloseIcon from "@material-ui/icons/Close";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import device from "../../common/device";
 
 const useStyles = makeStyles({
   paper: {
     zIndex: 9998,
-    width: 360,
-    height: 500,
+    width: 400,
+    height: 600,
     display: "flex",
     flexDirection: "column",
     position: "fixed",
@@ -95,6 +95,7 @@ const StyledList = styled(List)`
       & .MuiListItemText-root span:last-child {
         background: #3f63bf;
         color: #fff;
+        padding: 5px 10px;
       }
     }
 
@@ -103,6 +104,12 @@ const StyledList = styled(List)`
       & .MuiListItemText-root span:last-child {
         background: #eee;
       }
+    }
+
+    &.system > div {
+      margin: 0 auto;
+      text-align: center;
+      width: 100%;
     }
 
     & .MuiListItemText-root {
@@ -119,29 +126,31 @@ const StyledList = styled(List)`
 `;
 const StyledPaper = styled(Paper)`
   @media ${device.mobileL} {
-    &.makeStyles-paper-9 {
-      right: 0px;
-      bottom: 0px;
-      width: 100%;
-      height: 82vh;
+    &.makeStyles-paper-8 {
+      right: 0px !important;
+      bottom: 0px !important;
+      width: 100% !important;
+      height: 100% !important;
     }
   } ;
 `;
+const Notice = styled.li`
+  font-weight: bold;
+  color: #024a73;
+`;
 
-export default function Chat({
+function Chat({
   input,
   chatList,
   visual,
   handleClick,
   handleChangeInput,
   handleClickSubmit,
+  listRef,
   user,
   count,
   info,
 }) {
-  console.log("==========Chat");
-  console.log(chatList);
-
   const classes = useStyles();
 
   return visual ? (
@@ -153,11 +162,18 @@ export default function Chat({
             <CloseIcon />
           </IconButton>
         </div>
-        <StyledList className={classes.contents}>
+        <StyledList className={classes.contents} ref={listRef}>
           {chatList.map((item, idx) => (
             <ListItem
               alignItems="flex-start"
-              className={item.nick && item.id === info._id ? "me" : "you"}
+              className={
+                item.nick && item.id === info._id
+                  ? "me"
+                  : !item.id && !item.nick
+                  ? "system"
+                  : "you"
+              }
+              key={idx}
             >
               {item.nick && (
                 <ListItemAvatar>
@@ -190,7 +206,7 @@ export default function Chat({
             </ListItem>
           ))}
         </StyledList>
-        <form className={classes.form}>
+        <form className={classes.form} onSubmit={handleClickSubmit}>
           <IconButton>
             <AttachFileIcon />
           </IconButton>
@@ -212,3 +228,7 @@ export default function Chat({
     </ChatBtn>
   );
 }
+
+export default React.forwardRef((props, ref) => (
+  <Chat {...props} listRef={ref} />
+));
