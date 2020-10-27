@@ -163,9 +163,8 @@ export default function Comments(props) {
     addLike,
     loginUser,
     deleteReply,
-    sendable,
-    setSendable,
-    setSnack,
+    setSnackOpen,
+    setSnackContent,
     isLoadingComments,
     sortKey,
     setSortKey,
@@ -175,12 +174,6 @@ export default function Comments(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [modifyingInput, setModifyingInput] = React.useState("");
   const open = Boolean(anchorEl);
-
-  React.useEffect(() => {
-    if (modifyingInput.length > 300) setSendable(false);
-    if (modifyingInput.length <= 300) setSendable(true);
-    if (modifyingInput.length === 0) setSendable(false);
-  }, [modifyingInput]);
 
   const handleClickSort = (e) => {
     setSortKey(e.currentTarget.dataset.key);
@@ -207,8 +200,19 @@ export default function Comments(props) {
     handleCloseMenu();
   };
   const handleSubmitModify = (e) => {
-    if (!loginUser || !sendable) {
-      setSnack(true);
+    if (!loginUser) {
+      setSnackContent("로그인 후 이용해주세요.");
+      setSnackOpen(true);
+      return;
+    }
+    if (!modifyingInput) {
+      setSnackContent("1글자 이상 300글자 이하로 작성해주세요.");
+      setSnackOpen(true);
+      return;
+    }
+    if (modifyingInput.length > 300) {
+      setSnackContent("1글자 이상 300글자 이하로 작성해주세요.");
+      setSnackOpen(true);
       return;
     }
     updateComment(e.currentTarget.dataset.id, modifyingInput);
@@ -220,7 +224,8 @@ export default function Comments(props) {
   };
   const handleClickLike = (e) => {
     if (!loginUser) {
-      setSnack(true);
+      setSnackContent("로그인 후 이용해주세요.");
+      setSnackOpen(true);
       return;
     }
     addLike(e.currentTarget.parentElement.dataset.id);
@@ -235,50 +240,50 @@ export default function Comments(props) {
       ) : comments.length === 0 ? (
         <Empty description="등록된 댓글이 없습니다." />
       ) : (
-        comments.map((comment, i) => {
-          const {
-            commenter,
-            content,
-            createAt,
-            like,
-            reply,
-            nick,
-            _id,
-          } = comment;
-          const contentWithLine = content ? content.split(/\r\n|\r|\n/) : [];
-          const isLiked = like.includes(commenter);
-          return (
-            <React.Fragment key={_id}>
-              <FilterWrap>
-                <ByRegisteredButton
-                  sort={sortKey}
-                  data-key="registered"
-                  onClick={handleClickSort}
-                >
-                  {" "}
-                  등록순{" "}
-                </ByRegisteredButton>
-                |
-                <ByRecentButton
-                  sort={sortKey}
-                  data-key="recent"
-                  onClick={handleClickSort}
-                >
-                  {" "}
-                  최신순{" "}
-                </ByRecentButton>
-                |
-                <ByLikeButton
-                  sort={sortKey}
-                  data-key="like"
-                  onClick={handleClickSort}
-                >
-                  {" "}
-                  좋아요순{" "}
-                </ByLikeButton>
-              </FilterWrap>
+        <React.Fragment>
+          <FilterWrap>
+            <ByRegisteredButton
+              sort={sortKey}
+              data-key="registered"
+              onClick={handleClickSort}
+            >
+              {" "}
+              등록순{" "}
+            </ByRegisteredButton>
+            |
+            <ByRecentButton
+              sort={sortKey}
+              data-key="recent"
+              onClick={handleClickSort}
+            >
+              {" "}
+              최신순{" "}
+            </ByRecentButton>
+            |
+            <ByLikeButton
+              sort={sortKey}
+              data-key="like"
+              onClick={handleClickSort}
+            >
+              {" "}
+              좋아요순{" "}
+            </ByLikeButton>
+          </FilterWrap>
 
-              <Container key={i} replyOn={replyOn === _id ? "on" : ""}>
+          {comments.map((comment, i) => {
+            const {
+              commenter,
+              content,
+              createAt,
+              like,
+              reply,
+              nick,
+              _id,
+            } = comment;
+            const contentWithLine = content ? content.split(/\r\n|\r|\n/) : [];
+            const isLiked = like.includes(commenter);
+            return (
+              <Container key={_id} replyOn={replyOn === _id ? "on" : ""}>
                 <CommenterWrap>
                   <ProfileWrap>
                     <Avatar />
@@ -370,14 +375,13 @@ export default function Comments(props) {
                 </InfoWrap>
                 {replyOn === _id && (
                   <CommentsInput
-                    setSnack={setSnack}
+                    setSnackOpen={setSnackOpen}
+                    setSnackContent={setSnackContent}
                     isReply={true}
                     commentId={_id}
                     addReply={addReply}
                     contentId={contentId}
                     commenter={commenter}
-                    sendable={sendable}
-                    setSendable={setSendable}
                   />
                 )}
                 <Reply
@@ -387,9 +391,9 @@ export default function Comments(props) {
                   deleteReply={deleteReply}
                 />
               </Container>
-            </React.Fragment>
-          );
-        })
+            );
+          })}
+        </React.Fragment>
       )}
     </CommentContainer>
   );

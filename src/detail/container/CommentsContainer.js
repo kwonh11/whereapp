@@ -3,7 +3,7 @@ import { createSelector } from "reselect";
 import CommentsInput from "../component/CommentsInput";
 import Comments from "../component/Comments";
 import { actions } from "../../common/reducer/detail";
-import ErrorSnack from "../component/ErrorSnack";
+import { actions as homeActions } from "../../common/reducer/home";
 
 const getComments = (state) => state.detail.comments;
 const getSortKey = (state) => state.detail.commentSortKey;
@@ -28,10 +28,6 @@ const getCommentsWithSortKey = createSelector(
 );
 
 export default function CommentsContainer(props) {
-  const [sendable, setSendable] = React.useState(false);
-  const [snack, setSnack] = React.useState(false);
-  const [snackContent, setSnackContent] = React.useState("");
-
   const comments = useSelector(getCommentsWithSortKey);
   const contentId = useSelector((state) => state.detail.ids.contentId);
   const user = useSelector((state) => state.user.info._id);
@@ -42,6 +38,19 @@ export default function CommentsContainer(props) {
   const { place } = useSelector((state) => state.detail);
 
   const dispatch = useDispatch();
+
+  const setSnackOpen = React.useCallback(
+    (snackOpen) => {
+      dispatch(homeActions.setSnackOpen(snackOpen));
+    },
+    [dispatch]
+  );
+  const setSnackContent = React.useCallback(
+    (snackContent) => {
+      dispatch(homeActions.setSnackContent(snackContent));
+    },
+    [dispatch]
+  );
 
   const addComment = React.useCallback(
     (comment) => {
@@ -116,12 +125,10 @@ export default function CommentsContainer(props) {
     <React.Fragment>
       <CommentsInput
         addComment={addComment}
-        setSendable={setSendable}
-        setSnack={setSnack}
-        setSnackContent={setSnackContent}
         contentId={contentId}
         commenter={user}
-        sendable={sendable}
+        setSnackContent={setSnackContent}
+        setSnackOpen={setSnackOpen}
       />
       <Comments
         isLoadingComments={isLoadingComments}
@@ -131,22 +138,12 @@ export default function CommentsContainer(props) {
         deleteComment={deleteComment}
         deleteReply={deleteReply}
         addLike={addLike}
-        setSendable={setSendable}
-        setSnack={setSnack}
         setSnackContent={setSnackContent}
+        setSnackOpen={setSnackOpen}
         sortKey={sortKey}
         comments={comments}
         contentId={contentId}
         loginUser={user}
-        sendable={sendable}
-      />
-      <ErrorSnack
-        snack={snack}
-        sendable={sendable}
-        setSnack={setSnack}
-        user={user}
-        snackContent={snackContent}
-        setSnackContent={setSnackContent}
       />
     </React.Fragment>
   );

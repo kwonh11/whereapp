@@ -6,10 +6,10 @@ import { actions as locationActions } from "../reducer/location";
 
 export function* fetchBestList(action) {
   const { regionCode, isHandledAddress, origin } = action.payload;
-  yield put(actions.setLoading(true));
-  yield put(actions.setError(""));
-
+  
   try {
+    yield put(actions.setLoading(true));
+    yield put(actions.setError(""));
     if (!isHandledAddress) {
       // get location
       const newOrigin = yield call(getUsersLocation);

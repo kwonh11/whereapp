@@ -14,13 +14,13 @@ const authRouter = require("./routes/auth");
 const locationRouter = require("./routes/location");
 const placeRouter = require("./routes/place");
 const commentRouter = require("./routes/comment");
-const chatRouter = require("./routes/chat");
 const middlewares = require("./routes/middlewares");
+const http = require("http");
 
 const app = express();
 connect();
 passportConfig(passport);
-
+const httpServer = http.createServer(app);
 const sessionMiddleware = session({
   resave: false,
   saveUninitialized: false,
@@ -56,7 +56,6 @@ app.use("/auth", authRouter);
 app.use("/location", locationRouter);
 app.use("/place", placeRouter);
 app.use("/comment", commentRouter);
-app.use("/chat", chatRouter);
 
 app.use((req, res, next) => {
   const err = new Error("Not Fount");
@@ -69,9 +68,8 @@ app.use((err, req, res, next) => {
   res.locals.error = req.app.get("env") === "devlopment" ? err : {};
   res.status(err.status || 500);
 });
-
-const server = app.listen(app.get("port"), () => {
+httpServer.listen(app.get("port"), () => {
   console.log(app.get("port"), "번 대기중!!!");
 });
 
-webSocket(server, app, sessionMiddleware);
+webSocket(httpServer, app, sessionMiddleware);

@@ -12,6 +12,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { actions as userActions } from "../../common/reducer/user";
 import { types, actions } from "../../common/reducer/detail";
 import device from "../../common/device";
+import { actions as homeActions } from "../../common/reducer/home";
 
 const MapContainer = styled.div`
   padding: 50px 0;
@@ -49,6 +50,18 @@ export default function AdditionalContainer(props) {
     state.detail.place.addr1.includes("온라인")
   );
 
+  const setSnackOpen = React.useCallback(
+    (snackOpen) => {
+      dispatch(homeActions.setSnackOpen(snackOpen));
+    },
+    [dispatch]
+  );
+  const setSnackContent = React.useCallback(
+    (snackContent) => {
+      dispatch(homeActions.setSnackContent(snackContent));
+    },
+    [dispatch]
+  );
   const requestDetails = React.useCallback(
     (contentTypeId, contentId) => {
       dispatch(actions.requestDetails({ contentTypeId, contentId }));
@@ -70,11 +83,13 @@ export default function AdditionalContainer(props) {
   }, []);
 
   const handleClickHeart = () => {
-    if (!isLoggedIn) return;
-    if (isLoggedIn) {
-      setIsHeart(!isHeart);
-      dispatch(userActions.setHeartsRequest(place));
+    if (!isLoggedIn) {
+      setSnackContent("로그인 후 이용해주세요.");
+      setSnackOpen(true);
+      return;
     }
+    setIsHeart(!isHeart);
+    dispatch(userActions.setHeartsRequest(place));
   };
 
   return (

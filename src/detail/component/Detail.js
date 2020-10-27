@@ -136,9 +136,9 @@ const StyledAvatar = styled(Avatar)`
     color: white;
     opacity: 0.8;
     background-color: ${(props) =>
-      props.bgColor === "blue"
+      props.bgcolor === "blue"
         ? "#1565c0"
-        : props.bgColor === "red"
+        : props.bgcolor === "red"
         ? "#b71c1c"
         : "#1b5e20"};
     z-index: 500;
@@ -195,7 +195,7 @@ export default function Detail(props) {
       </HeaderContainer>
 
       <ImageContainer>
-        <StyledAvatar bgColor={isOnline ? "green" : isClose ? "blue" : "red"}>
+        <StyledAvatar bgcolor={isOnline ? "green" : isClose ? "blue" : "red"}>
           {isOnline ? "Online" : Math.ceil(dist / 100) / 10 + "KM"}
         </StyledAvatar>
         <Image src={firstimage} />
