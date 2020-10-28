@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "npx webpack && npx nodemon ./server/app",
+    "dev": "npx cross-env NODE_ENV=development npx webpack && npx nodemon ./server/app",
     "server": "npx nodemon ./server/app",
     "client": "npx webpack-dev-server",
-    "build": "npx webpack --mode=development",
-    "predeploy": "npx webpack --mode=production",
+    "build": "npx cross-env NODE_ENV=development npx webpack",
+    "predeploy": "npx cross-env NODE_ENV=production npx webpack",
     "test": "jest"
   },
   "proxy": "http://localhost:8000",
@@ -37,6 +37,7 @@
     "babel-polyfill": "^6.26.0",
     "clean-webpack-plugin": "^3.0.0",
     "color-hash": "^1.0.3",
+    "compression-webpack-plugin": "^6.0.4",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "cross-env": "^7.0.2",
@@ -71,8 +72,8 @@
     "styled-components": "^5.1.1",
     "styled-reset": "^4.2.2",
     "url-loader": "^4.1.0",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^4.1.0",
     "webpack-dev-server": "^3.11.0"
   },
   "devDependencies": {

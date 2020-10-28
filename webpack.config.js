@@ -1,25 +1,25 @@
+const webpack = require("webpack");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const webpack = require("webpack");
-const { DefinePlugin } = require("webpack");
+const CompressPlugin = require('compression-webpack-plugin');
 const faviconPath = path.resolve(__dirname, "template");
-const BabelPluginImport = require("babel-plugin-import");
-
 const prod = process.env.NODE_ENV === "production";
+console.log(`production mode? ${prod}`);
+
 module.exports = {
   mode : prod? "production" : "development",
   entry: {
     app: ["babel-polyfill", "./src/index.js"],
   },
   output: {
-    filename: process.env.production
-      ? "[name].[chunkhash].js"
-      : "[name].[hash].js",
+    filename: "[name].[chunkhash].js",
     path: path.resolve(__dirname, "server/view"),
   },
   optimization: {
-    minimize: true,
+    concatenateModules: true,
+    providedExports: true,
+    minimize: prod? true: false,
     splitChunks: {
       chunks: "all",
       cacheGroups: {
@@ -37,7 +37,7 @@ module.exports = {
       },
     },
   },
-  devtool: prod? "hidden-source-map" : "eval",
+  devtool: prod? "cheap-module-source-map" : "eval",
   devServer: {
     port: 9000,
     proxy: {
@@ -92,6 +92,6 @@ module.exports = {
     new webpack.ProvidePlugin({
       React: "react",
     }),
+    new CompressPlugin(),
   ],
-  mode: "development",
 };
