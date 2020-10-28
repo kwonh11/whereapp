@@ -2,9 +2,13 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const webpack = require("webpack");
+const { DefinePlugin } = require("webpack");
 const faviconPath = path.resolve(__dirname, "template");
+const BabelPluginImport = require("babel-plugin-import");
 
+const prod = process.env.NODE_ENV === "production";
 module.exports = {
+  mode : prod? "production" : "development",
   entry: {
     app: ["babel-polyfill", "./src/index.js"],
   },
@@ -15,24 +19,25 @@ module.exports = {
     path: path.resolve(__dirname, "server/view"),
   },
   optimization: {
+    minimize: true,
     splitChunks: {
       chunks: "all",
       cacheGroups: {
+        reactBundle: {
+          test: /[\\/]node_modules[\\/](react|react-router-dom)[\\/]/,
+          name: "react.bundle",
+          priority: 1,
+          minSize: 100,
+        },
         vendors: {
           test: /[\\/]node_modules[\\/]/,
           name: "vendors",
-          priority: 1,
-        },
-        reactBundle: {
-          test: /[\\/]node_modules[\\/](react|react-router)[\\/]/,
-          name: "react.bundle",
           priority: 2,
-          minSize: 100,
         },
       },
     },
   },
-  devtool: "cheap-eval-source-map",
+  devtool: prod? "hidden-source-map" : "eval",
   devServer: {
     port: 9000,
     proxy: {
@@ -51,9 +56,8 @@ module.exports = {
               [
                 "@babel/preset-env",
                 {
-                  targets: {
-                    esmodules: true,
-                  },
+                  targets: { node: "current"},
+                  modules: false
                 },
               ],
               "@babel/preset-react",
