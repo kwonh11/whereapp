@@ -1,6 +1,6 @@
 /node_modules
-# .env 무시
-.env
 /server/uploads
-/server/view
-!/server/view/index.html
+src/
+/template
+babel.config.js
+jest.config.js

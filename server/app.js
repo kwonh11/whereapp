@@ -6,7 +6,6 @@ const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const ColorHash = require("color-hash");
 require("dotenv").config();
-
 const webSocket = require("./socket");
 const passportConfig = require("./passport");
 const connect = require("./schemas");
@@ -16,6 +15,7 @@ const placeRouter = require("./routes/place");
 const commentRouter = require("./routes/comment");
 const middlewares = require("./routes/middlewares");
 const http = require("http");
+const cors = require("cors");
 
 const app = express();
 connect();
@@ -32,6 +32,21 @@ const sessionMiddleware = session({
 });
 
 app.set("port", process.env.PORT || 8000);
+
+const whiteList = [
+  "http://localhost:8000",
+  "http://13.124.10.252",
+  "https://13.124.10.252",
+];
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (whiteList.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+};
 
 app.use(morgan("dev"));
 app.use(express.json({ extended: true }));
@@ -52,6 +67,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/", express.static(path.join(__dirname, "view")));
+app.use(cors(corsOptions));
 app.use("/auth", authRouter);
 app.use("/location", locationRouter);
 app.use("/place", placeRouter);
