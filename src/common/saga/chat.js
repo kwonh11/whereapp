@@ -15,7 +15,7 @@ let socket = null;
 let user = null;
 
 function connect() {
-  socket = io.connect("http://localhost:8000", {
+  socket = io.connect("https://whereapp.ga", {
     path: "/socket.io",
   });
 }
