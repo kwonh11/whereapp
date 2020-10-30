@@ -1,6 +1,2 @@
 /node_modules
-# .env 무시
 .env
-/server/uploads
-/server/view
-!/server/view/index.html
