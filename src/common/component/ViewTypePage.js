@@ -256,15 +256,40 @@ const ContentsContainer = styled.div`
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 20px;
-
-      @media ${device.laptop} {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
+      justify-content: center;
+      & .MuiPaper-root {
+        height: 380px !important;
+      }
+      & .MuiTypography-root span {
+        font-size: 10px;
+        border: 1px;
+        padding: 1px;
       }
 
+      @media ${device.laptopM} {
+        grid-template-columns: repeat(3, 330px);
+        gap: 30px;
+      }
+      @media ${device.laptop} {
+        grid-template-columns: repeat(3, 250px);
+        gap: 10px;
+        & .MuiPaper-root {
+          height: 320px !important;
+        }
+      }
       @media ${device.tablet} {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 6px;
+        grid-template-columns: repeat(2, 230px);
+        gap: 10px;
+        & .MuiPaper-root {
+          height: 260px !important;
+        }
+      }
+      @media ${device.mobileL} {
+        grid-template-columns: repeat(2, 160px);
+        gap: 3px;
+        & .MuiPaper-root {
+          height: 200px !important;
+        }
       }
     `}
   ${(props) =>
