@@ -15,35 +15,10 @@ let socket = null;
 let user = null;
 
 function connect() {
-  socket = io.connect("http://localhost:8000", {
+  socket = io.connect("https://whereapp.ga", {
     path: "/socket.io",
   });
 }
-// const defaultMathcer = () => true;
-// export function createSocketChannel(eventType, buffer, matcher) {
-//   return eventChannel(
-//     (emit) => {
-//       const emitter = (message) => emit(message);
-//       socket.on(eventType, emitter);
-//       return function unsubscribe() {
-//         socket.off(eventType, emitter);
-//       };
-//     },
-//     buffer || buffers.none(),
-//     matcher || defaultMathcer
-//   );
-// }
-// export function* onMessage(type) {
-//   const channel = yield call(createSocketChannel, type, buffers.sliding(1));
-//   while (true) {
-//     try {
-//       const message = yield take(channel);
-//       yield put(actions.addMessage(message));
-//     } catch (err) {
-//       put(actions.setConnectError(err));
-//     }
-//   }
-// }
 
 function createSocketChannel(buffer) {
   return eventChannel((emit) => {
