@@ -126,12 +126,10 @@ const StyledList = styled(List)`
 `;
 const StyledPaper = styled(Paper)`
   @media ${device.mobileL} {
-    &.makeStyles-paper-8 {
-      right: 0px !important;
-      bottom: 0px !important;
-      width: 100% !important;
-      height: 100% !important;
-    }
+    right: 0px !important;
+    bottom: 0px !important;
+    width: 100% !important;
+    height: 100% !important;
   } ;
 `;
 const Notice = styled.li`
