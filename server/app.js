@@ -16,11 +16,15 @@ const placeRouter = require("./routes/place");
 const commentRouter = require("./routes/comment");
 const middlewares = require("./routes/middlewares");
 const http = require("http");
+const https = require("https");
+const fs = require("fs");
 
 const app = express();
+let server = http.createServer(app);
+
 connect();
 passportConfig(passport);
-const httpServer = http.createServer(app);
+
 const sessionMiddleware = session({
   resave: false,
   saveUninitialized: false,
@@ -33,7 +37,18 @@ const sessionMiddleware = session({
 
 app.set("port", process.env.PORT || 8000);
 
-app.use(morgan("dev"));
+if (process.env.NODE_ENV === "production") {
+  app.use(morgan("combined"));
+  const options = {
+    ca: fs.readFileSync("/etc/letsencrypt/live/whereapp.ga/fullchain.pem"),
+    key: fs.readFileSync("/etc/letsencrypt/live/whereapp.ga/privkey.pem"),
+    cert: fs.readFileSync("/etc/letsencrypt/live/whereapp.ga/cert.pem"),
+  };
+  server = https.createServer(options, app);
+} else {
+  app.use(morgan("dev"));
+}
+
 app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: false }));
 app.use("/img", express.static(path.join(__dirname, "uploads")));
@@ -68,8 +83,8 @@ app.use((err, req, res, next) => {
   res.locals.error = req.app.get("env") === "devlopment" ? err : {};
   res.status(err.status || 500);
 });
-httpServer.listen(app.get("port"), () => {
+server.listen(app.get("port"), () => {
   console.log(app.get("port"), "번 대기중!!!");
 });
 
-webSocket(httpServer, app, sessionMiddleware);
+webSocket(server, app, sessionMiddleware);
