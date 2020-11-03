@@ -1,12 +1,12 @@
-import { useSelector, useDispatch } from 'react-redux';
-import { createSelector } from 'reselect';
+import { useSelector, useDispatch } from "react-redux";
+import { createSelector } from "reselect";
 import PlaceList from "../component/PlaceList";
-import { actions, types } from "../../common/reducer/place";
+import { actions } from "../../common/reducer/place";
 import { actions as locationActions } from "../../common/reducer/location";
 
 // reselector
-const getPlaceList = state => state.place.placeList;
-const getCategoryCode = state => state.place.categoryCode;
+const getPlaceList = (state) => state.place.placeList;
+const getCategoryCode = (state) => state.place.categoryCode;
 const placeListWithCategoryCode = createSelector(
   [getPlaceList, getCategoryCode],
   (placeList, categoryCode) => {
@@ -16,32 +16,50 @@ const placeListWithCategoryCode = createSelector(
 );
 
 export default function PlaceContainer(props) {
-
-  const {
-    viewType, isLoading, categoryCode
-  } = useSelector(state => ({
+  const { viewType, isLoading, categoryCode } = useSelector((state) => ({
     viewType: state.place.viewType,
     categoryCode: state.place.categoryCode,
     isLoading: state.place.isLoading,
   }));
   const placeList = useSelector(placeListWithCategoryCode);
-  const {origin, address, isHandledAddress} = useSelector(state => state.location);
+  const { origin, isHandledAddress } = useSelector((state) => state.location);
+  const { arrange, dist } = useSelector((state) => state.place);
 
   const dispatch = useDispatch();
-  const handleSelectTab = React.useCallback((contentTypeId) => {
-    dispatch(actions.setPlaceListCategoryCode(contentTypeId));
-  }, [dispatch]);
-  const setPlaceViewType = React.useCallback((viewType) => {
-    dispatch(actions.setPlaceViewType(viewType));
-  }, [dispatch]);
-  const requestAreaBasedList = React.useCallback((origin) => {
-    dispatch(locationActions.requestAreaBasedList({origin, isHandledAddress}));
-  }, [dispatch]);
-  
 
-  React.useEffect(()=> {
+  const handleSelectTab = React.useCallback(
+    (contentTypeId) => {
+      dispatch(actions.setPlaceListCategoryCode(contentTypeId));
+    },
+    [dispatch]
+  );
+  const setPlaceViewType = React.useCallback(
+    (viewType) => {
+      dispatch(actions.setPlaceViewType(viewType));
+    },
+    [dispatch]
+  );
+  const requestAreaBasedList = React.useCallback(
+    (origin) => {
+      dispatch(
+        locationActions.requestAreaBasedList({ origin, isHandledAddress })
+      );
+    },
+    [dispatch]
+  );
+
+  const handleChangeFilter = React.useCallback(
+    (e) => {
+      dispatch(
+        actions.setFilter({ value: e.target.value, name: e.target.name })
+      );
+    },
+    [dispatch]
+  );
+
+  React.useEffect(() => {
     requestAreaBasedList(origin);
-  },[origin.lat, origin.lng]);
+  }, [origin.lat, origin.lng]);
 
   return (
     <PlaceList
@@ -51,6 +69,9 @@ export default function PlaceContainer(props) {
       viewType={viewType}
       handleSelectTab={handleSelectTab}
       setPlaceViewType={setPlaceViewType}
+      arrange={arrange}
+      dist={dist}
+      handleChangeFilter={handleChangeFilter}
     />
   );
-};
+}

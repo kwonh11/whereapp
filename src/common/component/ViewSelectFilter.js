@@ -9,7 +9,11 @@ const useStyles = makeStyles({
   },
 });
 
-export default function ViewSelectFilter({ arrange, handleChangeArrange }) {
+export default function ViewSelectFilter({
+  arrange,
+  dist,
+  handleChangeFilter,
+}) {
   const classes = useStyles();
   const arrangeList = [
     {
@@ -34,23 +38,33 @@ export default function ViewSelectFilter({ arrange, handleChangeArrange }) {
     },
   ];
 
-  const makeSelect = (selectList, value) => {
-    return (
+  const distList = [1000, 3000, 5000];
+
+  return (
+    <div>
       <FormControl variant="outlined" className={classes.formControl}>
-        <Select native value={value} onChange={handleChangeArrange}>
-          {selectList.map((item, idx) => (
+        <Select
+          native
+          value={arrange}
+          onChange={handleChangeFilter}
+          name="arrange"
+        >
+          {arrangeList.map((item, idx) => (
             <option key={idx} value={item.value}>
               {item.title}
             </option>
           ))}
         </Select>
       </FormControl>
-    );
-  };
-  return (
-    <div>
-      {makeSelect(arrangeList, arrange)}
-      {makeSelect(["1000m", "2000m"], arrange)}
+      <FormControl variant="outlined" className={classes.formControl}>
+        <Select native value={dist} onChange={handleChangeFilter} name="dist">
+          {distList.map((item, idx) => (
+            <option key={idx} value={item}>
+              {`${item}m`}
+            </option>
+          ))}
+        </Select>
+      </FormControl>
     </div>
   );
 }

@@ -5,6 +5,10 @@ export const types = {
   SET_PLACELIST_TYPE: "place/SET_PLACELIST_TYPE",
   SET_PLACELIST_CATEGORY_CODE: "place/SET_PLACELIST_CATEGORY_CODE",
   SET_PLACELIST_LOADING: "place/SET_PLACELIST_LOADING",
+
+  SET_FILTER: "place/SET_FILTER",
+  SET_ARRANGE: "place/SET_ARRANGE",
+  SET_DIST: "place/SET_DIST",
 };
 
 export const actions = {
@@ -21,6 +25,10 @@ export const actions = {
     type: types.SET_PLACELIST_LOADING,
     isLoading,
   }),
+
+  setFilter: (payload) => ({ type: types.SET_FILTER, payload }),
+  setArrange: (payload) => ({ type: types.SET_ARRANGE, payload }),
+  setDist: (payload) => ({ type: types.SET_DIST, payload }),
 };
 
 const INITIAL_STATE = {
@@ -28,6 +36,8 @@ const INITIAL_STATE = {
   viewType: "card",
   isLoading: true,
   categoryCode: "",
+  dist: 1000,
+  arrange: "A",
 };
 
 const reducer = createReducer(INITIAL_STATE, {
@@ -42,6 +52,14 @@ const reducer = createReducer(INITIAL_STATE, {
   },
   [types.SET_PLACELIST_LOADING]: (state, action) => {
     state.isLoading = action.isLoading;
+  },
+
+  [types.SET_ARRANGE]: (state, action) => {
+    state.arrange = action.payload;
+  },
+
+  [types.SET_DIST]: (state, action) => {
+    state.dist = action.payload;
   },
 });
 
