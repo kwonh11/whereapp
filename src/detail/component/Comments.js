@@ -235,7 +235,8 @@ export default function Comments(props) {
         <LoadingContainer>
           <Loading />
         </LoadingContainer>
-      ) : comments.length === 0 ? ("등록된 댓글이 없습니다."
+      ) : comments.length === 0 ? (
+        "등록된 댓글이 없습니다."
       ) : (
         <React.Fragment>
           <FilterWrap>
@@ -244,8 +245,7 @@ export default function Comments(props) {
               data-key="registered"
               onClick={handleClickSort}
             >
-              {" "}
-              등록순{" "}
+              등록순
             </ByRegisteredButton>
             |
             <ByRecentButton
@@ -253,8 +253,7 @@ export default function Comments(props) {
               data-key="recent"
               onClick={handleClickSort}
             >
-              {" "}
-              최신순{" "}
+              최신순
             </ByRecentButton>
             |
             <ByLikeButton
@@ -262,8 +261,7 @@ export default function Comments(props) {
               data-key="like"
               onClick={handleClickSort}
             >
-              {" "}
-              좋아요순{" "}
+              좋아요순
             </ByLikeButton>
           </FilterWrap>
 
@@ -311,8 +309,7 @@ export default function Comments(props) {
                   >
                     <MenuItem onClick={handleClickDelete}> 삭제하기 </MenuItem>
                     <MenuItem onClick={handleClickModifyButton}>
-                      {" "}
-                      수정하기{" "}
+                      수정하기
                     </MenuItem>
                   </Menu>
                 </CommenterWrap>
