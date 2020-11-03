@@ -68,33 +68,18 @@ router.get("/autocomplete", async (req, res, next) => {
 });
 
 router.get("/search", async (req, res, next) => {
-  const location = JSON.parse(req.query.location);
-  console.log(location);
+  const { location, arrange, categoryCode, dist } = req.query;
+  const loc = JSON.parse(location);
   try {
     const data = await axios.get(
-      `http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey=${process.env.TOUR_KEY}&mapX=${location.lng}&mapY=${location.lat}&numOfRows=100&radius=2000&listYN=Y&MobileOS=ETC&MobileApp=Where&_type=json`
+      `http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey=${process.env.TOUR_KEY}&mapX=${loc.lng}&mapY=${loc.lat}&radius=${dist}&contentTypeId=${categoryCode}&arrange=${arrange}&radius=2000&listYN=Y&MobileOS=ETC&MobileApp=Where&_type=json`
     );
+
     res.json(data.data.response.body.items);
   } catch (error) {
     res.send(error).end();
   }
 });
-
-// router.get("/search", async (req, res, next) => {
-//   const { location, arrange, contentTypeId } = req.query;
-//   const loc = JSON.parse(location);
-//   const typeId = contentTypeId ? JSON.parse(contentTypeId) : "";
-
-//   try {
-//     const data = await axios.get(
-//       `http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey=${process.env.TOUR_KEY}&mapX=${loc.lng}&mapY=${loc.lat}&contentTypeId=${typeId}&arrange=${arrange}&radius=2000&listYN=Y&MobileOS=ETC&MobileApp=Where&_type=json`
-//     );
-
-//     res.json(data.data.response.body.items);
-//   } catch (error) {
-//     console.error(error);
-//   }
-// });
 
 router.get("/best/:region", async (req, res) => {
   const { region } = req.params;

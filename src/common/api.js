@@ -35,12 +35,8 @@ export function getUsersLocation() {
   return getLocation();
 }
 
-export function callApiLocationBasedList(location) {
-  return axios.get("/location/search", {
-    params: {
-      location: location,
-    },
-  });
+export function callApiLocationBasedList(params) {
+  return axios.get("/location/search", { params });
 }
 
 export function uploadImgAPI(formData) {

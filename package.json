@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production PORT=80 pm2 start app.js -i 0",
+    "start": "cross-env NODE_ENV=production PORT=80 pm2 start ./server/app.js -i 0",
     "dev": "npx cross-env NODE_ENV=development npx webpack && npx nodemon ./server/app",
     "devserver": "npx nodemon ./server/app",
     "devbuild": "npx cross-env NODE_ENV=development npx webpack",
