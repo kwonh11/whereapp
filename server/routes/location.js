@@ -69,10 +69,9 @@ router.get("/autocomplete", async (req, res, next) => {
 
 router.get("/search", async (req, res, next) => {
   const location = JSON.parse(req.query.location);
-  console.log(location);
   try {
     const data = await axios.get(
-      `http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey=${process.env.TOUR_KEY}&mapX=${location.lng}&mapY=${location.lat}&numOfRows=100&radius=2000&listYN=Y&MobileOS=ETC&MobileApp=Where&_type=json`
+      `http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey=${process.env.TOUR_KEY}&mapX=${location.lng}&mapY=${location.lat}&numOfRows=200&radius=4000&listYN=Y&MobileOS=ETC&MobileApp=Where&_type=json`
     );
     res.json(data.data.response.body.items);
   } catch (error) {
