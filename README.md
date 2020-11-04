@@ -43,13 +43,15 @@
 - #### Frontend
 
   - React
-  - React-router
+  - React-router-dom
   - Redux
+  - React-redux
   - Redux-Saga
   - Styled components
   - Material UI
   - Webpack
   - Babel
+  - Socket.io-client
 
 - #### Backend
 
@@ -57,6 +59,7 @@
   - Express
   - Passport
   - Multer
+  - Socket.io
 
 - #### Database
 
