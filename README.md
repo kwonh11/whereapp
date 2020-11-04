@@ -33,7 +33,7 @@
 
 ---
 
-## ■ 기술 스택
+## ■ 기술 스택 및 
 
 - #### 공통
 
@@ -51,7 +51,6 @@
   - Material UI
   - Webpack
   - Babel
-  - Socket.io-client
 
 - #### Backend
 
@@ -59,7 +58,6 @@
   - Express
   - Passport
   - Multer
-  - Socket.io
 
 - #### Database
 
