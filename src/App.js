@@ -43,6 +43,13 @@ const AppContainer = styled.div`
 
 // router
 export default function App() {
+  console.log(document.location.protocol);
+  const { protocol, hostname } = document.location;
+  if( protocol === "http:" && hostname !== "localhost") {
+    // https로 리다이렉트
+    document.location.href = document.location.href.replace('http:', 'https:');
+  }
+
   return (
     <React.Fragment>
       <GlobalFontStyle />

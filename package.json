@@ -39,6 +39,7 @@
     "color-hash": "^1.0.3",
     "compression-webpack-plugin": "^6.0.4",
     "cookie-parser": "^1.4.5",
+    "core-js": "^3.6.5",
     "cors": "^2.8.5",
     "cross-env": "^7.0.2",
     "css-loader": "^4.2.2",
