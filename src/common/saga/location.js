@@ -32,7 +32,7 @@ export function* fetchLocation() {
 export function* fetchAreaBasedList(action) {
   const { origin, isHandledAddress } = action.payload;
   const { dist, arrange, categoryCode } = yield select((state) => state.place);
-
+  let params = { location: origin, dist, arrange, categoryCode };
   yield put(actions.setError(""));
   try {
     if (!isHandledAddress) {
@@ -42,16 +42,14 @@ export function* fetchAreaBasedList(action) {
       // reverse geocode 좌표로 주소 변환
       const address = yield call(callApiGetAddress, usersLocation);
       yield put(actions.setAddress(address.data));
-
+      params = { ...params, location: usersLocation };
       yield put(placeActions.setPlaceListLoading(true));
-      const params = { location: usersLocation, dist, arrange, categoryCode };
       const placeList = yield call(callApiLocationBasedList, params);
-      yield put(placeActions.setPlaceList(placeList.data.item));
+      yield put(placeActions.setPlaceList(placeList.data));
     } else {
       yield put(placeActions.setPlaceListLoading(true));
-      const params = { location: origin, dist, arrange, categoryCode };
       const placeList = yield call(callApiLocationBasedList, params);
-      yield put(placeActions.setPlaceList(placeList.data.item));
+      yield put(placeActions.setPlaceList(placeList.data));
     }
   } catch (err) {
     yield put(actions.setError(err));

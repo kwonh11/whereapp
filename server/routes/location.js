@@ -70,13 +70,21 @@ router.get("/autocomplete", async (req, res, next) => {
 router.get("/search", async (req, res, next) => {
   const { location, arrange, categoryCode, dist } = req.query;
   const loc = JSON.parse(location);
+
   try {
     const data = await axios.get(
       `http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey=${process.env.TOUR_KEY}&mapX=${loc.lng}&mapY=${loc.lat}&radius=${dist}&contentTypeId=${categoryCode}&arrange=${arrange}&radius=2000&listYN=Y&MobileOS=ETC&MobileApp=Where&_type=json`
     );
 
-    res.json(data.data.response.body.items);
+    if (data.data.response.body.totalCount) {
+      const resData = data.data.response.body.items.item;
+      const placeList = Array.isArray(resData) ? resData : [resData];
+      res.json(placeList);
+    } else {
+      res.json([]);
+    }
   } catch (error) {
+    console.error(error);
     res.send(error).end();
   }
 });
