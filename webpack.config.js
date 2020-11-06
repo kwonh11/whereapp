@@ -27,7 +27,6 @@ module.exports = {
           test: /[\\/]node_modules[\\/](react|react-router-dom)[\\/]/,
           name: "react.bundle",
           priority: 1,
-          minSize: 100,
         },
         vendors: {
           test: /[\\/]node_modules[\\/]/,

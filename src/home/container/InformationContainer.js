@@ -14,7 +14,8 @@ const Container = styled.div`
 export default function InformationContainer(props) {
 
     const regionCode = useSelector(state => state.home.regionCode);
-    const address = useSelector(state => state.location.address );
+    const address = useSelector(state => state.location.address);
+    const isHandledAddress = useSelector(state => state.location.isHandledAddress);
 
     const dispatch = useDispatch();
     const setRegionCode = React.useCallback((region) => {
@@ -27,7 +28,12 @@ export default function InformationContainer(props) {
     }
     return (
         <Container>
-            <Information address={address} regionCode={regionCode} handleChangeRegionCode={handleChangeRegionCode} />
+            <Information 
+            address={address} 
+            regionCode={regionCode} 
+            handleChangeRegionCode={handleChangeRegionCode}
+            isHandledAddress={isHandledAddress}
+            />
         </Container>
     )
 }
