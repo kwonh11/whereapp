@@ -77,7 +77,6 @@ const ChatBtn = styled(IconButton)`
 `;
 
 const StyledList = styled(List)`
-  /* list-style: none; */
   margin: 0;
   padding: 0;
   flex: 1;
@@ -205,9 +204,17 @@ function Chat({
           ))}
         </StyledList>
         <form className={classes.form} onSubmit={handleClickSubmit}>
-          <IconButton>
-            <AttachFileIcon />
-          </IconButton>
+          <input
+            accept="image/*"
+            style={{ display: "none" }}
+            type="file"
+            name="img"
+          />
+          <label htmlFor="img">
+            <IconButton>
+              <AttachFileIcon />
+            </IconButton>
+          </label>
           <InputBase
             className={classes.inputBase}
             value={input}
