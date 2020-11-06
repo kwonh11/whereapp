@@ -5,8 +5,7 @@ const { isLoggedIn } = require("./middlewares");
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
-  console.log("-----------place get");
+router.get("/", async (req, res, next) => {
   const { contentId, contentTypeId } = req.query;
   let additional = {};
 
@@ -25,15 +24,12 @@ router.get("/", async (req, res) => {
       })
     )
     .catch((err) => {
-      console.log(err);
-      res.status(403).send(err);
+      next(err);
     });
 });
 
-router.post("/", isLoggedIn, async (req, res) => {
+router.post("/", isLoggedIn, async (req, res, next) => {
   const { contentid } = req.body;
-  console.log(contentid);
-
   try {
     const exPlace = await Place.findOne({
       contentid,

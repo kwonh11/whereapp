@@ -17,8 +17,6 @@ export function callApiDetailIntro(contentTypeId, contentId) {
     params: {
       contentId,
       contentTypeId,
-      mapinfoYN: "Y",
-      overviewYN: "Y",
     },
   });
 }
@@ -26,11 +24,16 @@ export function callApiDetailIntro(contentTypeId, contentId) {
 // 유저 위치 확인
 export function getUsersLocation() {
   const getLocation = () => {
-    return new Promise((resolve, reject) => {
+    const originPromise = new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition((loc) => {
         resolve({ lat: loc.coords.latitude, lng: loc.coords.longitude });
       });
     });
+    const timeOutPromise = new Promise((resolve, reject) => {
+      setTimeout(resolve, 2500, { lat: 37.57593689999999, lng: 126.9768157 });
+    });
+    // 2.5초 내에 응답 없을 시 기본 주소 "광화문" 설정
+    return Promise.race([originPromise, timeOutPromise]);
   };
   return getLocation();
 }
