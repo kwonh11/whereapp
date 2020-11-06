@@ -33,7 +33,7 @@
 
 ---
 
-## ■ 기술 스택
+## ■ 기술 스택 및 
 
 - #### 공통
 
@@ -43,8 +43,9 @@
 - #### Frontend
 
   - React
-  - React-router
+  - React-router-dom
   - Redux
+  - React-redux
   - Redux-Saga
   - Styled components
   - Material UI

@@ -80,8 +80,9 @@ app.use((req, res, next) => {
 
 app.use((err, req, res, next) => {
   res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "devlopment" ? err : {};
-  res.status(err.status || 500);
+  // res.locals.error = req.app.get("env") === "devlopment" ? err : {};
+  // 임시 에러처리 리다이렉트
+  res.redirect("/");
 });
 server.listen(app.get("port"), () => {
   console.log(app.get("port"), "번 대기중!!!");
