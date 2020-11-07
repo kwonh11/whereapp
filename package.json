@@ -8,7 +8,7 @@
     "dev": "npx cross-env NODE_ENV=development npx webpack && npx nodemon ./server/app",
     "server": "npx nodemon ./server/app",
     "devbuild": "npx cross-env NODE_ENV=development npx webpack",
-    "prebuild": "npx cross-env NODE_ENV=production npx webpack",
+    "prodbuild": "npx cross-env NODE_ENV=production npx webpack",
     "wds": "npx webpack-dev-server",
     "test": "jest"
   },
