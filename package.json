@@ -6,9 +6,9 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production PORT=80 pm2 start ./server/app.js -i 0",
     "dev": "npx cross-env NODE_ENV=development npx webpack && npx nodemon ./server/app",
-    "devserver": "npx nodemon ./server/app",
+    "server": "npx nodemon ./server/app",
     "devbuild": "npx cross-env NODE_ENV=development npx webpack",
-    "prodbuild": "npx cross-env NODE_ENV=production npx webpack",
+    "prebuild": "npx cross-env NODE_ENV=production npx webpack",
     "wds": "npx webpack-dev-server",
     "test": "jest"
   },
